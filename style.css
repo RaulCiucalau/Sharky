@@ -1,9 +1,26 @@
-html, body {
-    height: 100%;
+@font-face {
+    font-family: 'LuckiestGuy-Regular';
+    src: url('LuckiestGuy-Regular.ttf');
+    src: local('LuckiestGuy-Regular'), url('./font/LuckiestGuy-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    font-family: 'LuckiestGuy-Regular', Arial, sans-serif;
 }
 
 canvas {
