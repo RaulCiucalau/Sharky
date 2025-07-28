@@ -1,0 +1,3 @@
+class FinalEnemy extends MovableObject {
+    
+}

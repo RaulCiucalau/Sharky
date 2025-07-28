@@ -1,10 +1,6 @@
 let canvas;
 let ctx;
-let character = new Character();
-let enemies = [
-    new PufferFish(),
-    new JellyFish()
-]
+let world = new World();
 
 function init() {
     canvas = document.getElementById('canvas');
