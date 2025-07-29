@@ -3,8 +3,9 @@ class World {
     enemies = [
         new PufferFish(),
         new JellyFish(),
-        new FinalEnemy()
+ 
     ]
+    light = [new Light()];
     canvas
     ctx;
 
@@ -19,6 +20,9 @@ class World {
         this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height);
         this.enemies.forEach(enemy => {
             this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
+        });
+        this.light.forEach(light => {
+            this.ctx.drawImage(light.img, light.x, light.y, light.width, light.height);
         });
         requestAnimationFrame(() => this.draw());
     }
