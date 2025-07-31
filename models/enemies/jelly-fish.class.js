@@ -8,5 +8,12 @@ class JellyFish extends MovableObject {
         this.y = 300;
         this.height = 100;
         this.width = 100;
+        this.animate();
+    }
+
+    animate() {
+        setInterval(() => {
+            this.y -= 0.2
+        }, 1000 / 60);
     }
 }
