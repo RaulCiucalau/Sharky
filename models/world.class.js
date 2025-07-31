@@ -3,9 +3,25 @@ class World {
     enemies = [
         new PufferFish(),
         new JellyFish(),
- 
+
     ]
-    light = [new Light()];
+    backgroundObjects = [
+        new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 20, 0),
+
+    ]
+    light = [
+        new Light()
+    ];
+    fondo = [
+        new Fondo2(),
+        new Fondo1()
+    ]
+    water = [
+        new Water()
+    ];
+    floor = [
+        new Floor(),
+    ];
     canvas
     ctx;
 
@@ -17,13 +33,28 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height);
+
+        this.water.forEach(water => {
+            this.addToMap(water);
+        });
+        this.fondo.forEach(fondo => {
+            this.addToMap(fondo);
+        });
+        this.floor.forEach(floor => {
+            this.addToMap(floor);
+        });
+        this.addToMap(this.character);
         this.enemies.forEach(enemy => {
-            this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
+            this.addToMap(enemy);
         });
         this.light.forEach(light => {
-            this.ctx.drawImage(light.img, light.x, light.y, light.width, light.height);
+            this.addToMap(light);
         });
+        
         requestAnimationFrame(() => this.draw());
+    }
+
+    addToMap(MovableObject) {
+        this.ctx.drawImage(MovableObject.img, MovableObject.x, MovableObject.y, MovableObject.width, MovableObject.height);
     }
 }
