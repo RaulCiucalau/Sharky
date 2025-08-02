@@ -21,17 +21,28 @@ class Character extends MovableObject {
     }
 
     animate() {
+        let lastMoving = false;
         const move = () => {
+            let moving = false;
             if (this.world && this.world.keyboard) {
                 if (this.world.keyboard.right) {
                     this.x += this.speed;
                     this.otherDirection = false;
+                    moving = true;
                 }
                 if (this.world.keyboard.left) {
                     this.x -= this.speed;
                     this.otherDirection = true;
+                    moving = true;
                 }
             }
+            if (moving && !lastMoving) {
+                let i = this.currentImage % this.imgs_swim.length;
+                let path = this.imgs_swim[i];
+                this.img = this.imageCache[path];
+                this.currentImage++;
+            }
+            lastMoving = moving;
             requestAnimationFrame(move);
         };
         move();
