@@ -46,6 +46,18 @@ class World {
         });
     }
     addToMap(MovableObject) {
-        this.ctx.drawImage(MovableObject.img, MovableObject.x, MovableObject.y, MovableObject.width, MovableObject.height);
+        if (MovableObject.otherDirection) {
+            this.flipImage(MovableObject);
+        } else {
+            this.ctx.drawImage(MovableObject.img, MovableObject.x, MovableObject.y, MovableObject.width, MovableObject.height);
+        }
+    }
+
+    flipImage(object) {
+        this.ctx.save();
+        this.ctx.translate(object.x + object.width, object.y);
+        this.ctx.scale(-1, 1);
+        this.ctx.drawImage(object.img, 0, 0, object.width, object.height);
+        this.ctx.restore();
     }
 }

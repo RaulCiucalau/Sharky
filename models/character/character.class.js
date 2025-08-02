@@ -25,9 +25,11 @@ class Character extends MovableObject {
             if (this.world && this.world.keyboard) {
                 if (this.world.keyboard.right) {
                     this.x += this.speed;
+                    this.otherDirection = false;
                 }
                 if (this.world.keyboard.left) {
                     this.x -= this.speed;
+                    this.otherDirection = true;
                 }
             }
             requestAnimationFrame(move);
