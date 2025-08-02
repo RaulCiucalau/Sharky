@@ -3,7 +3,7 @@ class Character extends MovableObject {
     y = 100;
     height = 280;
     width = 280;
-    speed = 2;
+    speed = 1;
     imgs_swim = [
         'img/1.Sharkie/3.Swim/1.png',
         'img/1.Sharkie/3.Swim/2.png',
@@ -21,24 +21,30 @@ class Character extends MovableObject {
     }
 
     animate() {
+        const move = () => {
+            if (this.world && this.world.keyboard) {
+                if (this.world.keyboard.right) {
+                    this.x += this.speed;
+                }
+                if (this.world.keyboard.left) {
+                    this.x -= this.speed;
+                }
+            }
+            requestAnimationFrame(move);
+        };
+        move();
 
         setInterval(() => {
-            if (this.world.keyboard.right) {
-                this.x += this.speed;
-            }
-            if (this.world.keyboard.left) {
-                this.x -= this.speed;
-            }
-        }, 1000 / 60)
-
-        setInterval(() => {
-            if (this.world.keyboard.right || this.world.keyboard.left) {
+            if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {
                 let i = this.currentImage % this.imgs_swim.length;
                 let path = this.imgs_swim[i];
                 this.img = this.imageCache[path];
                 this.currentImage++;
+            } else {
+                this.img = this.imageCache[this.imgs_swim[0]];
+                this.currentImage = 0;
             }
-        }, 240)
+        }, 140);
     }
 }
 
