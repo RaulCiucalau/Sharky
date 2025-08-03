@@ -3,7 +3,7 @@ class Character extends MovableObject {
     y = 100;
     height = 280;
     width = 280;
-    speed = 10;
+    speed = 20;
     imgs_swim = [
         'img/1.Sharkie/3.Swim/1.png',
         'img/1.Sharkie/3.Swim/2.png',
@@ -27,7 +27,7 @@ class Character extends MovableObject {
                     this.x += this.speed;
                     this.otherDirection = false;
                 }
-                if (this.world.keyboard.left && this.x > this.world.level.level_end_start_x) {
+                if (this.world.keyboard.left && this.x > 0) {
                     this.x -= this.speed;
                     this.otherDirection = true;
                 }
