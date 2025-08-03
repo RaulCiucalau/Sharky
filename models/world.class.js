@@ -9,12 +9,13 @@ class World {
         new BackgroundObject('img/3. Background/Layers/5. Water/D1.png', 0, 480, 720),
         new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D1.png', 0, 400, 720),
         new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 0, 400, 720),
-        new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 20, 450, 700),
+        new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0, 450, 700),
         new BackgroundObject('img/3. Background/Layers/2. Floor/D1.png', 0, 400, 720),
     ]
     canvas
     ctx;
     keyboard;
+    camera_x = 0;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -30,9 +31,11 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.translate(this.camera_x, 0); 
         this.addObjectToMap(this.backgroundObjects);
         this.addObjectToMap(this.enemies);
         this.addToMap(this.character);
+        this.ctx.translate(-this.camera_x, 0);
         requestAnimationFrame(() => this.draw());
     }
 

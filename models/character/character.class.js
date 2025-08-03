@@ -1,9 +1,9 @@
 class Character extends MovableObject {
-    x = 20;
+    x = 0;
     y = 100;
     height = 280;
     width = 280;
-    speed = 1;
+    speed = 3;
     imgs_swim = [
         'img/1.Sharkie/3.Swim/1.png',
         'img/1.Sharkie/3.Swim/2.png',
@@ -21,31 +21,19 @@ class Character extends MovableObject {
     }
 
     animate() {
-        let lastMoving = false;
-        const move = () => {
-            let moving = false;
-            if (this.world && this.world.keyboard) {
-                if (this.world.keyboard.right) {
-                    this.x += this.speed;
-                    this.otherDirection = false;
-                    moving = true;
-                }
-                if (this.world.keyboard.left) {
-                    this.x -= this.speed;
-                    this.otherDirection = true;
-                    moving = true;
-                }
+
+        setInterval(() => {
+            if (this.world.keyboard.right) {
+                this.x += this.speed;
+                this.otherDirection = false;
             }
-            if (moving && !lastMoving) {
-                let i = this.currentImage % this.imgs_swim.length;
-                let path = this.imgs_swim[i];
-                this.img = this.imageCache[path];
-                this.currentImage++;
+            if (this.world.keyboard.left) {
+                this.x -= this.speed;
+                this.otherDirection = true;
             }
-            lastMoving = moving;
-            requestAnimationFrame(move);
-        };
-        move();
+            this.world.camera_x = -this.x;
+        }, 1000 / 60)
+        
 
         setInterval(() => {
             if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {
