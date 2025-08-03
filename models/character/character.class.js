@@ -23,11 +23,11 @@ class Character extends MovableObject {
     animate() {
         const move = () => {
             if (this.world && this.world.keyboard) {
-                if (this.world.keyboard.right) {
+                if (this.world.keyboard.right && this.x < this.world.level.level_end_x) {
                     this.x += this.speed;
                     this.otherDirection = false;
                 }
-                if (this.world.keyboard.left) {
+                if (this.world.keyboard.left && this.x > this.world.level.level_end_start_x) {
                     this.x -= this.speed;
                     this.otherDirection = true;
                 }
