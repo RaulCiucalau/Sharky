@@ -1,5 +1,5 @@
 class FinalEnemy extends MovableObject {
-    x = 200;
+    x = 2480;
     y = -100;
     height = 420;
     width = 420;
