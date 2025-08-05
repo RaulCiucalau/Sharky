@@ -1,4 +1,5 @@
 class Character extends MovableObject {
+    rotation = 0;
     x = 0;
     y = 100;
     height = 280;
@@ -20,19 +21,16 @@ class Character extends MovableObject {
         this.animate();
     }
 
-    animate() {
+     animate() {
         const moveDown = () => {
-            let maxY = (this.world && this.world.level && typeof this.world.level.level_end_y !== 'undefined')
-                ? this.world.level.level_end_y
-                : 480 - this.height;
-            if (this.world && this.world.keyboard && this.world.keyboard.down && this.y < maxY) {
+            if (this.world && this.world.keyboard && this.world.keyboard.down && this.y < 260) {
                 this.y += this.speed;
             }
             requestAnimationFrame(moveDown);
         };
 
         const moveUp = () => {
-            if (this.world && this.world.keyboard && this.world.keyboard.up && this.y > 0) {
+            if (this.world && this.world.keyboard && this.world.keyboard.up && this.y > -120) {
                 this.y -= this.speed;
             }
             requestAnimationFrame(moveUp);
@@ -42,11 +40,11 @@ class Character extends MovableObject {
             if (this.world && this.world.keyboard) {
                 if (this.world.keyboard.right && this.x < this.world.level.level_end_x) {
                     this.x += this.speed;
-                    this.otherDirection = false;
+                    this.isFacingLeft = false;
                 }
                 if (this.world.keyboard.left && this.x > 0) {
                     this.x -= this.speed;
-                    this.otherDirection = true;
+                    this.isFacingLeft = true;
                 }
                 this.world.camera_x = -this.x;
             }
@@ -70,6 +68,3 @@ class Character extends MovableObject {
         }, 140);
     }
 }
-
-
-

@@ -35,7 +35,13 @@ class World {
     }
     
     addToMap(MovableObject) {
-        if (MovableObject.otherDirection) {
+        if (MovableObject.rotation && MovableObject.rotation !== 0) {
+            this.ctx.save();
+            this.ctx.translate(MovableObject.x + MovableObject.width / 2, MovableObject.y + MovableObject.height / 2);
+            this.ctx.rotate((MovableObject.rotation * Math.PI) / 180);
+            this.ctx.drawImage(MovableObject.img, -MovableObject.width / 2, -MovableObject.height / 2, MovableObject.width, MovableObject.height);
+            this.ctx.restore();
+        } else if (MovableObject.isFacingLeft) {
             this.flipImage(MovableObject);
         } else {
             this.ctx.drawImage(MovableObject.img, MovableObject.x, MovableObject.y, MovableObject.width, MovableObject.height);
