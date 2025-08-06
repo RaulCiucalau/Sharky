@@ -25,6 +25,15 @@ class Character extends MovableObject {
         const moveDown = () => {
             if (this.world && this.world.keyboard && this.world.keyboard.down && this.y < 260) {
                 this.y += this.speed;
+                if (this.isFacingLeft) {
+                    this.rotation = 15;
+                } else {
+                    this.rotation = 15;
+                }
+            } else if (this.rotation !== 0) {
+                if (this.rotation > 0) this.rotation -= 1;
+                if (this.rotation < 0) this.rotation += 1;
+                if (this.rotation === 1 || this.rotation === -1) this.rotation = 0;
             }
             requestAnimationFrame(moveDown);
         };
@@ -32,6 +41,15 @@ class Character extends MovableObject {
         const moveUp = () => {
             if (this.world && this.world.keyboard && this.world.keyboard.up && this.y > -120) {
                 this.y -= this.speed;
+                if (this.isFacingLeft) {
+                    this.rotation = -15;
+                } else {
+                    this.rotation = -15;
+                }
+            } else if (this.rotation !== 0) {
+                if (this.rotation > 0) this.rotation -= 1;
+                if (this.rotation < 0) this.rotation += 1;
+                if (this.rotation === 1 || this.rotation === -1) this.rotation = 0;
             }
             requestAnimationFrame(moveUp);
         };
