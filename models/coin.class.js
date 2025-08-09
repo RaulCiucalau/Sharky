@@ -14,10 +14,10 @@ class Coin extends MovableObject {
         this.loadImages(this.imgs_coin);
         if (typeof x === 'number') {
             this.x = x;
-        }
+        };
         if (typeof y === 'number') {
             this.y = y;
-        }
+        };
         this.animate();
     }
 
