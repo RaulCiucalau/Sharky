@@ -20,7 +20,7 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.translate(this.camera_x, 0); 
+        this.ctx.translate(this.camera_x, 0);
         this.addObjectToMap(this.level.backgroundObjects);
         this.addObjectToMap(this.level.enemies);
         this.addObjectToMap(this.level.coins);
@@ -35,31 +35,23 @@ class World {
             this.addToMap(object);
         });
     }
-    
-    addToMap(MovableObject) {
-        if (MovableObject.isFacingLeft) {
-            this.ctx.save();
-            this.ctx.translate(MovableObject.x + MovableObject.width / 2, MovableObject.y + MovableObject.height / 2);
-            this.ctx.scale(-1, 1);
-            if (MovableObject.rotation && MovableObject.rotation !== 0) {
-                this.ctx.rotate((MovableObject.rotation * Math.PI) / 180);
-            }
-            this.ctx.drawImage(
-                MovableObject.img,
-                -MovableObject.width / 2,
-                -MovableObject.height / 2,
-                MovableObject.width,
-                MovableObject.height
-            );
-            this.ctx.restore();
-        } else if (MovableObject.rotation && MovableObject.rotation !== 0) {
-            this.ctx.save();
-            this.ctx.translate(MovableObject.x + MovableObject.width / 2, MovableObject.y + MovableObject.height / 2);
-            this.ctx.rotate((MovableObject.rotation * Math.PI) / 180);
-            this.ctx.drawImage(MovableObject.img, -MovableObject.width / 2, -MovableObject.height / 2, MovableObject.width, MovableObject.height);
-            this.ctx.restore();
+
+    addToMap(obj) {
+        if (obj.isFacingLeft) {
+            obj.drawFlipped(this.ctx);
+        } else if (obj.rotation && obj.rotation !== 0) {
+            obj.drawRotated(this.ctx);
         } else {
-            this.ctx.drawImage(MovableObject.img, MovableObject.x, MovableObject.y, MovableObject.width, MovableObject.height);
+            obj.draw(this.ctx);
+        }
+        const drawRectTypes = [
+            'Character', 'PufferFish', 'JellyFish', 'FinalEnemy', 'Coin', 'Poison'
+        ];
+        if (
+            typeof obj.drawRedRectangle === 'function' &&
+            drawRectTypes.includes(obj.constructor.name)
+        ) {
+            obj.drawRedRectangle(this.ctx);
         }
     }
 
