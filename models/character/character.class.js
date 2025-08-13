@@ -21,58 +21,43 @@ class Character extends MovableObject {
         this.animate();
     }
 
-     animate() {
-        const moveDown = () => {
-            if (this.world && this.world.keyboard && this.world.keyboard.down && this.y < 260) {
-                this.y += this.speed;
-                if (this.isFacingLeft) {
-                    this.rotation = 15;
-                } else {
-                    this.rotation = 15;
-                }
-            } else if (this.rotation !== 0) {
-                if (this.rotation > 0) this.rotation -= 1;
-                if (this.rotation < 0) this.rotation += 1;
-                if (this.rotation === 1 || this.rotation === -1) this.rotation = 0;
-            }
-            requestAnimationFrame(moveDown);
-        };
-
-        const moveUp = () => {
-            if (this.world && this.world.keyboard && this.world.keyboard.up && this.y > -120) {
-                this.y -= this.speed;
-                if (this.isFacingLeft) {
-                    this.rotation = -15;
-                } else {
-                    this.rotation = -15;
-                }
-            } else if (this.rotation !== 0) {
-                if (this.rotation > 0) this.rotation -= 1;
-                if (this.rotation < 0) this.rotation += 1;
-                if (this.rotation === 1 || this.rotation === -1) this.rotation = 0;
-            }
-            requestAnimationFrame(moveUp);
-        };
-
-        const move = () => {
+    animate() {
+        // Move character up, down, left, right
+        const moveLoop = () => {
             if (this.world && this.world.keyboard) {
-                if (this.world.keyboard.right && this.x < this.world.level.level_end_x) {
-                    this.x += this.speed;
-                    this.isFacingLeft = false;
+                // Up
+                if (this.world.keyboard.up && this.y > -120) {
+                    this.y -= this.speed;
+                    this.rotation = -15;
                 }
+                // Down
+                if (this.world.keyboard.down && this.y < 260) {
+                    this.y += this.speed;
+                    this.rotation = 15;
+                }
+                // Left
                 if (this.world.keyboard.left && this.x > 0) {
                     this.x -= this.speed;
                     this.isFacingLeft = true;
                 }
+                // Right
+                if (this.world.keyboard.right && this.x < this.world.level.level_end_x) {
+                    this.x += this.speed;
+                    this.isFacingLeft = false;
+                }
+                // Camera follows character
                 this.world.camera_x = -this.x;
             }
-            requestAnimationFrame(move);
+            // Smoothly reset rotation
+            if (this.rotation !== 0) {
+                if (this.rotation > 0) this.rotation -= 1;
+                if (this.rotation < 0) this.rotation += 1;
+                if (this.rotation === 1 || this.rotation === -1) this.rotation = 0;
+            }
+            requestAnimationFrame(moveLoop);
         };
 
-        move();
-        moveUp();
-        moveDown();
-
+        moveLoop();
         setInterval(() => {
             if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {
                 let i = this.currentImage % this.imgs_swim.length;
