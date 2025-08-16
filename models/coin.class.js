@@ -7,6 +7,12 @@ class Coin extends MovableObject {
         'img/4. Marcadores/1. Coins/3.png',
         'img/4. Marcadores/1. Coins/4.png',
     ];
+    offset = {
+        left: 1,
+        right: 1,
+        top: 1,
+        bottom: 1
+    };
 
 
     constructor(x, y) {

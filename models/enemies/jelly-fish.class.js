@@ -9,10 +9,10 @@ class JellyFish extends MovableObject {
         'img/2.Enemy/2 Jelly fish/Regular damage/Lila 4.png'
     ];
     offset = {
-        left: 100,
-        right: 97,
-        top: 131,
-        bottom: 70
+        left: 80,
+        right: 80,
+        top: 80,
+        bottom: 80
     };
 
     constructor() {

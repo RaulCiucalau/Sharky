@@ -14,11 +14,11 @@ class Character extends MovableObject {
         'img/1.Sharkie/3.Swim/6.png'
     ];
     world;
-    offset = {
+     offset = {
         left: 60,
-        right: 20,
-        top: 20,
-        bottom: 20
+        right: 60,
+        top: 140,
+        bottom: 70
     };
 
     constructor() {

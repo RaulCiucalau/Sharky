@@ -1,6 +1,5 @@
 
 class MovableObject {
-
     x = 120;
     y = 220;
     img;
@@ -97,35 +96,13 @@ class MovableObject {
     }
 
     drawRedRectangle(ctx) {
-        const offCanvas = document.createElement('canvas');
-        offCanvas.width = this.width;
-        offCanvas.height = this.height;
-        const offCtx = offCanvas.getContext('2d');
-        offCtx.drawImage(this.img, 0, 0, this.width, this.height);
-        const imageData = offCtx.getImageData(0, 0, this.width, this.height);
-        let minX = this.width, minY = this.height, maxX = 0, maxY = 0;
-        let found = false;
-        for (let y = 0; y < this.height; y++) {
-            for (let x = 0; x < this.width; x++) {
-                const idx = (y * this.width + x) * 4;
-                if (imageData.data[idx + 3] > 10) {
-                    found = true;
-                    if (x < minX) minX = x;
-                    if (y < minY) minY = y;
-                    if (x > maxX) maxX = x;
-                    if (y > maxY) maxY = y;
-                }
-            }
-        }
-        if (found) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = 'red';
-            ctx.rect(this.x + minX, this.y + minY, maxX - minX, maxY - minY);
-            ctx.stroke();
-            ctx.restore();
-        }
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'red';
+        ctx.rect(this.x, this.y, this.width, this.height);
+        ctx.stroke();
+        ctx.restore();
     }
 
     moveRight() {
