@@ -23,14 +23,11 @@ class World {
         setInterval(() => {
             this.level.enemies.forEach(enemy => {
                 if (this.character.isColliding(enemy)) {
-                    
+                    this.character.energy -= 10;
+                    console.log("colliding", this.character.energy);
                 }
             });
         }, 1000);
-    }
-
-    handleCollision(obj1, obj2) {
-        console.log('Collision detected between', obj1.constructor.name, 'and', obj2.constructor.name);
     }
 
     draw() {

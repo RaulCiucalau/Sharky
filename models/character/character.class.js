@@ -14,7 +14,8 @@ class Character extends MovableObject {
         'img/1.Sharkie/3.Swim/6.png'
     ];
     world;
-     offset = {
+    energy = 100;
+    offset = {
         left: 60,
         right: 60,
         top: 140,
