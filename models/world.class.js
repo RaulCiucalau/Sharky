@@ -23,11 +23,11 @@ class World {
         setInterval(() => {
             this.level.enemies.forEach(enemy => {
                 if (this.character.isColliding(enemy)) {
-                    this.character.energy -= 10;
+                    this.character.hit();
                     console.log("colliding", this.character.energy);
                 }
             });
-        }, 1000);
+        }, 500);
     }
 
     draw() {
@@ -63,7 +63,6 @@ class World {
             typeof obj.drawRedRectangle === 'function' &&
             drawRectTypes.includes(obj.constructor.name)
         ) {
-            obj.drawRedRectangle(this.ctx);
             obj.drawOffsetRectangleBlue(this.ctx);
         }
     }

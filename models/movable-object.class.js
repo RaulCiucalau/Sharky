@@ -25,6 +25,13 @@ class MovableObject {
         );
     }
 
+    hit() {
+        this.energy -= 10;
+        if (this.energy < 0) {
+            this.energy = 0;
+        }
+    }
+
     drawTransformed(ctx) {
         ctx.save();
         ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
