@@ -1,5 +1,13 @@
-    
+
 class MovableObject {
+    isColliding(other) {
+        return (
+            this.x < other.x + other.width &&
+            this.x + this.width > other.x &&
+            this.y < other.y + other.height &&
+            this.y + this.height > other.y
+        );
+    }
     drawTransformed(ctx) {
         ctx.save();
         ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
@@ -113,8 +121,8 @@ class MovableObject {
 
     isColiding(mo) {
         return this.x + this.width > mo.x &&
-               this.y + this.height > mo.y &&
-               this.x + mo.x &&
-               this.y < mo.y + mo.height;
+            this.y + this.height > mo.y &&
+            this.x + mo.x &&
+            this.y < mo.y + mo.height;
     }
 }
