@@ -1,13 +1,31 @@
 
 class MovableObject {
-    isColliding(other) {
+
+    x = 120;
+    y = 220;
+    img;
+    height = 150;
+    width = 150;
+    imageCache = {};
+    speed = 0.4;
+    currentImage = 0;
+    isFacingLeft = false;
+    offset = {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+    };
+
+    isColliding(mo) {
         return (
-            this.x < other.x + other.width &&
-            this.x + this.width > other.x &&
-            this.y < other.y + other.height &&
-            this.y + this.height > other.y
+            this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+            this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
+            this.x + this.offset.left < mo.x + mo.width + mo.offset.right &&
+            this.y + this.offset.top < mo.y + mo.height + mo.offset.bottom
         );
     }
+
     drawTransformed(ctx) {
         ctx.save();
         ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
@@ -26,15 +44,6 @@ class MovableObject {
         );
         ctx.restore();
     }
-    x = 120;
-    y = 220;
-    img;
-    height = 150;
-    width = 150;
-    imageCache = {};
-    speed = 0.4;
-    currentImage = 0;
-    isFacingLeft = false;
 
     loadImage(path) {
         this.img = new Image();
@@ -66,6 +75,24 @@ class MovableObject {
         ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
         ctx.rotate((this.rotation * Math.PI) / 180);
         ctx.drawImage(this.img, -this.width / 2, -this.height / 2, this.width, this.height);
+        ctx.restore();
+    }
+
+    drawOffsetRectangleBlue(ctx) {
+        const left = this.offset.left || 0;
+        const top = this.offset.top || 0;
+        const right = this.offset.right || 0;
+        const bottom = this.offset.bottom || 0;
+        const x = this.x + left;
+        const y = this.y + top;
+        const w = this.width - left - right;
+        const h = this.height - top - bottom;
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'blue';
+        ctx.rect(x, y, w, h);
+        ctx.stroke();
         ctx.restore();
     }
 
@@ -117,12 +144,5 @@ class MovableObject {
         setInterval(() => {
             this.y -= this.speed;
         }, 1000 / 60);
-    }
-
-    isColiding(mo) {
-        return this.x + this.width > mo.x &&
-            this.y + this.height > mo.y &&
-            this.x + mo.x &&
-            this.y < mo.y + mo.height;
     }
 }

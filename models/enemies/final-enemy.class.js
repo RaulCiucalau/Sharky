@@ -18,8 +18,13 @@ class FinalEnemy extends MovableObject {
         'img/2.Enemy/3 Final Enemy/2.floating/10.png',
         'img/2.Enemy/3 Final Enemy/2.floating/11.png',
         'img/2.Enemy/3 Final Enemy/2.floating/12.png'
-    ]
-
+    ];
+    offset = {
+        left: 56,
+        right: 57,
+        top: 150,
+        bottom: 70
+    };
 
     constructor() {
         super().loadImage('img/2.Enemy/3 Final Enemy/2.floating/1.png');

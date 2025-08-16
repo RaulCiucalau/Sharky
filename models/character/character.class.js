@@ -14,6 +14,12 @@ class Character extends MovableObject {
         'img/1.Sharkie/3.Swim/6.png'
     ];
     world;
+    offset = {
+        left: 60,
+        right: 20,
+        top: 20,
+        bottom: 20
+    };
 
     constructor() {
         super().loadImage('img/1.Sharkie/3.Swim/1.png');

@@ -67,6 +67,7 @@ class World {
             drawRectTypes.includes(obj.constructor.name)
         ) {
             obj.drawRedRectangle(this.ctx);
+            obj.drawOffsetRectangleBlue(this.ctx);
         }
     }
 
