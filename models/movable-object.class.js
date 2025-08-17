@@ -14,6 +14,7 @@ class MovableObject {
         top: 0,
         bottom: 0
     };
+    lastHit = 0;
 
     isColliding(mo) {
         return (
@@ -28,7 +29,15 @@ class MovableObject {
         this.energy -= 10;
         if (this.energy < 0) {
             this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime();
         }
+    }
+
+    isHurt() {
+        let timePassed = new Date().getTime() - this.lastHit;
+        timePassed = timePassed / 1000;
+        return timePassed < 0.5;
     }
 
     isDead() {
