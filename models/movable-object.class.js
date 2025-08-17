@@ -1,12 +1,5 @@
-class MovableObject {
-    x = 120;
-    y = 220;
-    img;
-    height = 150;
-    width = 150;
-    imageCache = {};
+class MovableObject extends DrawableObject {
     speed = 0.4;
-    currentImage = 0;
     isFacingLeft = false;
     offset = {
         left: 0,
@@ -68,23 +61,6 @@ class MovableObject {
             this.height
         );
         ctx.restore();
-    }
-
-    loadImage(path) {
-        this.img = new Image();
-        this.img.src = path;
-    }
-
-    loadImages(arr) {
-        arr.forEach((path) => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = img;
-        });
-    }
-
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
     drawFlipped(ctx) {
