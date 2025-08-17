@@ -5,13 +5,27 @@ class Character extends MovableObject {
     height = 280;
     width = 280;
     speed = 12;
-    imgs_swim = [
+    IMAGES_SWIM = [
         'img/1.Sharkie/3.Swim/1.png',
         'img/1.Sharkie/3.Swim/2.png',
         'img/1.Sharkie/3.Swim/3.png',
         'img/1.Sharkie/3.Swim/4.png',
         'img/1.Sharkie/3.Swim/5.png',
         'img/1.Sharkie/3.Swim/6.png'
+    ];
+    IMAGES_DEAD = [
+        'img/1.Sharkie/6.dead/1.Poisoned/1.png',
+        'img/1.Sharkie/6.dead/1.Poisoned/2.png',
+        'img/1.Sharkie/6.dead/1.Poisoned/3.png',
+        'img/1.Sharkie/6.dead/1.Poisoned/4.png',
+        'img/1.Sharkie/6.dead/1.Poisoned/5.png',
+        'img/1.Sharkie/6.dead/1.Poisoned/6.png',
+        'img/1.Sharkie/6.dead/1.Poisoned/7.png',
+        'img/1.Sharkie/6.dead/1.Poisoned/8.png',
+        'img/1.Sharkie/6.dead/1.Poisoned/9.png',
+        'img/1.Sharkie/6.dead/1.Poisoned/10.png',
+        'img/1.Sharkie/6.dead/1.Poisoned/11.png',
+        'img/1.Sharkie/6.dead/1.Poisoned/12.png',
     ];
     world;
     energy = 100;
@@ -24,7 +38,8 @@ class Character extends MovableObject {
 
     constructor() {
         super().loadImage('img/1.Sharkie/3.Swim/1.png');
-        this.loadImages(this.imgs_swim);
+        this.loadImages(this.IMAGES_SWIM);
+        this.loadImages(this.IMAGES_DEAD);
         this.animate();
     }
 
@@ -66,13 +81,12 @@ class Character extends MovableObject {
 
         moveLoop();
         setInterval(() => {
-            if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {
-                let i = this.currentImage % this.imgs_swim.length;
-                let path = this.imgs_swim[i];
-                this.img = this.imageCache[path];
-                this.currentImage++;
+            if(this.isDead()) {
+                this.playAnimation(this.IMAGES_DEAD);
+            } else if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {
+                this.playAnimation(this.IMAGES_SWIM);
             } else {
-                this.img = this.imageCache[this.imgs_swim[0]];
+                this.img = this.imageCache[this.IMAGES_SWIM[0]];
                 this.currentImage = 0;
             }
         }, 140);

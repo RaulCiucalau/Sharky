@@ -1,4 +1,3 @@
-
 class MovableObject {
     x = 120;
     y = 220;
@@ -30,6 +29,17 @@ class MovableObject {
         if (this.energy < 0) {
             this.energy = 0;
         }
+    }
+
+    isDead() {
+        return this.energy == 0;
+    }
+
+    playAnimation(imageArray) {
+        let i = this.currentImage % imageArray.length;
+        let path = imageArray[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
     }
 
     drawTransformed(ctx) {
