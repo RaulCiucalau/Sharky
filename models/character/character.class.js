@@ -1,4 +1,5 @@
 class Character extends MovableObject {
+    idleTime = 0;
     rotation = 0;
     x = 0;
     y = 100;
@@ -24,6 +25,22 @@ class Character extends MovableObject {
         'img/1.Sharkie/1.IDLE/16.png',
         'img/1.Sharkie/1.IDLE/17.png',
         'img/1.Sharkie/1.IDLE/18.png'
+    ];
+    IMAGES_LONG_IDLE = [
+        'img/1.Sharkie/2.Long_IDLE/i1.png',
+        'img/1.Sharkie/2.Long_IDLE/i2.png',
+        'img/1.Sharkie/2.Long_IDLE/i3.png',
+        'img/1.Sharkie/2.Long_IDLE/i4.png',
+        'img/1.Sharkie/2.Long_IDLE/i5.png',
+        'img/1.Sharkie/2.Long_IDLE/i6.png',
+        'img/1.Sharkie/2.Long_IDLE/i7.png',
+        'img/1.Sharkie/2.Long_IDLE/i8.png',
+        'img/1.Sharkie/2.Long_IDLE/i9.png',
+        'img/1.Sharkie/2.Long_IDLE/i10.png',
+        'img/1.Sharkie/2.Long_IDLE/i11.png',
+        'img/1.Sharkie/2.Long_IDLE/i12.png',
+        'img/1.Sharkie/2.Long_IDLE/i13.png',
+        'img/1.Sharkie/2.Long_IDLE/i14.png'
     ];
     IMAGES_SWIM = [
         'img/1.Sharkie/3.Swim/1.png',
@@ -71,6 +88,7 @@ class Character extends MovableObject {
     constructor() {
         super().loadImage('img/1.Sharkie/3.Swim/1.png');
         this.loadImages(this.IMAGES_IDLE);
+        this.loadImages(this.IMAGES_LONG_IDLE);
         this.loadImages(this.IMAGES_SWIM);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT_ELECTRIC);
@@ -78,27 +96,50 @@ class Character extends MovableObject {
         this.animate();
     }
 
+    playLongIdleAnimation(images) {
+    if (this.currentImage < images.length - 4) {
+        this.img = this.imageCache[images[this.currentImage]];
+        this.currentImage++;
+    } else {
+        let loopStart = images.length - 4;
+        let loopIndex = ((this.currentImage - loopStart) % 4) + loopStart;
+        this.img = this.imageCache[images[loopIndex]];
+        this.currentImage++;
+    }
+}
+
     animate() {
         const moveLoop = () => {
+            let moved = false;
             if (this.world && this.world.keyboard) {
                 if (this.world.keyboard.up && this.y > -120) {
                     this.y -= this.speed;
                     this.rotation = -15;
+                    moved = true;
                 }
                 if (this.world.keyboard.down && this.y < 260) {
                     this.y += this.speed;
                     this.rotation = 15;
+                    moved = true;
                 }
                 if (this.world.keyboard.left && this.x > 0) {
                     this.x -= this.speed;
                     this.isFacingLeft = true;
+                    moved = true;
                 }
                 if (this.world.keyboard.right && this.x < this.world.level.level_end_x) {
                     this.x += this.speed;
                     this.isFacingLeft = false;
+                    moved = true;
                 }
                 this.world.camera_x = -this.x;
             }
+            if (moved) {
+                this.idleTime = 0;
+            } else {
+                this.idleTime += 16;
+            }
+
             if (this.rotation !== 0) {
                 if (this.rotation > 0) this.rotation -= 1;
                 if (this.rotation < 0) this.rotation += 1;
@@ -112,6 +153,8 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT_POISONED);
+            } else if (this.idleTime >= 8000) {
+                this.playLongIdleAnimation(this.IMAGES_LONG_IDLE);
             } else if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {
                 this.playAnimation(this.IMAGES_SWIM);
             } else {
