@@ -1,27 +1,27 @@
-class StatusBar extends DrawableObject {
-    IMAGES_LIFE = [
-        'img/4. Marcadores/green/Life/0_copia.png', // 0%
-        'img/4. Marcadores/green/Life/20_copia.png', // 20%
-        'img/4. Marcadores/green/Life/40_copia.png', // 40%
-        'img/4. Marcadores/green/Life/60_copia.png', // 60%
-        'img/4. Marcadores/green/Life/80_copia.png', // 80%
-        'img/4. Marcadores/green/Life/100_copia.png', // 100%
+class CoinsBar extends DrawableObject {
+    IMAGES_COINS = [
+        'img/4. Marcadores/green/Coin/0_copia 4.png',
+        'img/4. Marcadores/green/Coin/20_copia 2.png',
+        'img/4. Marcadores/green/Coin/40_copia 4.png',
+        'img/4. Marcadores/green/Coin/60_copia 4.png',
+        'img/4. Marcadores/green/Coin/80_copia 4.png',
+        'img/4. Marcadores/green/Coin/100_copia 4.png',
     ];
     percentage = 100;
 
     constructor() {
         super();
-        this.loadImages(this.IMAGES_LIFE);
+        this.loadImages(this.IMAGES_COINS);
         this.width = 220;
         this.height = 60;
-        this.x = 0;
+        this.x = 470;
         this.y = 0;
         this.setPercentage(100);
     }
 
     setPercentage(percentage) {
         this.percentage = percentage;
-        let path = this.IMAGES_LIFE[this.resolveImageIndex(percentage)];
+        let path = this.IMAGES_COINS[this.resolveImageIndex(percentage)];
         this.img = this.imageCache[path];
     }
 

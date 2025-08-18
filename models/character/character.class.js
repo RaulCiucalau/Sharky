@@ -42,10 +42,10 @@ class Character extends MovableObject {
     world;
     energy = 100;
     offset = {
-        left: 60,
-        right: 60,
-        top: 140,
-        bottom: 70
+        left: 70,
+        right: 70,
+        top: 150,
+        bottom: 80
     };
 
     constructor() {
