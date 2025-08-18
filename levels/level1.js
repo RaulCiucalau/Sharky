@@ -1,12 +1,17 @@
 const level1 = new Level(
     [
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new PufferFish(),
-        new JellyFish(),
-        new JellyFish(),
-        new JellyFish(),
+        new PufferFish(0),
+        new PufferFish(1),
+        new PufferFish(2),
+        new PufferFish(3),
+        new PufferFish(4),
+        new PufferFish(5),
+        new PufferFish(6),
+        new JellyFish(0),
+        new JellyFish(1),
+        new JellyFish(2),
+        new JellyFish(3),
+        new JellyFish(4),
         new FinalEnemy()
     ],
 
