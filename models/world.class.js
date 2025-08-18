@@ -16,8 +16,9 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollisions();
+        this.checkCollectBottle();
     }
-
+    
     setWorld() {
         this.character.world = this;
     }
@@ -33,6 +34,17 @@ class World {
         }, 500);
     }
 
+    checkCollectBottle() {
+        setInterval(() => {
+            this.level.bottles.forEach(bottle => {
+                if (this.character.isColliding(bottle)) {
+                    this.bottlesBar.collectBottle();
+                    this.level.removeObject(bottle);
+                }
+            });
+        }, 200);
+    }
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
@@ -44,7 +56,7 @@ class World {
         this.addToMap(this.coinsBar);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectToMap(this.level.coins);
-        this.addObjectToMap(this.level.poison);
+        this.addObjectToMap(this.level.bottles);
         this.addToMap(this.character);
         this.ctx.translate(-this.camera_x, 0);
         requestAnimationFrame(() => this.draw());

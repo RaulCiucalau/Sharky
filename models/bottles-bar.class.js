@@ -1,4 +1,5 @@
 class BottlesBar extends DrawableObject {
+    bottlesCollected = 0;
     IMAGES_BOTTLES = [
         'img/4. Marcadores/green/poisoned bubbles/0_ copia 2.png',
         'img/4. Marcadores/green/poisoned bubbles/20_ copia 3.png',
@@ -7,7 +8,7 @@ class BottlesBar extends DrawableObject {
         'img/4. Marcadores/green/poisoned bubbles/80_ copia 2.png',
         'img/4. Marcadores/green/poisoned bubbles/100_ copia 3.png',
     ];
-    percentage = 100;
+    percentage = 0;
 
     constructor() {
         super();
@@ -16,10 +17,11 @@ class BottlesBar extends DrawableObject {
         this.height = 60;
         this.x = 240;
         this.y = 0;
-        this.setPercentage(100);
+        this.setPercentage(0);
     }
 
     setPercentage(percentage) {
+        percentage = Math.max(0, Math.min(percentage, 100));
         this.percentage = percentage;
         let path = this.IMAGES_BOTTLES[this.resolveImageIndex(percentage)];
         this.img = this.imageCache[path];
@@ -32,5 +34,10 @@ class BottlesBar extends DrawableObject {
         if (percentage >= 40) return 2;
         if (percentage >= 20) return 1;
         return 0;
+    }
+
+    collectBottle() {
+        this.bottlesCollected++;
+        this.setPercentage(this.bottlesCollected * 20);
     }
 }

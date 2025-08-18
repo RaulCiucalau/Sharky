@@ -4,10 +4,14 @@ class Level {
     level_end_x = 2150;
     level_end_start_x = -720;
 
-    constructor(enemies, backgroundObjects, coins, poison) {
+    constructor(enemies, backgroundObjects, coins, bottles) {
         this.enemies = enemies;
         this.backgroundObjects = backgroundObjects;
         this.coins = coins;
-        this.poison = poison;
+        this.bottles = bottles;
+    }
+
+    removeObject(object) {
+        this.bottles = this.bottles.filter(b => b !== object);
     }
 }

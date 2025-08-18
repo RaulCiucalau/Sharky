@@ -1,4 +1,4 @@
-class Poison extends MovableObject {
+class Bottles extends MovableObject {
     height = 74;
     width = 66;
     imgs_poison = [
