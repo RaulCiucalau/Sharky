@@ -17,6 +17,7 @@ class World {
         this.setWorld();
         this.checkCollisions();
         this.checkCollectBottle();
+        this.checkCollectCoin();
     }
     
     setWorld() {
@@ -40,6 +41,17 @@ class World {
                 if (this.character.isColliding(bottle)) {
                     this.bottlesBar.collectBottle();
                     this.level.removeObject(bottle);
+                }
+            });
+        }, 200);
+    }
+
+    checkCollectCoin() {
+        setInterval(() => {
+            this.level.coins.forEach(coin => {
+                if (this.character.isColliding(coin)) {
+                    this.coinsBar.collectCoin();
+                    this.level.removeObject(coin);
                 }
             });
         }, 200);

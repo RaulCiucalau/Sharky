@@ -58,33 +58,26 @@ class Character extends MovableObject {
     }
 
     animate() {
-        // Move character up, down, left, right
         const moveLoop = () => {
             if (this.world && this.world.keyboard) {
-                // Up
                 if (this.world.keyboard.up && this.y > -120) {
                     this.y -= this.speed;
                     this.rotation = -15;
                 }
-                // Down
                 if (this.world.keyboard.down && this.y < 260) {
                     this.y += this.speed;
                     this.rotation = 15;
                 }
-                // Left
                 if (this.world.keyboard.left && this.x > 0) {
                     this.x -= this.speed;
                     this.isFacingLeft = true;
                 }
-                // Right
                 if (this.world.keyboard.right && this.x < this.world.level.level_end_x) {
                     this.x += this.speed;
                     this.isFacingLeft = false;
                 }
-                // Camera follows character
                 this.world.camera_x = -this.x;
             }
-            // Smoothly reset rotation
             if (this.rotation !== 0) {
                 if (this.rotation > 0) this.rotation -= 1;
                 if (this.rotation < 0) this.rotation += 1;
@@ -92,12 +85,11 @@ class Character extends MovableObject {
             }
             requestAnimationFrame(moveLoop);
         };
-
         moveLoop();
         setInterval(() => {
-            if(this.isDead()) {
+            if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
-            } else if(this.isHurt()) {
+            } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT_POISONED);
             } else if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {
                 this.playAnimation(this.IMAGES_SWIM);

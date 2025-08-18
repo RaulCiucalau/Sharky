@@ -12,6 +12,7 @@ class Level {
     }
 
     removeObject(object) {
+        this.coins = this.coins.filter(c => c !== object);
         this.bottles = this.bottles.filter(b => b !== object);
     }
 }
