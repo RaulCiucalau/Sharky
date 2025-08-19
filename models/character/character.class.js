@@ -1,3 +1,5 @@
+    attackBubbleActive = false;
+    attackBubbleFrame = 0;
 class Character extends MovableObject {
     idleTime = 0;
     rotation = 0;
@@ -50,6 +52,16 @@ class Character extends MovableObject {
         'img/1.Sharkie/3.Swim/5.png',
         'img/1.Sharkie/3.Swim/6.png'
     ];
+    IMAGES_ATTACK_BUBBLE = [
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/1.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/2.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/3.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/4.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/5.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/6.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/7.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/8.png'
+    ]
     IMAGES_DEAD = [
         'img/1.Sharkie/6.dead/1.Poisoned/1.png',
         'img/1.Sharkie/6.dead/1.Poisoned/2.png',
@@ -90,6 +102,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_LONG_IDLE);
         this.loadImages(this.IMAGES_SWIM);
+        this.loadImages(this.IMAGES_ATTACK_BUBBLE);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT_ELECTRIC);
         this.loadImages(this.IMAGES_HURT_POISONED);
@@ -153,6 +166,19 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT_POISONED);
+            } else if (this.attackBubbleActive) {
+                let i = this.attackBubbleFrame;
+                if (i < this.IMAGES_ATTACK_BUBBLE.length) {
+                    this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE[i]];
+                    this.attackBubbleFrame++;
+                } else {
+                    this.attackBubbleActive = false;
+                    this.attackBubbleFrame = 0;
+                }
+            } else if (this.world && this.world.keyboard && this.world.keyboard.E) {
+                this.attackBubbleActive = true;
+                this.attackBubbleFrame = 0;
+                this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE[0]];
             } else if (this.idleTime >= 8000) {
                 this.playLongIdleAnimation(this.IMAGES_LONG_IDLE);
             } else if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {

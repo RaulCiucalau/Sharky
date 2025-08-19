@@ -62,6 +62,7 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectToMap(this.level.backgroundObjects);
         this.addObjectToMap(this.level.enemies);
+        this.addToMap(this.character);
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
         this.addToMap(this.bottlesBar);
@@ -69,7 +70,6 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectToMap(this.level.coins);
         this.addObjectToMap(this.level.bottles);
-        this.addToMap(this.character);
         this.ctx.translate(-this.camera_x, 0);
         requestAnimationFrame(() => this.draw());
     }
