@@ -1,4 +1,15 @@
 class World {
+    checkBubbleCollisions() {
+        setInterval(() => {
+            this.shootableObjects.forEach((bubble) => {
+                this.level.enemies.forEach((enemy, enemyIdx) => {
+                    if (enemy instanceof JellyFish && bubble.isColliding(enemy)) {
+                        this.level.enemies.splice(enemyIdx, 1);
+                    }
+                });
+            });
+        }, 100);
+    }
     spawnBubble(x, y) {
         const bubble = new ShootableObjects();
         bubble.x = x;
@@ -21,11 +32,12 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.draw();
-        this.setWorld();
-        this.checkCollisions();
-        this.checkCollectBottle();
-        this.checkCollectCoin();
+    this.draw();
+    this.setWorld();
+    this.checkCollisions();
+    this.checkCollectBottle();
+    this.checkCollectCoin();
+    this.checkBubbleCollisions();
     }
     
     setWorld() {
