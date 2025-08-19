@@ -174,6 +174,9 @@ class Character extends MovableObject {
                 } else {
                     this.attackBubbleActive = false;
                     this.attackBubbleFrame = 0;
+                    if (this.world && typeof this.world.spawnBubble === 'function') {
+                        this.world.spawnBubble(this.x + this.width, this.y + this.height / 2);
+                    }
                 }
             } else if (this.world && this.world.keyboard && this.world.keyboard.E) {
                 this.attackBubbleActive = true;

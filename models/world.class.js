@@ -1,4 +1,11 @@
 class World {
+    spawnBubble(x, y) {
+        const bubble = new ShootableObjects();
+        bubble.x = x;
+        bubble.y = y;
+        bubble.moveRight();
+        this.shootableObjects.push(bubble);
+    }
     character = new Character();
     level = level1;
     canvas;
@@ -8,6 +15,7 @@ class World {
     statusBar = new StatusBar();
     bottlesBar = new BottlesBar();
     coinsBar = new CoinsBar();
+    shootableObjects = [new ShootableObjects()];
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -62,14 +70,15 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectToMap(this.level.backgroundObjects);
         this.addObjectToMap(this.level.enemies);
+        this.addObjectToMap(this.level.coins);
+        this.addObjectToMap(this.level.bottles);
+        this.addObjectToMap(this.shootableObjects);
         this.addToMap(this.character);
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
         this.addToMap(this.bottlesBar);
         this.addToMap(this.coinsBar);
         this.ctx.translate(this.camera_x, 0);
-        this.addObjectToMap(this.level.coins);
-        this.addObjectToMap(this.level.bottles);
         this.ctx.translate(-this.camera_x, 0);
         requestAnimationFrame(() => this.draw());
     }
