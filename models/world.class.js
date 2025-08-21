@@ -1,22 +1,4 @@
 class World {
-    checkBubbleCollisions() {
-        setInterval(() => {
-            this.shootableObjects.forEach((bubble) => {
-                this.level.enemies.forEach((enemy, enemyIdx) => {
-                    if (enemy instanceof JellyFish && bubble.isColliding(enemy)) {
-                        this.level.enemies.splice(enemyIdx, 1);
-                    }
-                });
-            });
-        }, 100);
-    }
-    spawnBubble(x, y) {
-        const bubble = new ShootableObjects();
-        bubble.x = x;
-        bubble.y = y;
-        bubble.moveRight();
-        this.shootableObjects.push(bubble);
-    }
     character = new Character();
     level = level1;
     canvas;
@@ -32,22 +14,43 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-    this.draw();
-    this.setWorld();
-    this.checkCollisions();
-    this.checkCollectBottle();
-    this.checkCollectCoin();
-    this.checkBubbleCollisions();
+        this.draw();
+        this.setWorld();
+        this.checkCollisions();
+        this.checkCollectBottle();
+        this.checkCollectCoin();
+        this.checkBubbleCollisions();
     }
-    
+
     setWorld() {
         this.character.world = this;
+    }
+
+    checkBubbleCollisions() {
+        setInterval(() => {
+            this.shootableObjects.forEach((bubble) => {
+                this.level.enemies.forEach((enemy, enemyIdx) => {
+                    if (enemy instanceof JellyFish && bubble.isColliding(enemy) && !enemy.isDead) {
+                        enemy.dieAndRemove(this.level.enemies);
+                        this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
+                    }
+                });
+            });
+        }, 100);
+    }
+
+    spawnBubble(x, y) {
+        const bubble = new ShootableObjects();
+        bubble.x = x;
+        bubble.y = y;
+        bubble.moveRight();
+        this.shootableObjects.push(bubble);
     }
 
     checkCollisions() {
         setInterval(() => {
             this.level.enemies.forEach(enemy => {
-                if (this.character.isColliding(enemy)) {
+                if (!enemy.isDead && this.character.isColliding(enemy)) {
                     this.character.hit();
                     this.statusBar.setPercentage(this.character.energy);
                 }
@@ -110,8 +113,8 @@ class World {
             obj.draw(this.ctx);
         }
         if (typeof obj.drawOffsetRectangle === 'function') {
-        obj.drawOffsetRectangle(this.ctx);
-    }      
+            obj.drawOffsetRectangle(this.ctx);
+        }
     }
 
     flipImage(object) {

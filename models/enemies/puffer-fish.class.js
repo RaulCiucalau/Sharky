@@ -1,4 +1,5 @@
 class PufferFish extends MovableObject {
+    isDead = false;
     height = 100;
     width = 100;
     imgs_fish_swim = [
