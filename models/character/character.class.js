@@ -1,6 +1,8 @@
+class Character extends MovableObject {
     attackBubbleActive = false;
     attackBubbleFrame = 0;
-class Character extends MovableObject {
+    attackBubblePoisonActive = false;
+    attackBubblePoisonFrame = 0;
     idleTime = 0;
     rotation = 0;
     x = 0;
@@ -61,7 +63,17 @@ class Character extends MovableObject {
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/6.png',
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/7.png',
         'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/8.png'
-    ]
+    ];
+    IMAGES_ATTACK_BUBBLE_POISON = [
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/1.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/2.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/3.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/4.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/5.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/6.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png'
+    ];
     IMAGES_DEAD = [
         'img/1.Sharkie/6.dead/1.Poisoned/1.png',
         'img/1.Sharkie/6.dead/1.Poisoned/2.png',
@@ -103,6 +115,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_LONG_IDLE);
         this.loadImages(this.IMAGES_SWIM);
         this.loadImages(this.IMAGES_ATTACK_BUBBLE);
+        this.loadImages(this.IMAGES_ATTACK_BUBBLE_POISON);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT_ELECTRIC);
         this.loadImages(this.IMAGES_HURT_POISONED);
@@ -110,16 +123,16 @@ class Character extends MovableObject {
     }
 
     playLongIdleAnimation(images) {
-    if (this.currentImage < images.length - 4) {
-        this.img = this.imageCache[images[this.currentImage]];
-        this.currentImage++;
-    } else {
-        let loopStart = images.length - 4;
-        let loopIndex = ((this.currentImage - loopStart) % 4) + loopStart;
-        this.img = this.imageCache[images[loopIndex]];
-        this.currentImage++;
+        if (this.currentImage < images.length - 4) {
+            this.img = this.imageCache[images[this.currentImage]];
+            this.currentImage++;
+        } else {
+            let loopStart = images.length - 4;
+            let loopIndex = ((this.currentImage - loopStart) % 4) + loopStart;
+            this.img = this.imageCache[images[loopIndex]];
+            this.currentImage++;
+        }
     }
-}
 
     animate() {
         const moveLoop = () => {
@@ -178,10 +191,26 @@ class Character extends MovableObject {
                         this.world.spawnBubble(this.x + this.width, this.y + this.height / 2);
                     }
                 }
+            } else if (this.attackBubblePoisonActive) {
+                let i = this.attackBubblePoisonFrame;
+                if (i < this.IMAGES_ATTACK_BUBBLE_POISON.length) {
+                    this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE_POISON[i]];
+                    this.attackBubblePoisonFrame++;
+                } else {
+                    this.attackBubblePoisonActive = false;
+                    this.attackBubblePoisonFrame = 0;
+                    if (this.world && typeof this.world.spawnPoisonBubble === 'function') {
+                        this.world.spawnPoisonBubble(this.x + this.width, this.y + this.height / 2);
+                    }
+                }
             } else if (this.world && this.world.keyboard && this.world.keyboard.E) {
                 this.attackBubbleActive = true;
                 this.attackBubbleFrame = 0;
                 this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE[0]];
+            } else if (this.world && this.world.keyboard && this.world.keyboard.Q) {
+                this.attackBubblePoisonActive = true;
+                this.attackBubblePoisonFrame = 0;
+                this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE_POISON[0]];
             } else if (this.idleTime >= 8000) {
                 this.playLongIdleAnimation(this.IMAGES_LONG_IDLE);
             } else if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {
