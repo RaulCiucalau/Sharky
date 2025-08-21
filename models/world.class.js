@@ -28,9 +28,13 @@ class World {
 
     checkBubbleCollisions() {
         setInterval(() => {
-            this.shootableObjects.forEach((bubble) => {
-                this.level.enemies.forEach((enemy, enemyIdx) => {
-                    if (enemy instanceof JellyFish && bubble.isColliding(enemy) && !enemy.isDead) {
+            this.shootableObjects.forEach(bubble => {
+                this.level.enemies.forEach(enemy => {
+                    if (
+                        (enemy instanceof JellyFish || enemy instanceof PufferFish) &&
+                        bubble.isColliding(enemy) &&
+                        !enemy.isDead
+                    ) {
                         enemy.dieAndRemove(this.level.enemies);
                         this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
                     }
