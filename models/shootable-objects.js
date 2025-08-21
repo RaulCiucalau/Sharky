@@ -1,18 +1,21 @@
 class ShootableObjects extends MovableObject {
+    img_bubble = 'img/1.Sharkie/4.Attack/Bubble trap/Bubble.png';
+    img_poisoned_bubble = 'img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png';
 
- constructor() {
-  super().loadImage("img/1.Sharkie/4.Attack/Bubble trap/Bubble.png");
-  this.x = 100;
-  this.y = 100;
-  this.speed = 4;
-  this.width = 50;
-  this.height = 50;
-  this.shoot();
- }
+    constructor(isPoisoned = false) {
+        super();
+        if (isPoisoned) {
+            this.loadImage(this.img_poisoned_bubble);
+        } else {
+            this.loadImage(this.img_bubble);
+        }
+        this.width = 50;
+        this.height = 50;
+    }
 
- shoot(x, y) {
-  this.x = x;
-  this.y = y;
-  this.moveRight();
- }
+    moveRight() {
+        setInterval(() => {
+            this.x += 8;
+        }, 1000 / 60);
+    }
 }
