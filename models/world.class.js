@@ -8,7 +8,7 @@ class World {
     statusBar = new StatusBar();
     bottlesBar = new BottlesBar();
     coinsBar = new CoinsBar();
-    shootableObjects = [new ShootableObjects()];
+    shootableObjects = [];
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -44,7 +44,15 @@ class World {
     }
 
     spawnBubble(x, y) {
-        const bubble = new ShootableObjects();
+        const bubble = new ShootableObjects(false);
+        bubble.x = x;
+        bubble.y = y;
+        bubble.moveRight();
+        this.shootableObjects.push(bubble);
+    }
+
+    spawnPoisonBubble(x, y) {
+        const bubble = new ShootableObjects(true);
         bubble.x = x;
         bubble.y = y;
         bubble.moveRight();
