@@ -27,6 +27,28 @@ class World {
         this.character.world = this;
     }
 
+    checkPoisonBubbleFinalEnemyCollision() {
+    this.shootableObjects.forEach(bubble => {
+        // Check only poison bubbles
+        if (bubble.isPoisoned && this.finalEnemy && !this.finalEnemy.isDead && bubble.isColliding(this.finalEnemy)) {
+            this.finalEnemy.energy = (this.finalEnemy.energy - 10);
+            // Optionally remove bubble after hit:
+            this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
+        }
+    });
+}
+
+    checkFinalEnemyCollision() {
+    if (
+        this.finalEnemy &&
+        !this.finalEnemy.isDead &&
+        this.character.isColliding(this.finalEnemy)
+    ) {
+        this.character.hit();
+        this.statusBar.setPercentage(this.character.energy);
+    }
+}
+
     checkFinalEnemyIntroduce() {
         if (
             this.finalEnemy &&
@@ -133,7 +155,8 @@ class World {
         this.addToMap(this.coinsBar);
         this.ctx.translate(this.camera_x, 0);
         this.ctx.translate(-this.camera_x, 0);
-        
+        this.checkFinalEnemyCollision();
+        this.checkPoisonBubbleFinalEnemyCollision();
         requestAnimationFrame(() => this.draw());
     }
 

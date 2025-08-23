@@ -12,6 +12,7 @@ class ShootableObjects extends MovableObject {
         this.width = 50;
         this.height = 50;
         this.direction = direction;
+        this.isPoisoned = isPoisoned;
     }
 
     move() {
