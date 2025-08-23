@@ -7,8 +7,8 @@ class Character extends MovableObject {
     rotation = 0;
     x = 0;
     y = 100;
-    height = 280;
-    width = 280;
+    height = 250;
+    width = 250;
     speed = 12;
     IMAGES_IDLE = [
         'img/1.Sharkie/1.IDLE/1.png',
@@ -103,10 +103,10 @@ class Character extends MovableObject {
     world;
     energy = 100;
     offset = {
-        left: 70,
-        right: 70,
-        top: 150,
-        bottom: 80
+        left: 60,
+        right: 52,
+        top: 134,
+        bottom: 66
     };
 
     constructor() {
