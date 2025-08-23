@@ -52,11 +52,16 @@ class World {
     }
 
     spawnPoisonBubble(x, y) {
-        const bubble = new ShootableObjects(true);
-        bubble.x = x;
-        bubble.y = y;
-        bubble.moveRight();
-        this.shootableObjects.push(bubble);
+        if (this.bottlesBar.bottlesCollected > 0) {
+            const bubble = new ShootableObjects(true);
+            bubble.x = x;
+            bubble.y = y;
+            bubble.moveRight();
+            this.shootableObjects.push(bubble);
+            this.bottlesBar.bottlesCollected--;
+            let percent = Math.round((this.bottlesBar.bottlesCollected / 6) * 100);
+            this.bottlesBar.setPercentage(percent);
+        }
     }
 
     checkCollisions() {

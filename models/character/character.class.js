@@ -208,9 +208,11 @@ class Character extends MovableObject {
                 this.attackBubbleFrame = 0;
                 this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE[0]];
             } else if (this.world && this.world.keyboard && this.world.keyboard.Q) {
-                this.attackBubblePoisonActive = true;
-                this.attackBubblePoisonFrame = 0;
-                this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE_POISON[0]];
+                if (this.world.bottlesBar.bottlesCollected > 0) {
+                    this.attackBubblePoisonActive = true;
+                    this.attackBubblePoisonFrame = 0;
+                    this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE_POISON[0]];
+                }
             } else if (this.idleTime >= 8000) {
                 this.playLongIdleAnimation(this.IMAGES_LONG_IDLE);
             } else if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {
