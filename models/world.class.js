@@ -9,6 +9,7 @@ class World {
     bottlesBar = new BottlesBar();
     coinsBar = new CoinsBar();
     shootableObjects = [];
+    finalEnemy = new FinalEnemy();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -24,6 +25,19 @@ class World {
 
     setWorld() {
         this.character.world = this;
+    }
+
+    checkFinalEnemyIntroduce() {
+        if (
+            this.finalEnemy &&
+            (this.finalEnemy.isIntroducing || this.character.x === 2160)
+        ) {
+            if (!this.finalEnemy.isIntroducing && this.character.x === 2160) {
+                this.finalEnemy.isIntroducing = true;
+                this.finalEnemy.introduceFrame = 0;
+            }
+            this.addToMap(this.finalEnemy);
+        }
     }
 
     checkBubbleCollisions() {
@@ -107,6 +121,7 @@ class World {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectToMap(this.level.backgroundObjects);
+        this.checkFinalEnemyIntroduce();
         this.addObjectToMap(this.level.enemies);
         this.addObjectToMap(this.level.coins);
         this.addObjectToMap(this.level.bottles);
@@ -118,6 +133,7 @@ class World {
         this.addToMap(this.coinsBar);
         this.ctx.translate(this.camera_x, 0);
         this.ctx.translate(-this.camera_x, 0);
+        
         requestAnimationFrame(() => this.draw());
     }
 

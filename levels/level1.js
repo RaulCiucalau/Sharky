@@ -12,6 +12,9 @@ const level1 = new Level(
         new JellyFish(2),
         new JellyFish(3),
         new JellyFish(4),
+    ],
+
+    [
         new FinalEnemy()
     ],
 
