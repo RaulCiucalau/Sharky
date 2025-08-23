@@ -1,9 +1,9 @@
 class FinalEnemy extends MovableObject {
     x = 2480;
     y = -100;
-    height = 420;
-    width = 420;
-    speed = 0.1;
+    height = 500;
+    width = 500;
+    speed = 0.08;
     imgs_introduce = [
         'img/2.Enemy/3 Final Enemy/1.Introduce/1.png',
         'img/2.Enemy/3 Final Enemy/1.Introduce/2.png',
@@ -54,6 +54,7 @@ class FinalEnemy extends MovableObject {
                     let path = this.imgs_introduce[this.introduceFrame];
                     this.img = this.imageCache[path];
                     this.introduceFrame++;
+                    this.moveLeft();
                 } else {
                     this.isIntroducing = false;
                     this.hasIntroduced = true;
