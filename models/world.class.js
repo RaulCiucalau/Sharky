@@ -44,19 +44,25 @@ class World {
     }
 
     spawnBubble(x, y) {
-        const bubble = new ShootableObjects(false);
-        bubble.x = x;
-        bubble.y = y;
-        bubble.moveRight();
+        const direction = this.character.isFacingLeft ? 'left' : 'right';
+        const spawnX = direction === 'left' ? this.character.x - 30 : this.character.x + this.character.width + 10;
+        const spawnY = this.character.y + this.character.height / 2;
+        const bubble = new ShootableObjects(false, direction);
+        bubble.x = spawnX;
+        bubble.y = spawnY;
+        bubble.move();
         this.shootableObjects.push(bubble);
     }
 
     spawnPoisonBubble(x, y) {
         if (this.bottlesBar.bottlesCollected > 0) {
-            const bubble = new ShootableObjects(true);
-            bubble.x = x;
-            bubble.y = y;
-            bubble.moveRight();
+            const direction = this.character.isFacingLeft ? 'left' : 'right';
+            const spawnX = direction === 'left' ? this.character.x - 30 : this.character.x + this.character.width + 10;
+            const spawnY = this.character.y + this.character.height / 2 - 25;
+            const bubble = new ShootableObjects(true, direction);
+            bubble.x = spawnX;
+            bubble.y = spawnY;
+            bubble.move();
             this.shootableObjects.push(bubble);
             this.bottlesBar.bottlesCollected--;
             let percent = Math.round((this.bottlesBar.bottlesCollected / 6) * 100);
