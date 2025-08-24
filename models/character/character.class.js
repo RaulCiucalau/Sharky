@@ -215,10 +215,11 @@ class Character extends MovableObject {
                 }
             } else if (this.idleTime >= 10000) {
                 this.playLongIdleAnimation(this.IMAGES_LONG_IDLE);
-            } else if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {
+            } else if (
+                this.world && this.world.keyboard &&
+                (this.world.keyboard.right || this.world.keyboard.left || this.world.keyboard.up || this.world.keyboard.down)
+            ) {
                 this.playAnimation(this.IMAGES_SWIM);
-            } else {
-                this.playAnimation(this.IMAGES_IDLE);
             }
         }, 140);
     }

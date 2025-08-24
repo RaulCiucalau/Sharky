@@ -190,15 +190,23 @@ class World {
     }
 
     addToMap(obj) {
+        this.ctx.save();
+        this.ctx.translate(obj.x + obj.width / 2, obj.y + obj.height / 2);
         if (obj.isFacingLeft) {
-            obj.drawFlipped(this.ctx);
-        } else if (obj.rotation && obj.rotation !== 0) {
-            obj.drawRotated(this.ctx);
-        } else {
-            obj.draw(this.ctx);
+            this.ctx.scale(-1, 1);
         }
+        if (obj.rotation && obj.rotation !== 0) {
+            this.ctx.rotate((obj.rotation * Math.PI) / 180);
+        }
+        this.ctx.drawImage(
+            obj.img,
+            -obj.width / 2,
+            -obj.height / 2,
+            obj.width,
+            obj.height
+        );
+        this.ctx.restore();
         if (typeof obj.drawOffsetRectangle === 'function') {
-            //obj.drawOffsetRectangle(this.ctx);
         }
     }
 
