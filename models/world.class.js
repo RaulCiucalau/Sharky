@@ -7,9 +7,12 @@ class World {
     camera_x = 0;
     statusBar = new StatusBar();
     bottlesBar = new BottlesBar();
+    healthBarEndboss = new HealthBarEndboss();
     coinsBar = new CoinsBar();
     shootableObjects = [];
     finalEnemy = new FinalEnemy();
+    endbossHealthBarVisible = false;
+    finalEnemyVisible = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -21,6 +24,7 @@ class World {
         this.checkCollectBottle();
         this.checkCollectCoin();
         this.checkBubbleCollisions();
+        this.showEndbossHealthBar();
     }
 
     setWorld() {
@@ -54,16 +58,28 @@ class World {
         }
     }
 
+    showEndbossHealthBar() {
+        if (this.character.x === 2160) {
+            this.endbossHealthBarVisible = true;
+        }
+        if (this.endbossHealthBarVisible) {
+            this.addToMap(this.healthBarEndboss);
+        }
+    }
+
     checkFinalEnemyIntroduce() {
         if (
             this.finalEnemy &&
-            (this.finalEnemy.isIntroducing || this.character.x === 2160)
+            (this.finalEnemy.isIntroducing || this.character.x === 2160 || this.finalEnemyVisible)
         ) {
             if (!this.finalEnemy.isIntroducing && this.character.x === 2160) {
                 this.finalEnemy.isIntroducing = true;
                 this.finalEnemy.introduceFrame = 0;
+                this.finalEnemyVisible = true;
             }
-            this.addToMap(this.finalEnemy);
+            if (this.finalEnemy.isIntroducing || this.finalEnemyVisible) {
+                this.addToMap(this.finalEnemy);
+            }
         }
     }
 
@@ -108,6 +124,7 @@ class World {
             this.bottlesBar.bottlesCollected--;
             let percent = Math.round((this.bottlesBar.bottlesCollected / 6) * 100);
             this.bottlesBar.setPercentage(percent);
+            this.healthBarEndboss.setPercentage(this.finalEnemy.energy);
         }
     }
 
@@ -158,6 +175,7 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.bottlesBar);
         this.addToMap(this.coinsBar);
+        this.showEndbossHealthBar();
         this.ctx.translate(this.camera_x, 0);
         this.ctx.translate(-this.camera_x, 0);
         this.checkFinalEnemyCollision();
@@ -180,7 +198,7 @@ class World {
             obj.draw(this.ctx);
         }
         if (typeof obj.drawOffsetRectangle === 'function') {
-            obj.drawOffsetRectangle(this.ctx);
+            //obj.drawOffsetRectangle(this.ctx);
         }
     }
 

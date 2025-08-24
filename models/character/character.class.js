@@ -163,7 +163,7 @@ class Character extends MovableObject {
             if (moved) {
                 this.idleTime = 0;
             } else {
-                this.idleTime += 16;
+                this.idleTime += 5;
             }
 
             if (this.rotation !== 0) {
@@ -213,7 +213,7 @@ class Character extends MovableObject {
                     this.attackBubblePoisonFrame = 0;
                     this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE_POISON[0]];
                 }
-            } else if (this.idleTime >= 8000) {
+            } else if (this.idleTime >= 10000) {
                 this.playLongIdleAnimation(this.IMAGES_LONG_IDLE);
             } else if (this.world && this.world.keyboard && (this.world.keyboard.right || this.world.keyboard.left)) {
                 this.playAnimation(this.IMAGES_SWIM);
