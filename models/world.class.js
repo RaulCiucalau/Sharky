@@ -59,7 +59,7 @@ class World {
     }
 
     showEndbossHealthBar() {
-        if (this.character.x === 2160) {
+        if (this.character.x === 2151) {
             this.endbossHealthBarVisible = true;
         }
         if (this.endbossHealthBarVisible) {
@@ -70,9 +70,9 @@ class World {
     checkFinalEnemyIntroduce() {
         if (
             this.finalEnemy &&
-            (this.finalEnemy.isIntroducing || this.character.x === 2160 || this.finalEnemyVisible)
+            (this.finalEnemy.isIntroducing || this.character.x === 2151 || this.finalEnemyVisible)
         ) {
-            if (!this.finalEnemy.isIntroducing && this.character.x === 2160) {
+            if (!this.finalEnemy.isIntroducing && this.character.x === 2151) {
                 this.finalEnemy.isIntroducing = true;
                 this.finalEnemy.introduceFrame = 0;
                 this.finalEnemyVisible = true;

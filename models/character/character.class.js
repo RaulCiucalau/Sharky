@@ -9,7 +9,7 @@ class Character extends MovableObject {
     y = 100;
     height = 250;
     width = 250;
-    speed = 12;
+    speed = 3;
     IMAGES_IDLE = [
         'img/1.Sharkie/1.IDLE/1.png',
         'img/1.Sharkie/1.IDLE/2.png',
