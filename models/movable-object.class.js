@@ -105,7 +105,9 @@ class MovableObject extends DrawableObject {
 
     moveLeft() {
         setInterval(() => {
-            this.x -= this.speed;
+            if (!this.isDead) {
+                this.x -= this.speed;
+            }
         }, 1000 / 60);
     }
 
@@ -116,25 +118,25 @@ class MovableObject extends DrawableObject {
     }
 
     moveUpAndDown(distance = 300, speed = this.speed) {
-    const startY = this.y;
-    let goingUp = true;
-    let moved = 0;
-    const interval = setInterval(() => {
-        if (goingUp) {
-            this.y -= speed;
-            moved += speed;
-            if (moved >= distance) {
-                goingUp = false;
+        const startY = this.y;
+        let goingUp = true;
+        let moved = 0;
+        const interval = setInterval(() => {
+            if (goingUp) {
+                this.y -= speed;
+                moved += speed;
+                if (moved >= distance) {
+                    goingUp = false;
+                }
+            } else {
+                this.y += speed;
+                moved -= speed;
+                if (moved <= 0) {
+                    clearInterval(interval);
+                    this.y = startY;
+                    this.moveUpAndDown();
+                }
             }
-        } else {
-            this.y += speed;
-            moved -= speed;
-            if (moved <= 0) {
-                clearInterval(interval);
-                this.y = startY;
-                this.moveUpAndDown();
-            }
-        }
-    }, 1000 / 60);
-}
+        }, 1000 / 60);
+    }
 }

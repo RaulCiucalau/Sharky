@@ -28,26 +28,31 @@ class World {
     }
 
     checkPoisonBubbleFinalEnemyCollision() {
-    this.shootableObjects.forEach(bubble => {
-        // Check only poison bubbles
-        if (bubble.isPoisoned && this.finalEnemy && !this.finalEnemy.isDead && bubble.isColliding(this.finalEnemy)) {
-            this.finalEnemy.energy = (this.finalEnemy.energy - 10);
-            // Optionally remove bubble after hit:
-            this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
-        }
-    });
-}
+        this.shootableObjects.forEach(bubble => {
+            if (
+                bubble.isPoisoned &&
+                this.finalEnemy &&
+                !this.finalEnemy.isDead &&
+                bubble.isColliding(this.finalEnemy)
+            ) {
+                this.finalEnemy.energy = Math.max(0, this.finalEnemy.energy - 10);
+                this.finalEnemy.isHurt = true;
+                this.finalEnemy.hurtFrame = 0;
+                this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
+            }
+        });
+    }
 
     checkFinalEnemyCollision() {
-    if (
-        this.finalEnemy &&
-        !this.finalEnemy.isDead &&
-        this.character.isColliding(this.finalEnemy)
-    ) {
-        this.character.hit();
-        this.statusBar.setPercentage(this.character.energy);
+        if (
+            this.finalEnemy &&
+            !this.finalEnemy.isDead &&
+            this.character.isColliding(this.finalEnemy)
+        ) {
+            this.character.hit();
+            this.statusBar.setPercentage(this.character.energy);
+        }
     }
-}
 
     checkFinalEnemyIntroduce() {
         if (
