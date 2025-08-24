@@ -43,6 +43,7 @@ class World {
                 this.finalEnemy.isHurt = true;
                 this.finalEnemy.hurtFrame = 0;
                 this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
+                this.healthBarEndboss.setPercentage(this.finalEnemy.energy);
             }
         });
     }
@@ -124,7 +125,6 @@ class World {
             this.bottlesBar.bottlesCollected--;
             let percent = Math.round((this.bottlesBar.bottlesCollected / 6) * 100);
             this.bottlesBar.setPercentage(percent);
-            this.healthBarEndboss.setPercentage(this.finalEnemy.energy);
         }
     }
 
