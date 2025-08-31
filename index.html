@@ -25,15 +25,46 @@
     <script src="./models/shootable-objects.js"></script>
     <script src="./levels/level1.js"></script>
     <script src="./js/game.js"></script>
+
 </head>
 
 <body onload="init()">
+    <!-- <div class="game-over-dialog">
+        <p>GAME OVER</p>
+        <button>PLAY AGAIN</button>
+        <button>MAIN MENU</button>
+    </div> -->
+
     <div class="canvas-content">
-        <h1>Sharky</h1>
         <canvas id="canvas" width="720" height="480"></canvas>
-        <!-- <img id="gameMenu" class="main-menu" src="./img/6.Botones/Try again/Mesa de trabajo 1.png" alt=""> -->
+        <div id="gameMenu" class="main-menu-background-img" alt=""></div>
+        <div class="game-title">
+            <img class="title" src="img/6.Botones/Menu/Title.png" alt="">
+        </div>
+            <div class="controls-tab-container">
+                <h2>Movement & Actions</h2>
+                <br>
+                <p><strong>W / A / S / D or arrow keys</strong> - Move</p>
+                <p><strong>E</strong> - Normal Bubble</p>
+                <p><strong>Q</strong> - Poisoned Bubble</p>
+                <br>
+                <h2>Tips</h2>
+                <p>- Grab coins and poison bottles</p>
+                <p>- Whale boss 🐋 = only hurts from Poisoned Bubbles</p>
+                </ul>
+        </div>
+        <div class="buttons-container">
+            <img id="playBtn" onclick="startPlay()" class="button-to-play bubble" src="img/6.Botones/Menu/Play_btn.png"
+                alt="Play Button"></img>
+            <img id="controlsBtn" class="button-to-controls bubble" src="img/6.Botones/Menu/Controls_btn.png"
+                alt="Controls Button">
+            <img id="impressumBtn" class="button-to-impressum bubble" src="img/6.Botones/Menu/Impressum_btn.png"
+                alt="Impressum Button">
+        </div>
+
     </div>
 
 </body>
+<script src="./script.js"></script>
 
 </html>
