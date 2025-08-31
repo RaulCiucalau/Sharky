@@ -159,6 +159,29 @@ canvas {
     letter-spacing: 1px;
 }
 
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 7px;
+    width: 54px;
+    cursor: pointer;
+    background: #00a9e4;
+    border-radius: 50%;
+}
+
+.back-button:hover {
+    box-shadow: inset 20px 11px 20px 20px rgb(0 241 243 / 93%);
+    transform: scale(1.05);
+}
+
+.dp-none {
+    display: none;
+}
+
+.title-movement-controls {
+    margin-top: 54px;
+}
+
 @media only screen and (max-width: 720px) {
     h1 {
         font-size: 2rem;
