@@ -185,10 +185,6 @@ canvas {
     height: 300px;
     z-index: 5;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     letter-spacing: 1px;
 }
 
