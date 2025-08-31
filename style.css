@@ -143,9 +143,6 @@ canvas {
     position: absolute;
     top: 156px;
     left: 156px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 10px;
     width: 400px;
@@ -176,6 +173,27 @@ canvas {
 
 .dp-none {
     display: none;
+}
+
+.impressum-tab-container {
+    position: absolute;
+    top: 156px;
+    left: 156px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    width: 400px;
+    height: 300px;
+    z-index: 5;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 1px;
+}
+
+.title-impressum {
+    margin-top: 54px;
 }
 
 .title-movement-controls {
