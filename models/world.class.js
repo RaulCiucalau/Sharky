@@ -134,6 +134,9 @@ class World {
                 if (!enemy.isDead && this.character.isColliding(enemy)) {
                     this.character.hit();
                     this.statusBar.setPercentage(this.character.energy);
+                    const hurtSound = document.getElementById('hurtSound');
+                    hurtSound.currentTime = 0;
+                    hurtSound.play();
                 }
             });
         }, 500);
@@ -145,6 +148,9 @@ class World {
                 if (this.character.isColliding(bottle)) {
                     this.bottlesBar.collectBottle();
                     this.level.removeObject(bottle);
+                    const bottleSound = document.getElementById('collectBottleSound');
+                    bottleSound.currentTime = 0;
+                    bottleSound.play();
                 }
             });
         }, 200);
@@ -156,10 +162,13 @@ class World {
                 if (this.character.isColliding(coin)) {
                     this.coinsBar.collectCoin();
                     this.level.removeObject(coin);
-                }
-            });
-        }, 200);
-    }
+                    const coinSound = document.getElementById('coinCollectSound');
+                    coinSound.currentTime = 0;
+                    coinSound.play();
+             }
+        });
+    }, 200);
+}
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

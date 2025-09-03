@@ -29,18 +29,33 @@
 </head>
 
 <body onload="init()">
-    <!-- <div class="game-over-dialog">
-        <p>GAME OVER</p>
-        <button>PLAY AGAIN</button>
-        <button>MAIN MENU</button>
-    </div> -->
+    <div class="game-over-dialog dp-none">
+        <h1 class="game-end-title">GAME OVER</h1>
+        <p class="game-end-btn">TRY AGAIN</p>
+        <p class="game-end-btn">MAIN MENU</p>
+    </div>
+
+    <div class="game-win-dialog dp-none">
+        <img class="game-win-img" src="img/6.Botones/Tittles/You win/Mesa de trabajo 1.png" alt="">
+        <div class="game-win-btn">
+            <p class="game-end-btn">TRY AGAIN</p>
+            <p class="game-end-btn">MAIN MENU</p>
+        </div>
+    </div>
 
     <div class="canvas-content">
+        <audio id="mainMenuMusic" src="audio/566116__skynext__ocean-natural-sound-waves.mp3" preload="auto" autoplay
+            loop></audio>
+        <audio id="inGameMusic" src="audio/651743__department64__underwater-deep-water-loop.flac"></audio>
+        <audio id="coinCollectSound" src="audio/536071__eminyildirim__coin-collect.wav"></audio>
+        <audio id="collectBottleSound" src="audio/724223__sapphicrabbit__drinking-gulp.wav"></audio>
+        <audio id="hurtSound" src="audio/588557_unfa_short-male-pain-sounds-kinda-silly.mp3"></audio>
         <canvas id="canvas" width="720" height="480"></canvas>
         <div id="gameMenu" class="main-menu-background-img" alt=""></div>
         <div class="game-title">
             <img class="title" src="img/6.Botones/Menu/Title.png" alt="">
         </div>
+        <img id="characterImg" class="character-img" src="img/1.Sharkie/1.IDLE/1.png" alt="Sharkie">
         <div class="controls-tab-container dp-none">
             <img src="img/6.Botones/Menu/icons8_close.png" alt="Back Button" class="back-button"
                 id="backFromControlsBtn">

@@ -1,3 +1,9 @@
+document.body.addEventListener('click', () => {
+    const music = document.getElementById('mainMenuMusic');
+    music.currentTime = 0;
+    music.play();
+}, { once: true });
+
 // Show controls tab and hide main menu
 function showControlsTab() {
     document.querySelector('.controls-tab-container').style.display = 'block';
@@ -31,14 +37,18 @@ document.getElementById('backFromImpressumBtn').addEventListener('click', hideIm
 document.getElementById('impressumBtn').addEventListener('click', showImpressumTab);
 
 function startPlay() {
+    document.getElementById('mainMenuMusic').pause();
+    document.getElementById('inGameMusic').play();
     let mainMenuImg = document.getElementById('gameMenu');
     let buttonsContainer = document.querySelector('.buttons-container');
     let gameTitle = document.querySelector('.game-title');
+    let characterImg = document.getElementById('characterImg');
 
     if (mainMenuImg) {
         mainMenuImg.classList.add('overlay-fade-out');
         buttonsContainer.remove();
         gameTitle.remove();
+        characterImg.remove();
     }
 }
 
