@@ -1,3 +1,7 @@
+// Track if user has interacted with the document
+let userInteracted = false;
+window.addEventListener('click', () => { userInteracted = true; });
+window.addEventListener('keydown', () => { userInteracted = true; });
 document.body.addEventListener('click', () => {
     const music = document.getElementById('mainMenuMusic');
     music.currentTime = 0;
@@ -51,5 +55,12 @@ function startPlay() {
         characterImg.remove();
     }
     startGame();
+}
+
+function restartGame() {
+    let gameOverDialog = document.getElementById('gameOverDialog');
+    gameOverDialog.classList.add('dp-none');
+    userInteracted = false;
+    restartGameState();
 }
 

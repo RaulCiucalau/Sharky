@@ -17,6 +17,14 @@ function startGame() {
     gamePaused = false;
 }
 
+function restartGameState() {
+    canvas = document.getElementById('canvas');
+    keyboard = new Keyboard();
+    world = new World(canvas, keyboard);
+    world.paused = false;
+    gamePaused = false;
+}
+
 window.addEventListener("keydown", (e) => {
     if (e.key === "w" || e.key === "W") {
         keyboard.up = true;

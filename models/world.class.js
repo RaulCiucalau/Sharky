@@ -137,8 +137,8 @@ class World {
                     this.statusBar.setPercentage(this.character.energy);
                     const hurtSound = document.getElementById('hurtSound');
                     if (this.character.energy > 0) {
-                        // Only play if not already playing
-                        if (hurtSound.paused) {
+                        // Only play if not already playing and user interacted
+                        if (typeof userInteracted !== 'undefined' && userInteracted && hurtSound.paused) {
                             hurtSound.currentTime = 0;
                             try {
                                 hurtSound.play();
@@ -154,8 +154,10 @@ class World {
                         } catch (e) {
                             // Suppress AbortError from play/pause race
                         }
-                        this.paused = true;
-                        document.querySelector('.game-over-dialog').classList.remove('dp-none');
+                        if (!this.paused) {
+                            this.paused = true;
+                            document.querySelector('.game-over-dialog').classList.remove('dp-none');
+                        }
                     }
                 }
             });

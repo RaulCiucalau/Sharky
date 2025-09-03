@@ -29,17 +29,17 @@
 </head>
 
 <body onload="init()">
-    <div class="game-over-dialog dp-none">
+    <div id="gameOverDialog" class="game-over-dialog dp-none">
         <h1 class="game-end-title">GAME OVER</h1>
-        <p class="game-end-btn">TRY AGAIN</p>
-        <p class="game-end-btn">MAIN MENU</p>
+        <p id="tryAgainBtn" onclick="restartGame()" class="game-end-btn">TRY AGAIN</p>
+        <p id="mainMenuBtn" onclick="openMainMenu()" class="game-end-btn">MAIN MENU</p>
     </div>
 
     <div class="game-win-dialog dp-none">
         <img class="game-win-img" src="img/6.Botones/Tittles/You win/Mesa de trabajo 1.png" alt="">
         <div class="game-win-btn">
-            <p class="game-end-btn">TRY AGAIN</p>
-            <p class="game-end-btn">MAIN MENU</p>
+            <p id="tryAgainBtn" onclick="restartGame()" class="game-end-btn">TRY AGAIN</p>
+            <p id="mainMenuBtn" onclick="openMainMenu()" class="game-end-btn">MAIN MENU</p>
         </div>
     </div>
 
