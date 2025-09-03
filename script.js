@@ -50,11 +50,12 @@ function startPlay() {
 
     if (mainMenuImg) {
         mainMenuImg.classList.add('overlay-fade-out');
-        buttonsContainer.remove();
-        gameTitle.remove();
-        characterImg.remove();
+        buttonsContainer.style.display = 'none';
+        gameTitle.style.display = 'none';
+        characterImg.style.display = 'none';
     }
     startGame();
+    restartGameState();
 }
 
 function restartGame() {
@@ -64,3 +65,43 @@ function restartGame() {
     restartGameState();
 }
 
+function openMainMenu() {
+    document.getElementById('mainMenuContainer').style.display = 'block';
+    // Hide game-over dialog
+    document.querySelector('.game-over-dialog').classList.add('dp-none');
+    // Show main menu UI elements
+    document.getElementById('gameMenu').classList.remove('overlay-fade-out');
+    document.querySelector('.buttons-container').style.display = "flex";
+    document.querySelector('.game-title').style.display = "block";
+    document.getElementById('characterImg').style.display = "block";
+    document.getElementById('controlsBtn').style.display = "block";
+    document.getElementById('impressumBtn').style.display = "block";
+
+    // Play main menu music, pause in-game music
+    const mainMenuMusic = document.getElementById('mainMenuMusic');
+    const inGameMusic = document.getElementById('inGameMusic');
+    if (inGameMusic) {
+        inGameMusic.pause();
+        inGameMusic.currentTime = 0;
+        inGameMusic.src = inGameMusic.src; // Force reload if needed
+    }
+    if (mainMenuMusic) {
+        mainMenuMusic.currentTime = 0;
+        mainMenuMusic.play();
+    }
+    if (typeof restartGameState === 'function') {
+        restartGameState();
+    }
+    if (typeof world !== 'undefined') {
+        world.paused = true;
+    }
+    // Ensure main menu music always plays
+    if (mainMenuMusic) {
+        mainMenuMusic.currentTime = 0;
+        try {
+            mainMenuMusic.play();
+        } catch (e) {
+            // Suppress NotAllowedError if user hasn't interacted
+        }
+    }
+}

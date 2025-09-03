@@ -241,6 +241,13 @@ canvas {
     top: 147px;
 }
 
+.main-menu-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .game-end-title {
     font-size: 114px;
     letter-spacing: 19px;
