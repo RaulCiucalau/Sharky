@@ -1,10 +1,20 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let gamePaused = true;
 
 function init() {
     canvas = document.getElementById('canvas');
+    // Only create World instance, but do not start game loop
     world = new World(canvas, keyboard);
+    world.paused = true;
+}
+
+function startGame() {
+    if (world) {
+        world.paused = false;
+    }
+    gamePaused = false;
 }
 
 window.addEventListener("keydown", (e) => {

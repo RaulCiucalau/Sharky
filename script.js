@@ -50,5 +50,6 @@ function startPlay() {
         gameTitle.remove();
         characterImg.remove();
     }
+    startGame();
 }
 

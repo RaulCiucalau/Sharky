@@ -18,6 +18,7 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.paused = false;
         this.draw();
         this.setWorld();
         this.checkCollisions();
@@ -135,8 +136,27 @@ class World {
                     this.character.hit();
                     this.statusBar.setPercentage(this.character.energy);
                     const hurtSound = document.getElementById('hurtSound');
-                    hurtSound.currentTime = 0;
-                    hurtSound.play();
+                    if (this.character.energy > 0) {
+                        // Only play if not already playing
+                        if (hurtSound.paused) {
+                            hurtSound.currentTime = 0;
+                            try {
+                                hurtSound.play();
+                            } catch (e) {
+                                // Suppress AbortError from play/pause race
+                            }
+                        }
+                    } else {
+                        // Stop hurt sound safely before pausing game
+                        try {
+                            hurtSound.pause();
+                            hurtSound.currentTime = 0;
+                        } catch (e) {
+                            // Suppress AbortError from play/pause race
+                        }
+                        this.paused = true;
+                        document.querySelector('.game-over-dialog').classList.remove('dp-none');
+                    }
                 }
             });
         }, 500);
@@ -171,6 +191,10 @@ class World {
 }
 
     draw() {
+        if (this.paused) {
+            requestAnimationFrame(() => this.draw());
+            return;
+        }
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectToMap(this.level.backgroundObjects);
