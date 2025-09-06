@@ -35,7 +35,7 @@
         <p id="mainMenuBtn" onclick="openMainMenu()" class="game-end-btn">MAIN MENU</p>
     </div>
 
-    <div class="game-win-dialog dp-none">
+    <div id="gameWinDialog" class="game-win-dialog dp-none-win">
         <img class="game-win-img" src="img/6.Botones/Tittles/You win/Mesa de trabajo 1.png" alt="">
         <div class="game-win-btn">
             <p id="tryAgainBtn" onclick="restartGame()" class="game-end-btn">TRY AGAIN</p>
@@ -46,10 +46,11 @@
     <div class="canvas-content">
         <audio id="mainMenuMusic" src="audio/566116__skynext__ocean-natural-sound-waves.mp3" preload="auto" autoplay
             loop></audio>
-        <audio id="inGameMusic" src="audio/651743__department64__underwater-deep-water-loop.flac"></audio>
+        <audio id="inGameMusic" src="audio/651743__department64__underwater-deep-water-loop.flac" loop></audio>
         <audio id="coinCollectSound" src="audio/536071__eminyildirim__coin-collect.wav"></audio>
         <audio id="collectBottleSound" src="audio/724223__sapphicrabbit__drinking-gulp.wav"></audio>
         <audio id="hurtSound" src="audio/588557_unfa_short-male-pain-sounds-kinda-silly.mp3"></audio>
+        <audio id="finalEnemySplash" src="audio/320185__robinhood76__05966-water-surfacing-splashes.mp3"></audio>
         <canvas id="canvas" width="720" height="480"></canvas>
         <div id="mainMenuContainer" class="main-menu-container">
             <div id="gameMenu" class="main-menu-background-img" alt=""></div>
@@ -84,6 +85,7 @@
                 <p>Quelle: <a href="https://www.e-recht24.de">https://www.e-recht24.de</a></p>
                 <p>
                 <p> Icons: <a target="_blank" href="https://icons8.com">Icons8</a>
+                <p> Audio: <a target="_blank" href="https://freesound.org">Freesound</a>
                 </p>
             </div>
             <div class="buttons-container">
@@ -93,6 +95,10 @@
                     src="img/6.Botones/Menu/Controls_btn.png" alt="Controls Button">
                 <img id="impressumBtn" class="button-to-impressum bubble" src="img/6.Botones/Menu/Impressum_btn.png"
                     alt="Impressum Button">
+                <div class="volume-slider-container">
+                    <label for="mainMenuVolume">Volume:</label>
+                    <input type="range" id="mainMenuVolume" min="0" max="1" step="0.01" value="1">
+                </div>
             </div>
         </div>
     </div>
