@@ -70,6 +70,7 @@ class World {
     }
 
     checkFinalEnemyIntroduce() {
+            const finalEnemySplashSound = document.getElementById('finalEnemySplash');
         if (
             this.finalEnemy &&
             (this.finalEnemy.isIntroducing || this.character.x === 2151 || this.finalEnemyVisible)
@@ -78,6 +79,7 @@ class World {
                 this.finalEnemy.isIntroducing = true;
                 this.finalEnemy.introduceFrame = 0;
                 this.finalEnemyVisible = true;
+                finalEnemySplashSound.play();
             }
             if (this.finalEnemy.isIntroducing || this.finalEnemyVisible) {
                 this.addToMap(this.finalEnemy);
@@ -133,35 +135,38 @@ class World {
         setInterval(() => {
             this.level.enemies.forEach(enemy => {
                 if (!enemy.isDead && this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    this.statusBar.setPercentage(this.character.energy);
-                    const hurtSound = document.getElementById('hurtSound');
-                    if (this.character.energy > 0) {
-                        // Only play if not already playing and user interacted
-                        if (typeof userInteracted !== 'undefined' && userInteracted && hurtSound.paused) {
-                            hurtSound.currentTime = 0;
-                            try {
-                                hurtSound.play();
-                            } catch (e) {
-                                // Suppress AbortError from play/pause race
+                    // Only allow hit if not recently hurt
+                    if (!this.character.isHurt()) {
+                        const prevEnergy = this.character.energy;
+                        this.character.hit();
+                        this.statusBar.setPercentage(this.character.energy);
+                        const hurtSound = document.getElementById('hurtSound');
+                        // Only play hurt sound if energy actually decreased, not dead, and isHurt() is true
+                        if (
+                            this.character.energy < prevEnergy &&
+                            this.character.energy > 0 &&
+                            this.character.isHurt()
+                        ) {
+                            if (typeof userInteracted !== 'undefined' && userInteracted) {
+                                hurtSound.currentTime = 0;
+                                try {
+                                    hurtSound.play();
+                                } catch (e) {
+                                    // Suppress AbortError from play/pause race
+                                }
                             }
                         }
-                    } else {
-                        // Stop hurt sound safely before pausing game
-                        try {
-                            hurtSound.pause();
-                            hurtSound.currentTime = 0;
-                        } catch (e) {
-                            // Suppress AbortError from play/pause race
-                        }
-                        if (!this.paused) {
-                            this.paused = true;
-                            document.querySelector('.game-over-dialog').classList.remove('dp-none');
+                        if (this.character.energy === 0) {
+                            if (!this.paused) {
+                                this.paused = true;
+                                document.querySelector('.game-over-dialog').classList.remove('dp-none');
+                                this.character.stopMovement();
+                            }
                         }
                     }
                 }
             });
-        }, 500);
+        }, 100);
     }
 
     checkCollectBottle() {
@@ -187,10 +192,10 @@ class World {
                     const coinSound = document.getElementById('coinCollectSound');
                     coinSound.currentTime = 0;
                     coinSound.play();
-             }
-        });
-    }, 200);
-}
+                }
+            });
+        }, 200);
+    }
 
     draw() {
         if (this.paused) {
