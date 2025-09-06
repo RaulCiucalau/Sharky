@@ -45,6 +45,9 @@ class World {
                 this.finalEnemy.hurtFrame = 0;
                 this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
                 this.healthBarEndboss.setPercentage(this.finalEnemy.energy);
+                if (this.finalEnemy.energy === 0) {
+                    document.getElementById('gameWinDialog').classList.remove('dp-none-win');
+                }
             }
         });
     }
@@ -57,6 +60,9 @@ class World {
         ) {
             this.character.hit();
             this.statusBar.setPercentage(this.character.energy);
+            if (this.finalEnemy.energy === 0) {
+                document.getElementById('gameWinDialog').classList.remove('dp-none-win');
+            }
         }
     }
 

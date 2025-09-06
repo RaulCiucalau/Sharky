@@ -114,7 +114,6 @@ function openMainMenu() {
     document.getElementById('gameMenu').classList.remove('overlay-fade-out');
     document.querySelector('.buttons-container').style.display = "flex";
     document.querySelector('.game-title').style.display = "block";
-    document.getElementById('characterImg').style.display = "block";
     document.getElementById('controlsBtn').style.display = "block";
     document.getElementById('impressumBtn').style.display = "block";
 
@@ -127,9 +126,6 @@ function openMainMenu() {
     }
     if (!soundManager.isMusicPlaying()) {
         soundManager.playMusic();
-    }
-    if (typeof restartGameState === 'function') {
-        restartGameState();
     }
     if (typeof world !== 'undefined') {
         world.paused = true;
