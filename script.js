@@ -87,10 +87,12 @@ function startPlay() {
     let mainMenuImg = document.getElementById('gameMenu');
     let buttonsContainer = document.querySelector('.buttons-container');
     let gameTitle = document.querySelector('.game-title');
+    let volumeSlider = document.getElementById('volumeSlider');
     if (mainMenuImg) {
         mainMenuImg.classList.add('overlay-fade-out');
         buttonsContainer.style.display = 'none';
         gameTitle.style.display = 'none';
+        volumeSlider.style.display = 'none';
     }
     startGame();
     restartGameState();
