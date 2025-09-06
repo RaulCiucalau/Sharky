@@ -106,7 +106,7 @@ function restartGame() {
 }
 
 function openMainMenu() {
-    document.getElementById('mainMenuContainer').style.display = 'block';
+    document.getElementById('mainMenuContainer').style.display = 'flex';
     // Hide game-over dialog
     document.querySelector('.game-over-dialog').classList.add('dp-none');
     document.getElementById('gameWinDialog').classList.add('dp-none-win');
@@ -116,6 +116,7 @@ function openMainMenu() {
     document.querySelector('.game-title').style.display = "block";
     document.getElementById('controlsBtn').style.display = "block";
     document.getElementById('impressumBtn').style.display = "block";
+    document.getElementById('volumeSlider').style.display = "block";
 
     // Play main menu music, pause in-game music
     const inGameMusic = document.getElementById('inGameMusic');

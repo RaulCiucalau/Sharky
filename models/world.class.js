@@ -166,7 +166,6 @@ class World {
                             if (!this.paused) {
                                 this.paused = true;
                                 document.querySelector('.game-over-dialog').classList.remove('dp-none');
-                                this.character.stopMovement();
                             }
                         }
                     }
