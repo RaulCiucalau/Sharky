@@ -1,12 +1,53 @@
+// Set in-game music volume to 40% on page load
+window.addEventListener('DOMContentLoaded', () => {
+    const inGameMusic = document.getElementById('inGameMusic');
+    if (inGameMusic) {
+        inGameMusic.volume = 0.3;
+    }
+});
+// Volume slider for main menu music
+window.addEventListener('DOMContentLoaded', () => {
+    const slider = document.getElementById('mainMenuVolume');
+    const music = document.getElementById('mainMenuMusic');
+    if (slider && music) {
+        slider.value = music.volume;
+        slider.addEventListener('input', (e) => {
+            music.volume = e.target.value;
+        });
+    }
+});
 // Track if user has interacted with the document
 let userInteracted = false;
 window.addEventListener('click', () => { userInteracted = true; });
 window.addEventListener('keydown', () => { userInteracted = true; });
-document.body.addEventListener('click', () => {
-    const music = document.getElementById('mainMenuMusic');
-    music.currentTime = 0;
-    music.play();
-}, { once: true });
+
+
+// Simple sound manager for menu music
+const soundManager = {
+    music: null,
+    isMusicPlaying() {
+        if (!this.music) this.music = document.getElementById('mainMenuMusic');
+        return this.music && !this.music.paused && !this.music.ended && this.music.currentTime > 0;
+    },
+    playMusic() {
+        if (!this.music) this.music = document.getElementById('mainMenuMusic');
+        if (this.music && !this.isMusicPlaying()) {
+            this.music.currentTime = 0;
+            this.music.play().catch(() => {});
+        }
+    },
+    pauseMusic() {
+        if (!this.music) this.music = document.getElementById('mainMenuMusic');
+        if (this.music && !this.music.paused) {
+            this.music.pause();
+        }
+    }
+};
+
+// Try to play music on page load (will be blocked by browser unless user interacts)
+window.addEventListener('DOMContentLoaded', () => {
+    soundManager.playMusic();
+});
 
 // Show controls tab and hide main menu
 function showControlsTab() {
@@ -41,13 +82,12 @@ document.getElementById('backFromImpressumBtn').addEventListener('click', hideIm
 document.getElementById('impressumBtn').addEventListener('click', showImpressumTab);
 
 function startPlay() {
-    document.getElementById('mainMenuMusic').pause();
+    soundManager.pauseMusic();
     document.getElementById('inGameMusic').play();
     let mainMenuImg = document.getElementById('gameMenu');
     let buttonsContainer = document.querySelector('.buttons-container');
     let gameTitle = document.querySelector('.game-title');
     let characterImg = document.getElementById('characterImg');
-
     if (mainMenuImg) {
         mainMenuImg.classList.add('overlay-fade-out');
         buttonsContainer.style.display = 'none';
@@ -69,6 +109,7 @@ function openMainMenu() {
     document.getElementById('mainMenuContainer').style.display = 'block';
     // Hide game-over dialog
     document.querySelector('.game-over-dialog').classList.add('dp-none');
+    document.getElementById('gameWinDialog').classList.add('dp-none-win');
     // Show main menu UI elements
     document.getElementById('gameMenu').classList.remove('overlay-fade-out');
     document.querySelector('.buttons-container').style.display = "flex";
@@ -78,30 +119,19 @@ function openMainMenu() {
     document.getElementById('impressumBtn').style.display = "block";
 
     // Play main menu music, pause in-game music
-    const mainMenuMusic = document.getElementById('mainMenuMusic');
     const inGameMusic = document.getElementById('inGameMusic');
     if (inGameMusic) {
         inGameMusic.pause();
         inGameMusic.currentTime = 0;
         inGameMusic.src = inGameMusic.src; // Force reload if needed
     }
-    if (mainMenuMusic) {
-        mainMenuMusic.currentTime = 0;
-        mainMenuMusic.play();
+    if (!soundManager.isMusicPlaying()) {
+        soundManager.playMusic();
     }
     if (typeof restartGameState === 'function') {
         restartGameState();
     }
     if (typeof world !== 'undefined') {
         world.paused = true;
-    }
-    // Ensure main menu music always plays
-    if (mainMenuMusic) {
-        mainMenuMusic.currentTime = 0;
-        try {
-            mainMenuMusic.play();
-        } catch (e) {
-            // Suppress NotAllowedError if user hasn't interacted
-        }
     }
 }
