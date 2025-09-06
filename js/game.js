@@ -8,6 +8,10 @@ function init() {
     // Only create World instance, but do not start game loop
     world = new World(canvas, keyboard);
     world.paused = true;
+    checkOrientation();
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('orientationchange', checkOrientation);
+    window.addEventListener('load', checkOrientation);
 }
 
 function startGame() {

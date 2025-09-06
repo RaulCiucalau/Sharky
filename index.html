@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sharky</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="rotate-phone-animation.css">
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
     <script src="./models/drawable-object.class.js"></script>
     <script src="./models/movable-object.class.js"></script>
     <script src="./models/keyboard.class.js"></script>
@@ -57,7 +59,10 @@
             <div class="game-title">
                 <img class="title" src="img/6.Botones/Menu/Title.png" alt="">
             </div>
-            <img id="characterImg" class="character-img" src="img/1.Sharkie/1.IDLE/1.png" alt="Sharkie">
+            <div class="volume-slider-container">
+                <label for="mainMenuVolume">Volume:</label>
+                <input type="range" id="mainMenuVolume" min="0" max="1" step="0.01" value="1">
+            </div>
             <div class="controls-tab-container dp-none">
                 <img src="img/6.Botones/Menu/icons8_close.png" alt="Back Button" class="back-button"
                     id="backFromControlsBtn">
@@ -95,10 +100,12 @@
                     src="img/6.Botones/Menu/Controls_btn.png" alt="Controls Button">
                 <img id="impressumBtn" class="button-to-impressum bubble" src="img/6.Botones/Menu/Impressum_btn.png"
                     alt="Impressum Button">
-                <div class="volume-slider-container">
-                    <label for="mainMenuVolume">Volume:</label>
-                    <input type="range" id="mainMenuVolume" min="0" max="1" step="0.01" value="1">
-                </div>
+            </div>
+        </div>
+        <div id="landscapeMode" class="landscape-mode d-none">
+            <div class="rotate-container">
+                <div class="phone"></div>
+                <div class="text">Rotate your device to play Sharky Splash!</div>
             </div>
         </div>
     </div>

@@ -1,0 +1,38 @@
+.rotate-container {
+      text-align: center;
+      font-family: sans-serif;
+    }
+
+    .phone {
+      width: 100px;
+      height: 180px;
+      border: 4px solid white;
+      border-radius: 16px;
+      margin: 0 auto;
+      background: #00a6df;
+      position: relative;
+      animation: rotate-phone 3s infinite ease-in-out;
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 8px;
+      background: white;
+      border-radius: 4px;
+    }
+
+    @keyframes rotate-phone {
+      0%, 20% { transform: rotate(0deg); }
+      50%, 70% { transform: rotate(90deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .text {
+      margin-top: 16px;
+      font-size: 18px;
+    }

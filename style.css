@@ -34,6 +34,8 @@ a {
 }
 
 canvas {
+    width: 100%;
+    height: 100%;
     background-color: black;
     display: block;
 }
@@ -42,6 +44,8 @@ canvas {
     position: relative;
     width: 720px;
     height: 480px;
+    aspect-ratio: 16 / 9;
+    margin: 0 auto;
 }
 
 .main-menu-background-img {
@@ -54,8 +58,6 @@ canvas {
 }
 
 .buttons-container {
-    width: 720px;
-    height: 480px;
     position: absolute;
     top: 0;
     display: flex;
@@ -276,23 +278,54 @@ canvas {
     border-radius: 10px;
 }
 
-@media only screen and (max-width: 720px) {
-    h1 {
-        font-size: 2rem;
-    }
+.rotate-device {
+    font-size: 100px;
+}
 
+.rotate-text {
+    font-size: 52px;
+    text-align: center;
+}
+
+.landscape-mode {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 20;
+    gap: 20px;
+}
+
+.d-none {
+    display: none;
+}
+
+@media only screen and (max-width: 720px) {
     canvas {
         width: 100%;
-        height: auto;
+    }
+
+    .canvas-content {
+        width: 100%;
     }
 }
 
-@media only screen and (max-width: 480px) {
-    h1 {
-        display: none;
-    }
-
+@media only screen and (max-height: 420px) and (orientation: landscape) {
     canvas {
         height: 100vh;
+        width: auto;
+    }
+}
+
+@media only screen and (max-height: 480px) and (orientation: landscape) {
+    canvas {
+        height: 100vh;
+        width: auto;
     }
 }

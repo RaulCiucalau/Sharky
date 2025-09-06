@@ -87,12 +87,10 @@ function startPlay() {
     let mainMenuImg = document.getElementById('gameMenu');
     let buttonsContainer = document.querySelector('.buttons-container');
     let gameTitle = document.querySelector('.game-title');
-    let characterImg = document.getElementById('characterImg');
     if (mainMenuImg) {
         mainMenuImg.classList.add('overlay-fade-out');
         buttonsContainer.style.display = 'none';
         gameTitle.style.display = 'none';
-        characterImg.style.display = 'none';
     }
     startGame();
     restartGameState();
@@ -134,4 +132,13 @@ function openMainMenu() {
     if (typeof world !== 'undefined') {
         world.paused = true;
     }
+}
+
+function checkOrientation() {
+  let landscapeMode = document.getElementById('landscapeMode');
+  if (window.innerWidth < 720 && window.innerHeight > window.innerWidth) {
+    landscapeMode.classList.remove('d-none');
+  } else {
+    landscapeMode.classList.add('d-none');
+  }
 }
