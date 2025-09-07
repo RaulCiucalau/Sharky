@@ -106,14 +106,11 @@ function restartGame() {
     restartGameState();
 }
 
-function dontshowJoystickIfNeeded() {
-    const joystick = document.getElementById('joystick-base');
-    if (joystick) joystick.style.display = 'none';
-}
-
 function showJoystickIfNeeded() {
-    const joystick = document.getElementById('joystick-base');
-    if (joystick) joystick.style.display = 'block';
+    let joystick = document.getElementById('joystick');
+    if (window.innerWidth < 720)
+        joystick.classList.remove('dp-none-joystick');
+
 }
 
 function openMainMenu() {
@@ -128,8 +125,7 @@ function openMainMenu() {
     document.getElementById('controlsBtn').style.display = "block";
     document.getElementById('impressumBtn').style.display = "block";
     document.getElementById('volumeSlider').style.display = "block";
-    dontshowJoystickIfNeeded();
-
+    document.getElementById('joystick').classList.add('dp-none-joystick');
     // Play main menu music, pause in-game music
     const inGameMusic = document.getElementById('inGameMusic');
     if (inGameMusic) {

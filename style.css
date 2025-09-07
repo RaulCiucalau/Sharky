@@ -316,7 +316,6 @@ canvas {
     overflow: hidden;
 }
 
-/* Joystick styles */
 .joystick {
   position: absolute;
   left: 30px;
@@ -324,7 +323,6 @@ canvas {
   z-index: 10;
   touch-action: none;
   user-select: none;
-  display: none; /* Show only on touch devices */
 }
 .joystick-base {
   width: 90px;
@@ -362,18 +360,19 @@ canvas {
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   touch-action: manipulation;
   user-select: none;
-  display: none;
+  display: block;
 }
+
 .bubble-btn {
   left: 110px;
   background: #2196f3;
-  display: none;
 }
+
 .poison-btn {
   left: 170px;
   background: #43a047;
-  display: none;
 }
+
 .joystick-btn:active {
   opacity: 1;
   filter: brightness(1.2);
@@ -385,11 +384,6 @@ canvas {
   left: 343px;
   display: flex;
   gap: 20px;
-}
-
-@media (pointer: coarse) {
-  .joystick { display: block; }
-  .joystick-btn { display: block; }
 }
 
 @media only screen and (max-width: 720px) {
