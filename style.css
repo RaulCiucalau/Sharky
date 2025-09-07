@@ -343,6 +343,11 @@ canvas {
   top: 20px;
   transition: left 0.05s, top 0.05s;
 }
+
+.dp-none-joystick {
+  display: none;
+}
+
 @media (pointer: coarse) {
   .joystick { display: block; }
 }
