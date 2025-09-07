@@ -45,8 +45,9 @@ class World {
                 this.finalEnemy.hurtFrame = 0;
                 this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
                 this.healthBarEndboss.setPercentage(this.finalEnemy.energy);
-                if (this.finalEnemy.energy === 0) {
-                    document.getElementById('gameWinDialog').classList.remove('dp-none-win');
+                    if (this.finalEnemy.energy === 0) {
+                        document.getElementById('gameWinDialog').classList.remove('dp-none-win');
+                        this.paused = true;
                 }
             }
         });
@@ -62,6 +63,7 @@ class World {
             this.statusBar.setPercentage(this.character.energy);
             if (this.finalEnemy.energy === 0) {
                 document.getElementById('gameWinDialog').classList.remove('dp-none-win');
+                this.paused = true;
             }
         }
     }
@@ -69,8 +71,10 @@ class World {
     showEndbossHealthBar() {
         if (this.character.x === 2151) {
             this.endbossHealthBarVisible = true;
-        }
-        if (this.endbossHealthBarVisible) {
+            if (this.finalEnemy.energy === 0) {
+                document.getElementById('gameWinDialog').classList.remove('dp-none-win');
+                this.paused = true;
+            }
             this.addToMap(this.healthBarEndboss);
         }
     }
