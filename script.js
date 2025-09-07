@@ -179,13 +179,16 @@ function restartGame() {
 }
 
 /**
- * Shows the joystick on small screens if needed.
+ * Shows the joystick for mobile/touch devices and hides it for desktop/large screens.
  */
 function showJoystickIfNeeded() {
-    let joystick = document.getElementById('joystick');
-    if (window.innerWidth < 720)
+    const joystick = document.getElementById('joystick');
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isTouchDevice && window.innerWidth < 1024) {
         joystick.classList.remove('dp-none-joystick');
-
+    } else {
+        joystick.classList.add('dp-none-joystick');
+    }
 }
 
 /**
