@@ -134,6 +134,10 @@ class Character extends MovableObject {
         }
     }
 
+    moveCharacter() {
+
+    }
+
     animate() {
         let deadFrame = 0;
         const moveLoop = () => {
@@ -177,12 +181,12 @@ class Character extends MovableObject {
         moveLoop();
         setInterval(() => {
             if (this.isDead()) {
-            if (deadFrame < this.IMAGES_DEAD.length) {
-                this.img = this.imageCache[this.IMAGES_DEAD[deadFrame]];
-                deadFrame++;
-            } else {
-                this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
-            }
+                if (deadFrame < this.IMAGES_DEAD.length) {
+                    this.img = this.imageCache[this.IMAGES_DEAD[deadFrame]];
+                    deadFrame++;
+                } else {
+                    this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
+                }
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT_POISONED);
             } else if (this.attackBubbleActive) {
