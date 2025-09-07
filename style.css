@@ -348,8 +348,48 @@ canvas {
   display: none;
 }
 
+.joystick-btn {
+  position: absolute;
+  bottom: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  z-index: 11;
+  opacity: 0.85;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  touch-action: manipulation;
+  user-select: none;
+  display: none;
+}
+.bubble-btn {
+  left: 110px;
+  background: #2196f3;
+  display: none;
+}
+.poison-btn {
+  left: 170px;
+  background: #43a047;
+  display: none;
+}
+.joystick-btn:active {
+  opacity: 1;
+  filter: brightness(1.2);
+}
+
+.attack-buttons {
+  position: absolute;
+  bottom: 0;
+  left: 343px;
+  display: flex;
+  gap: 20px;
+}
+
 @media (pointer: coarse) {
   .joystick { display: block; }
+  .joystick-btn { display: block; }
 }
 
 @media only screen and (max-width: 720px) {

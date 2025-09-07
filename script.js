@@ -219,6 +219,31 @@ if (joystick && base && knob) {
     });
 }
 
+// Joystick bubble and poison buttons for touch devices
+const bubbleBtn = document.getElementById('bubbleBtn');
+const poisonBtn = document.getElementById('poisonBtn');
+
+if (bubbleBtn) {
+  bubbleBtn.addEventListener('touchstart', function(e) {
+    if (window.keyboard) keyboard.E = true;
+    e.preventDefault();
+  });
+  bubbleBtn.addEventListener('touchend', function(e) {
+    if (window.keyboard) keyboard.E = false;
+    e.preventDefault();
+  });
+}
+if (poisonBtn) {
+  poisonBtn.addEventListener('touchstart', function(e) {
+    if (window.keyboard) keyboard.Q = true;
+    e.preventDefault();
+  });
+  poisonBtn.addEventListener('touchend', function(e) {
+    if (window.keyboard) keyboard.Q = false;
+    e.preventDefault();
+  });
+}
+
 // Make sure the joystick logic uses the same keyboard object as the game
 if (typeof keyboard !== 'undefined') {
     window.keyboard = keyboard;
