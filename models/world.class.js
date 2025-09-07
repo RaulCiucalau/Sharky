@@ -71,6 +71,8 @@ class World {
     showEndbossHealthBar() {
         if (this.character.x === 2151) {
             this.endbossHealthBarVisible = true;
+        }
+        if (this.endbossHealthBarVisible) {
             if (this.finalEnemy.energy === 0) {
                 document.getElementById('gameWinDialog').classList.remove('dp-none-win');
                 this.paused = true;

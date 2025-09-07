@@ -329,14 +329,14 @@ canvas {
 .joystick-base {
   width: 90px;
   height: 90px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.445);
   border-radius: 50%;
   position: relative;
 }
 .joystick-knob {
   width: 50px;
   height: 50px;
-  background: rgba(0,0,0,0.4);
+  background: rgba(54, 54, 54, 0.897);
   border-radius: 50%;
   position: absolute;
   left: 20px;
