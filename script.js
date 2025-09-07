@@ -141,3 +141,73 @@ function checkOrientation() {
     landscapeMode.classList.add('d-none');
   }
 }
+
+// Joystick logic for touch devices
+const joystick = document.getElementById('joystick');
+const base = document.getElementById('joystick-base');
+const knob = document.getElementById('joystick-knob');
+let joystickActive = false;
+let startX, startY;
+
+function getDirection(dx, dy) {
+  const threshold = 20; // Minimum movement to trigger
+  let dir = { left: false, right: false, up: false, down: false };
+  if (dx < -threshold) dir.left = true;
+  if (dx > threshold) dir.right = true;
+  if (dy < -threshold) dir.up = true;
+  if (dy > threshold) dir.down = true;
+  return dir;
+}
+
+if (joystick && base && knob) {
+  base.addEventListener('touchstart', function(e) {
+    joystickActive = true;
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+  });
+
+  base.addEventListener('touchmove', function(e) {
+    if (!joystickActive) return;
+    const touch = e.touches[0];
+    let dx = touch.clientX - startX;
+    let dy = touch.clientY - startY;
+    // Limit knob movement
+    const maxDist = 30;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist > maxDist) {
+      dx = dx * maxDist / dist;
+      dy = dy * maxDist / dist;
+    }
+    knob.style.left = (20 + dx) + 'px';
+    knob.style.top = (20 + dy) + 'px';
+
+    // Set movement direction on your keyboard object (lowercase)
+    if (window.keyboard) {
+      const dir = getDirection(dx, dy);
+      keyboard.left = dir.left;
+      keyboard.right = dir.right;
+      keyboard.up = dir.up;
+      keyboard.down = dir.down;
+    }
+    e.preventDefault();
+  });
+
+  base.addEventListener('touchend', function(e) {
+    joystickActive = false;
+    knob.style.left = '20px';
+    knob.style.top = '20px';
+    // Reset movement
+    if (window.keyboard) {
+      keyboard.left = false;
+      keyboard.right = false;
+      keyboard.up = false;
+      keyboard.down = false;
+    }
+  });
+}
+
+// Make sure the joystick logic uses the same keyboard object as the game
+if (typeof keyboard !== 'undefined') {
+  window.keyboard = keyboard;
+}
