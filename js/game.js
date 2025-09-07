@@ -5,7 +5,6 @@ let gamePaused = true;
 
 function init() {
     canvas = document.getElementById('canvas');
-    // Only create World instance, but do not start game loop
     world = new World(canvas, keyboard);
     world.paused = true;
     checkOrientation();

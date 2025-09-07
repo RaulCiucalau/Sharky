@@ -1,11 +1,10 @@
-// Set in-game music volume to 40% on page load
 window.addEventListener('DOMContentLoaded', () => {
     const inGameMusic = document.getElementById('inGameMusic');
     if (inGameMusic) {
         inGameMusic.volume = 0.3;
     }
 });
-// Volume slider for main menu music
+
 window.addEventListener('DOMContentLoaded', () => {
     const slider = document.getElementById('mainMenuVolume');
     const music = document.getElementById('mainMenuMusic');
@@ -16,13 +15,11 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-// Track if user has interacted with the document
+
 let userInteracted = false;
 window.addEventListener('click', () => { userInteracted = true; });
 window.addEventListener('keydown', () => { userInteracted = true; });
 
-
-// Simple sound manager for menu music
 const soundManager = {
     music: null,
     isMusicPlaying() {
@@ -44,41 +41,32 @@ const soundManager = {
     }
 };
 
-// Try to play music on page load (will be blocked by browser unless user interacts)
 window.addEventListener('DOMContentLoaded', () => {
     soundManager.playMusic();
 });
 
-// Show controls tab and hide main menu
 function showControlsTab() {
     document.querySelector('.controls-tab-container').style.display = 'block';
 }
 
-// Hide controls tab and show main menu
 function hideControlsTab() {
     document.querySelector('.controls-tab-container').style.display = 'none';
     document.querySelector('.buttons-container').style.display = 'flex';
     document.querySelector('.game-title').style.display = 'block';
 }
 
-// Back button event for controls tab
 document.getElementById('backFromControlsBtn').addEventListener('click', hideControlsTab);
-// Show impressum tab and hide main menu
 function showImpressumTab() {
     document.querySelector('.impressum-tab-container').style.display = 'block';
 }
 
-// Hide impressum tab and show main menu
 function hideImpressumTab() {
     document.querySelector('.impressum-tab-container').style.display = 'none';
     document.querySelector('.buttons-container').style.display = 'flex';
     document.querySelector('.game-title').style.display = 'block';
 }
 
-// Back button event for impressum tab
 document.getElementById('backFromImpressumBtn').addEventListener('click', hideImpressumTab);
-
-// Impressum button event
 document.getElementById('impressumBtn').addEventListener('click', showImpressumTab);
 
 function startPlay() {
@@ -115,10 +103,8 @@ function showJoystickIfNeeded() {
 
 function openMainMenu() {
     document.getElementById('mainMenuContainer').style.display = 'flex';
-    // Hide game-over dialog
     document.querySelector('.game-over-dialog').classList.add('dp-none');
     document.getElementById('gameWinDialog').classList.add('dp-none-win');
-    // Show main menu UI elements
     document.getElementById('gameMenu').classList.remove('overlay-fade-out');
     document.querySelector('.buttons-container').style.display = "flex";
     document.querySelector('.game-title').style.display = "block";
@@ -126,7 +112,6 @@ function openMainMenu() {
     document.getElementById('impressumBtn').style.display = "block";
     document.getElementById('volumeSlider').style.display = "block";
     document.getElementById('joystick').classList.add('dp-none-joystick');
-    // Play main menu music, pause in-game music
     const inGameMusic = document.getElementById('inGameMusic');
     if (inGameMusic) {
         inGameMusic.pause();
@@ -150,7 +135,6 @@ function checkOrientation() {
     }
 }
 
-// Joystick logic for touch devices
 const joystick = document.getElementById('joystick');
 const base = document.getElementById('joystick-base');
 const knob = document.getElementById('joystick-knob');
@@ -158,7 +142,7 @@ let joystickActive = false;
 let startX, startY;
 
 function getDirection(dx, dy) {
-    const threshold = 20; // Minimum movement to trigger
+    const threshold = 20;
     let dir = { left: false, right: false, up: false, down: false };
     if (dx < -threshold) dir.left = true;
     if (dx > threshold) dir.right = true;
@@ -180,7 +164,6 @@ if (joystick && base && knob) {
         const touch = e.touches[0];
         let dx = touch.clientX - startX;
         let dy = touch.clientY - startY;
-        // Limit knob movement
         const maxDist = 30;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist > maxDist) {
@@ -190,7 +173,6 @@ if (joystick && base && knob) {
         knob.style.left = (20 + dx) + 'px';
         knob.style.top = (20 + dy) + 'px';
 
-        // Set movement direction on your keyboard object (lowercase)
         if (window.keyboard) {
             const dir = getDirection(dx, dy);
             keyboard.left = dir.left;
@@ -205,7 +187,6 @@ if (joystick && base && knob) {
         joystickActive = false;
         knob.style.left = '20px';
         knob.style.top = '20px';
-        // Reset movement
         if (window.keyboard) {
             keyboard.left = false;
             keyboard.right = false;
@@ -215,7 +196,6 @@ if (joystick && base && knob) {
     });
 }
 
-// Joystick bubble and poison buttons for touch devices
 const bubbleBtn = document.getElementById('bubbleBtn');
 const poisonBtn = document.getElementById('poisonBtn');
 
@@ -240,7 +220,6 @@ if (poisonBtn) {
   });
 }
 
-// Make sure the joystick logic uses the same keyboard object as the game
 if (typeof keyboard !== 'undefined') {
     window.keyboard = keyboard;
 }
