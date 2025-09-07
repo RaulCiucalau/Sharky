@@ -11,6 +11,10 @@ function init() {
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', checkOrientation);
     window.addEventListener('load', checkOrientation);
+    setupJoystickEvents();
+    setupBubbleBtnEvents();
+    setupPoisonBtnEvents();
+    setupKeyboardGlobal();
 }
 
 function startGame() {
