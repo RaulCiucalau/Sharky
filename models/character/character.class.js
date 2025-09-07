@@ -1,3 +1,7 @@
+/**
+ * Character class for the Sharky game. Handles movement, animation, and attack logic.
+ * @extends MovableObject
+ */
 class Character extends MovableObject {
     attackBubbleActive = false;
     attackBubbleFrame = 0;
@@ -109,6 +113,9 @@ class Character extends MovableObject {
         bottom: 66
     };
 
+    /**
+     * Initializes the character and loads all images.
+     */
     constructor() {
         super().loadImage('img/1.Sharkie/3.Swim/1.png');
         this.loadImages(this.IMAGES_IDLE);
@@ -122,6 +129,10 @@ class Character extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Plays the long idle animation.
+     * @param {string[]} images - Array of image paths.
+     */
     playLongIdleAnimation(images) {
         if (this.currentImage < images.length - 4) {
             this.img = this.imageCache[images[this.currentImage]];
@@ -134,103 +145,232 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Placeholder for custom character movement logic.
+     */
     moveCharacter() {
 
     }
 
+    /**
+     * Moves the character up.
+     * @returns {boolean}
+     */
+    moveUp() {
+        if (this.world.keyboard.up && this.y > -120) {
+            this.y -= this.speed;
+            this.rotation = -15;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Moves the character down.
+     * @returns {boolean}
+     */
+    moveDown() {
+        if (this.world.keyboard.down && this.y < 260) {
+            this.y += this.speed;
+            this.rotation = 15;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Moves the character left.
+     * @returns {boolean}
+     */
+    moveLeft() {
+        if (this.world.keyboard.left && this.x > 0) {
+            this.x -= this.speed;
+            this.isFacingLeft = true;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Moves the character right.
+     * @returns {boolean}
+     */
+    moveRight() {
+        if (this.world.keyboard.right && this.x < this.world.level.level_end_x) {
+            this.x += this.speed;
+            this.isFacingLeft = false;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Updates the camera position.
+     */
+    updateCamera() {
+        this.world.camera_x = -this.x;
+    }
+
+    /**
+     * Updates idle time based on movement.
+     * @param {boolean} moved
+     */
+    updateIdleTime(moved) {
+        if (moved) {
+            this.idleTime = 0;
+        } else {
+            this.idleTime += 5;
+        }
+    }
+
+    /**
+     * Updates the character's rotation.
+     */
+    updateRotation() {
+        if (this.rotation !== 0) {
+            if (this.rotation > 0) this.rotation -= 1;
+            if (this.rotation < 0) this.rotation += 1;
+            if (this.rotation === 1 || this.rotation === -1) this.rotation = 0;
+        }
+    }
+
+    /**
+     * Starts the animation and movement loops.
+     */
     animate() {
         let deadFrame = 0;
-        const moveLoop = () => {
-            let moved = false;
-            if (this.world && this.world.keyboard) {
-                if (this.world.keyboard.up && this.y > -120) {
-                    this.y -= this.speed;
-                    this.rotation = -15;
-                    moved = true;
-                }
-                if (this.world.keyboard.down && this.y < 260) {
-                    this.y += this.speed;
-                    this.rotation = 15;
-                    moved = true;
-                }
-                if (this.world.keyboard.left && this.x > 0) {
-                    this.x -= this.speed;
-                    this.isFacingLeft = true;
-                    moved = true;
-                }
-                if (this.world.keyboard.right && this.x < this.world.level.level_end_x) {
-                    this.x += this.speed;
-                    this.isFacingLeft = false;
-                    moved = true;
-                }
-                this.world.camera_x = -this.x;
-            }
-            if (moved) {
-                this.idleTime = 0;
-            } else {
-                this.idleTime += 5;
-            }
+        this.startMoveLoop();
+        this.startAnimationInterval(deadFrame);
+    }
 
-            if (this.rotation !== 0) {
-                if (this.rotation > 0) this.rotation -= 1;
-                if (this.rotation < 0) this.rotation += 1;
-                if (this.rotation === 1 || this.rotation === -1) this.rotation = 0;
-            }
-            requestAnimationFrame(moveLoop);
-        };
-        moveLoop();
+    /**
+     * Starts the movement loop.
+     */
+    startMoveLoop() {
+        this.moveLoop();
+    }
+
+    /**
+     * Handles a single movement frame and schedules the next.
+     */
+    moveLoop() {
+        let moved = false;
+        if (this.world && this.world.keyboard) {
+            moved = this.moveUp() || moved;
+            moved = this.moveDown() || moved;
+            moved = this.moveLeft() || moved;
+            moved = this.moveRight() || moved;
+            this.updateCamera();
+        }
+        this.updateIdleTime(moved);
+        this.updateRotation();
+        requestAnimationFrame(() => this.moveLoop());
+    }
+
+    /**
+     * Starts the animation interval for state changes.
+     * @param {number} deadFrame
+     */
+    startAnimationInterval(deadFrame) {
         setInterval(() => {
-            if (this.isDead()) {
-                if (deadFrame < this.IMAGES_DEAD.length) {
-                    this.img = this.imageCache[this.IMAGES_DEAD[deadFrame]];
-                    deadFrame++;
-                } else {
-                    this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
-                }
-            } else if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT_POISONED);
-            } else if (this.attackBubbleActive) {
-                let i = this.attackBubbleFrame;
-                if (i < this.IMAGES_ATTACK_BUBBLE.length) {
-                    this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE[i]];
-                    this.attackBubbleFrame++;
-                } else {
-                    this.attackBubbleActive = false;
-                    this.attackBubbleFrame = 0;
-                    if (this.world && typeof this.world.spawnBubble === 'function') {
-                        this.world.spawnBubble(this.x + this.width, this.y + this.height / 2);
-                    }
-                }
-            } else if (this.attackBubblePoisonActive) {
-                let i = this.attackBubblePoisonFrame;
-                if (i < this.IMAGES_ATTACK_BUBBLE_POISON.length) {
-                    this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE_POISON[i]];
-                    this.attackBubblePoisonFrame++;
-                } else {
-                    this.attackBubblePoisonActive = false;
-                    this.attackBubblePoisonFrame = 0;
-                    if (this.world && typeof this.world.spawnPoisonBubble === 'function') {
-                        this.world.spawnPoisonBubble(this.x + this.width, this.y + this.height / 2);
-                    }
-                }
-            } else if (this.world && this.world.keyboard && this.world.keyboard.E) {
-                this.attackBubbleActive = true;
-                this.attackBubbleFrame = 0;
-                this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE[0]];
-            } else if (this.world && this.world.keyboard && this.world.keyboard.Q) {
-                if (this.world.bottlesBar.bottlesCollected > 0) {
-                    this.attackBubblePoisonActive = true;
-                    this.attackBubblePoisonFrame = 0;
-                    this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE_POISON[0]];
-                }
-            } else if (this.idleTime >= 10000) {
-                this.playLongIdleAnimation(this.IMAGES_LONG_IDLE);
-            } else if (
+            if (this.isDead()) return this.handleDeadAnimation(deadFrame++);
+            if (this.isHurt()) return this.handleHurtAnimation();
+            if (this.attackBubbleActive) return this.handleAttackBubbleAnimation();
+            if (this.attackBubblePoisonActive) return this.handleAttackBubblePoisonAnimation();
+            if (this.world && this.world.keyboard && this.world.keyboard.E) return this.handleStartAttackBubble();
+            if (this.world && this.world.keyboard && this.world.keyboard.Q) return this.handleStartAttackBubblePoison();
+            if (this.idleTime >= 10000) return this.handleLongIdleAnimation();
+            if (
                 this.world && this.world.keyboard &&
                 (this.world.keyboard.right || this.world.keyboard.left || this.world.keyboard.up || this.world.keyboard.down)
-            ) {
-                this.playAnimation(this.IMAGES_SWIM);
-            }
+            ) return this.handleSwimAnimation();
         }, 140);
+    }
+
+    /**
+     * Handles dead animation state.
+     * @param {number} deadFrame
+     */
+    handleDeadAnimation(deadFrame) {
+        if (deadFrame < this.IMAGES_DEAD.length) {
+            this.img = this.imageCache[this.IMAGES_DEAD[deadFrame]];
+        } else {
+            this.img = this.imageCache[this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]];
+        }
+    }
+
+    /**
+     * Handles hurt animation state.
+     */
+    handleHurtAnimation() {
+        this.playAnimation(this.IMAGES_HURT_POISONED);
+    }
+
+    /**
+     * Handles normal attack bubble animation.
+     */
+    handleAttackBubbleAnimation() {
+        let i = this.attackBubbleFrame;
+        if (i < this.IMAGES_ATTACK_BUBBLE.length) {
+            this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE[i]];
+            this.attackBubbleFrame++;
+        } else {
+            this.attackBubbleActive = false;
+            this.attackBubbleFrame = 0;
+            if (this.world && typeof this.world.spawnBubble === 'function') {
+                this.world.spawnBubble(this.x + this.width, this.y + this.height / 2);
+            }
+        }
+    }
+
+    /**
+     * Handles poison attack bubble animation.
+     */
+    handleAttackBubblePoisonAnimation() {
+        let i = this.attackBubblePoisonFrame;
+        if (i < this.IMAGES_ATTACK_BUBBLE_POISON.length) {
+            this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE_POISON[i]];
+            this.attackBubblePoisonFrame++;
+        } else {
+            this.attackBubblePoisonActive = false;
+            this.attackBubblePoisonFrame = 0;
+            if (this.world && typeof this.world.spawnPoisonBubble === 'function') {
+                this.world.spawnPoisonBubble(this.x + this.width, this.y + this.height / 2);
+            }
+        }
+    }
+
+    /**
+     * Starts normal attack bubble.
+     */
+    handleStartAttackBubble() {
+        this.attackBubbleActive = true;
+        this.attackBubbleFrame = 0;
+        this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE[0]];
+    }
+
+    /**
+     * Starts poison attack bubble if available.
+     */
+    handleStartAttackBubblePoison() {
+        if (this.world.bottlesBar.bottlesCollected > 0) {
+            this.attackBubblePoisonActive = true;
+            this.attackBubblePoisonFrame = 0;
+            this.img = this.imageCache[this.IMAGES_ATTACK_BUBBLE_POISON[0]];
+        }
+    }
+
+    /**
+     * Handles long idle animation.
+     */
+    handleLongIdleAnimation() {
+        this.playLongIdleAnimation(this.IMAGES_LONG_IDLE);
+    }
+
+    /**
+     * Handles swim animation.
+     */
+    handleSwimAnimation() {
+        this.playAnimation(this.IMAGES_SWIM);
     }
 }

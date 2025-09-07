@@ -1,3 +1,7 @@
+/**
+ * FinalEnemy class for the Sharky game. Controls the boss enemy's state, animation, and attack logic.
+ * @extends MovableObject
+ */
 class FinalEnemy extends MovableObject {
     x = 2480;
     y = -100;
@@ -65,6 +69,9 @@ class FinalEnemy extends MovableObject {
     isHurt = false;
     energy = 30;
 
+    /**
+     * Initializes the final enemy and loads all images.
+     */
     constructor() {
         super().loadImage(this.imgs_introduce[0]);
         this.loadImages(this.imgs_dead);
@@ -75,6 +82,10 @@ class FinalEnemy extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Reduces energy and triggers hurt or death state.
+     * @param {number} amount
+     */
     takeDamage(amount) {
         this.energy = Math.max(0, this.energy - amount);
         if (this.energy === 0) {
@@ -85,64 +96,108 @@ class FinalEnemy extends MovableObject {
         }
     }
 
+    /**
+     * Starts the animation interval for the enemy's state machine.
+     */
     animate() {
-    let deadFrame = 0;
-    setInterval(() => {
-        if (this.energy === 0) {
-            this.isDead = true;
-        }
+        let deadFrame = 0;
+        setInterval(() => {
+            if (this.energy === 0) this.isDead = true;
+            if (this.isDead) return this.handleDeadState(deadFrame++);
+            if (this.isIntroducing && !this.hasIntroduced) return this.handleIntroduceState();
+            if (this.isHurt) return this.handleHurtState();
+            if (this.hasIntroduced) return this.handleAttackOrFloatState();
+        }, 160);
+    }
 
-        if (this.isDead) {
-            if (deadFrame < this.imgs_dead.length) {
-                let path = this.imgs_dead[deadFrame];
-                this.img = this.imageCache[path];
-                deadFrame++;
-            } else {
-                this.img = this.imageCache[this.imgs_dead[this.imgs_dead.length - 1]];
-            }
-        } else if (this.isIntroducing && !this.hasIntroduced) {
+    /**
+     * Handles the dead animation state.
+     * @param {number} deadFrame
+     */
+    handleDeadState(deadFrame) {
+        if (deadFrame < this.imgs_dead.length) {
+            let path = this.imgs_dead[deadFrame];
+            this.img = this.imageCache[path];
+        } else {
+            this.img = this.imageCache[this.imgs_dead[this.imgs_dead.length - 1]];
+        }
+    }
+
+    /**
+     * Handles the introduction animation state.
+     */
+    handleIntroduceState() {
+        this.isHurt = false;
+        this.hurtFrame = 0;
+        if (this.introduceFrame < this.imgs_introduce.length) {
+            let path = this.imgs_introduce[this.introduceFrame];
+            this.img = this.imageCache[path];
+            this.introduceFrame++;
+            if (!this.isDead) this.moveLeft();
+        } else {
+            this.isIntroducing = false;
+            this.hasIntroduced = true;
+            this.introduceFrame = 0;
+            this.currentImage = 0;
+        }
+    }
+
+    /**
+     * Handles the hurt animation state.
+     */
+    handleHurtState() {
+        if (this.hurtFrame === undefined) this.hurtFrame = 0;
+        if (this.hurtFrame < this.imgs_hurt.length) {
+            let path = this.imgs_hurt[this.hurtFrame];
+            this.img = this.imageCache[path];
+            this.hurtFrame++;
+        } else {
             this.isHurt = false;
             this.hurtFrame = 0;
-            if (this.introduceFrame < this.imgs_introduce.length) {
-                let path = this.imgs_introduce[this.introduceFrame];
-                this.img = this.imageCache[path];
-                this.introduceFrame++;
-                if (!this.isDead) this.moveLeft();
-            } else {
-                this.isIntroducing = false;
-                this.hasIntroduced = true;
-                this.introduceFrame = 0;
-                this.currentImage = 0;
-            }
-        } else if (this.isHurt) {
-            if (this.hurtFrame === undefined) this.hurtFrame = 0;
-            if (this.hurtFrame < this.imgs_hurt.length) {
-                let path = this.imgs_hurt[this.hurtFrame];
-                this.img = this.imageCache[path];
-                this.hurtFrame++;
-            } else {
-                this.isHurt = false;
-                this.hurtFrame = 0;
-            }
-        } else if (this.hasIntroduced) {
-            this.attackTimer += 160;
-            if (this.isAttacking) {
-                if (this.attackFrame < this.imgs_attack.length) {
-                    let path = this.imgs_attack[this.attackFrame];
-                    this.img = this.imageCache[path];
-                    this.attackFrame++;
-                } else {
-                    this.isAttacking = false;
-                    this.attackFrame = 0;
-                }
-            } else if (this.attackTimer >= 2000) {
-                this.isAttacking = true;
-                this.attackFrame = 0;
-                this.attackTimer = 0;
-            } else {
-                this.playAnimation(this.imgs_floating);
-            }
         }
-    }, 160);
-}
+    }
+
+    /**
+     * Handles attack or floating state logic.
+     */
+    handleAttackOrFloatState() {
+        this.attackTimer += 160;
+        if (this.isAttacking) {
+            return this.handleAttackState();
+        } else if (this.attackTimer >= 2000) {
+            return this.startAttack();
+        } else {
+            return this.handleFloatState();
+        }
+    }
+
+    /**
+     * Handles the attack animation state.
+     */
+    handleAttackState() {
+        if (this.attackFrame < this.imgs_attack.length) {
+            let path = this.imgs_attack[this.attackFrame];
+            this.img = this.imageCache[path];
+            this.attackFrame++;
+        } else {
+            this.isAttacking = false;
+            this.attackFrame = 0;
+        }
+    }
+
+    /**
+     * Starts the attack sequence.
+     */
+    startAttack() {
+        this.isAttacking = true;
+        this.attackFrame = 0;
+        this.attackTimer = 0;
+    }
+
+    /**
+     * Handles the floating animation state.
+     */
+    handleFloatState() {
+        this.playAnimation(this.imgs_floating);
+    }
 }

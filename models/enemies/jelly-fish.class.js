@@ -1,3 +1,8 @@
+/**
+ * Represents a jellyfish enemy in the game.
+ * Handles movement, animation, and death/removal logic.
+ * @extends MovableObject
+ */
 class JellyFish extends MovableObject {
     isDead = false;
     y = 300;
@@ -22,7 +27,10 @@ class JellyFish extends MovableObject {
         bottom: 80
     };
     speed = 0.6 + Math.random() * 0.5;
-
+    /**
+     * Creates a new JellyFish instance.
+     * @param {number} i - Index used to determine initial x position.
+     */
     constructor(i) {
         super().loadImage('img/2.Enemy/2 Jelly fish/Regular damage/Lila 1.png');
         this.loadImages(this.imgs_regular_damage);
@@ -33,6 +41,9 @@ class JellyFish extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Starts the up/down movement and animation loop for the jellyfish.
+     */
     animate() {
         this.moveUpAndDown();
         setInterval(() => {
@@ -47,6 +58,11 @@ class JellyFish extends MovableObject {
         }, 240);
     }
 
+    
+    /**
+     * Marks the jellyfish as dead and removes it from the given enemies array after the death animation.
+     * @param {Array} enemiesArray - The array of enemies to remove this jellyfish from.
+     */
     dieAndRemove(enemiesArray) {
     this.isDead = true;
     setTimeout(() => {

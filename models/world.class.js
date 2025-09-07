@@ -1,19 +1,83 @@
+/**
+ * Represents the main game world, managing all game objects, collisions, and rendering.
+ */
 class World {
+    /**
+     * The main character instance.
+     * @type {Character}
+     */
     character = new Character();
+    /**
+     * The current level data.
+     * @type {Level}
+     */
     level = level1;
+    /**
+     * The canvas element for rendering.
+     * @type {HTMLCanvasElement}
+     */
     canvas;
+    /**
+     * The 2D rendering context.
+     * @type {CanvasRenderingContext2D}
+     */
     ctx;
+    /**
+     * The keyboard input handler.
+     * @type {Keyboard}
+     */
     keyboard;
+    /**
+     * The camera x offset.
+     * @type {number}
+     */
     camera_x = 0;
+    /**
+     * The status bar UI element.
+     * @type {StatusBar}
+     */
     statusBar = new StatusBar();
+    /**
+     * The bottles bar UI element.
+     * @type {BottlesBar}
+     */
     bottlesBar = new BottlesBar();
+    /**
+     * The endboss health bar UI element.
+     * @type {HealthBarEndboss}
+     */
     healthBarEndboss = new HealthBarEndboss();
+    /**
+     * The coins bar UI element.
+     * @type {CoinsBar}
+     */
     coinsBar = new CoinsBar();
+    /**
+     * Array of shootable objects (bubbles).
+     * @type {ShootableObjects[]}
+     */
     shootableObjects = [];
+    /**
+     * The final enemy instance.
+     * @type {FinalEnemy}
+     */
     finalEnemy = new FinalEnemy();
+    /**
+     * Whether the endboss health bar is visible.
+     * @type {boolean}
+     */
     endbossHealthBarVisible = false;
+    /**
+     * Whether the final enemy is visible.
+     * @type {boolean}
+     */
     finalEnemyVisible = false;
 
+    /**
+     * Creates a new World instance and initializes the game.
+     * @param {HTMLCanvasElement} canvas - The canvas element for rendering.
+     * @param {Keyboard} keyboard - The keyboard input handler.
+     */
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -28,10 +92,16 @@ class World {
         this.showEndbossHealthBar();
     }
 
+    /**
+     * Sets the world reference on the character.
+     */
     setWorld() {
         this.character.world = this;
     }
 
+    /**
+     * Checks for collisions between poison bubbles and the final enemy.
+     */
     checkPoisonBubbleFinalEnemyCollision() {
         this.shootableObjects.forEach(bubble => {
             if (
@@ -53,6 +123,9 @@ class World {
         });
     }
 
+    /**
+     * Checks for collisions between the character and the final enemy.
+     */
     checkFinalEnemyCollision() {
         if (
             this.finalEnemy &&
@@ -68,6 +141,9 @@ class World {
         }
     }
 
+    /**
+     * Shows the endboss health bar when appropriate.
+     */
     showEndbossHealthBar() {
         if (this.character.x === 2151) {
             this.endbossHealthBarVisible = true;
@@ -81,6 +157,9 @@ class World {
         }
     }
 
+    /**
+     * Handles the introduction sequence for the final enemy.
+     */
     checkFinalEnemyIntroduce() {
             const finalEnemySplashSound = document.getElementById('finalEnemySplash');
         if (
@@ -99,6 +178,9 @@ class World {
         }
     }
 
+    /**
+     * Checks for collisions between bubbles and enemies.
+     */
     checkBubbleCollisions() {
         setInterval(() => {
             this.shootableObjects.forEach(bubble => {
@@ -116,6 +198,11 @@ class World {
         }, 100);
     }
 
+    /**
+     * Spawns a regular bubble at the character's position.
+     * @param {number} x - The x position (unused).
+     * @param {number} y - The y position (unused).
+     */
     spawnBubble(x, y) {
         const direction = this.character.isFacingLeft ? 'left' : 'right';
         const spawnX = direction === 'left' ? this.character.x - 30 : this.character.x + this.character.width + 10;
@@ -127,6 +214,11 @@ class World {
         this.shootableObjects.push(bubble);
     }
 
+    /**
+     * Spawns a poison bubble if bottles are available.
+     * @param {number} x - The x position (unused).
+     * @param {number} y - The y position (unused).
+     */
     spawnPoisonBubble(x, y) {
         if (this.bottlesBar.bottlesCollected > 0) {
             const direction = this.character.isFacingLeft ? 'left' : 'right';
@@ -143,43 +235,73 @@ class World {
         }
     }
 
+    /**
+     * Checks for collisions between the character and enemies, and handles damage/game over.
+     */
     checkCollisions() {
         setInterval(() => {
             this.level.enemies.forEach(enemy => {
                 if (!enemy.isDead && this.character.isColliding(enemy)) {
-                    // Only allow hit if not recently hurt
-                    if (!this.character.isHurt()) {
-                        const prevEnergy = this.character.energy;
-                        this.character.hit();
-                        this.statusBar.setPercentage(this.character.energy);
-                        const hurtSound = document.getElementById('hurtSound');
-                        // Only play hurt sound if energy actually decreased, not dead, and isHurt() is true
-                        if (
-                            this.character.energy < prevEnergy &&
-                            this.character.energy > 0 &&
-                            this.character.isHurt()
-                        ) {
-                            if (typeof userInteracted !== 'undefined' && userInteracted) {
-                                hurtSound.currentTime = 0;
-                                try {
-                                    hurtSound.play();
-                                } catch (e) {
-                                    // Suppress AbortError from play/pause race
-                                }
-                            }
-                        }
-                        if (this.character.energy === 0) {
-                            if (!this.paused) {
-                                this.paused = true;
-                                document.querySelector('.game-over-dialog').classList.remove('dp-none');
-                            }
-                        }
-                    }
+                    this._handleCharacterEnemyCollision(enemy);
                 }
             });
         }, 100);
     }
 
+    /**
+     * Handles collision logic between the character and an enemy.
+     * @private
+     * @param {MovableObject} enemy - The enemy object.
+     */
+    _handleCharacterEnemyCollision(enemy) {
+        if (!this.character.isHurt()) {
+            const prevEnergy = this.character.energy;
+            this.character.hit();
+            this.statusBar.setPercentage(this.character.energy);
+            this._playHurtSoundIfNeeded(prevEnergy);
+            this._handleGameOverIfNeeded();
+        }
+    }
+
+    /**
+     * Plays the hurt sound if the character lost energy and is hurt.
+     * @private
+     * @param {number} prevEnergy - The character's energy before hit.
+     */
+    _playHurtSoundIfNeeded(prevEnergy) {
+        const hurtSound = document.getElementById('hurtSound');
+        if (
+            this.character.energy < prevEnergy &&
+            this.character.energy > 0 &&
+            this.character.isHurt()
+        ) {
+            if (typeof userInteracted !== 'undefined' && userInteracted) {
+                hurtSound.currentTime = 0;
+                try {
+                    hurtSound.play();
+                } catch (e) {
+                    console.error('Error playing sound:', e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Handles game over logic if the character's energy reaches zero.
+     * @private
+     */
+    _handleGameOverIfNeeded() {
+        if (this.character.energy === 0) {
+            if (!this.paused) {
+                this.paused = true;
+                document.querySelector('.game-over-dialog').classList.remove('dp-none');
+            }
+        }
+    }
+
+    /**
+     * Checks for collisions between the character and bottles, and collects them.
+     */
     checkCollectBottle() {
         setInterval(() => {
             this.level.bottles.forEach(bottle => {
@@ -194,6 +316,9 @@ class World {
         }, 200);
     }
 
+    /**
+     * Checks for collisions between the character and coins, and collects them.
+     */
     checkCollectCoin() {
         setInterval(() => {
             this.level.coins.forEach(coin => {
@@ -208,6 +333,9 @@ class World {
         }, 200);
     }
 
+    /**
+     * Main game loop: draws all objects and handles game state updates.
+     */
     draw() {
         if (this.paused) {
             requestAnimationFrame(() => this.draw());
@@ -234,12 +362,20 @@ class World {
         requestAnimationFrame(() => this.draw());
     }
 
+    /**
+     * Adds an array of objects to the map for rendering.
+     * @param {DrawableObject[]} objects - The objects to add.
+     */
     addObjectToMap(objects) {
         objects.forEach(object => {
             this.addToMap(object);
         });
     }
 
+    /**
+     * Adds a single object to the map for rendering.
+     * @param {DrawableObject} obj - The object to add.
+     */
     addToMap(obj) {
         this.ctx.save();
         this.ctx.translate(obj.x + obj.width / 2, obj.y + obj.height / 2);
@@ -261,6 +397,10 @@ class World {
         }
     }
 
+    /**
+     * Draws an object flipped horizontally.
+     * @param {DrawableObject} object - The object to flip and draw.
+     */
     flipImage(object) {
         this.ctx.save();
         this.ctx.translate(object.x + object.width, object.y);

@@ -1,5 +1,17 @@
+/**
+ * Represents the bottles bar UI element, showing collected bottles as a percentage.
+ * @extends DrawableObject
+ */
 class BottlesBar extends DrawableObject {
+    /**
+     * Number of bottles collected.
+     * @type {number}
+     */
     bottlesCollected = 0;
+    /**
+     * Array of image paths for each bottles bar state.
+     * @type {string[]}
+     */
     IMAGES_BOTTLES = [
         'img/4. Marcadores/green/poisoned bubbles/0_ copia 2.png',
         'img/4. Marcadores/green/poisoned bubbles/20_ copia 3.png',
@@ -8,8 +20,15 @@ class BottlesBar extends DrawableObject {
         'img/4. Marcadores/green/poisoned bubbles/80_ copia 2.png',
         'img/4. Marcadores/green/poisoned bubbles/100_ copia 3.png',
     ];
+    /**
+     * Current percentage of bottles collected (0-100).
+     * @type {number}
+     */
     percentage = 0;
 
+    /**
+     * Creates a new BottlesBar instance.
+     */
     constructor() {
         super();
         this.loadImages(this.IMAGES_BOTTLES);
@@ -20,6 +39,10 @@ class BottlesBar extends DrawableObject {
         this.setPercentage(0);
     }
 
+    /**
+     * Sets the percentage of bottles collected and updates the bar image.
+     * @param {number} percentage - The percentage to set (0-100).
+     */
     setPercentage(percentage) {
         percentage = Math.max(0, Math.min(percentage, 100));
         this.percentage = percentage;
@@ -27,6 +50,11 @@ class BottlesBar extends DrawableObject {
         this.img = this.imageCache[path];
     }
 
+    /**
+     * Resolves the image index based on the given percentage.
+     * @param {number} percentage - The percentage to resolve.
+     * @returns {number} The index of the image to use.
+     */
     resolveImageIndex(percentage) {
         if (percentage == 100) return 5;
         if (percentage >= 80) return 4;
@@ -36,6 +64,9 @@ class BottlesBar extends DrawableObject {
         return 0;
     }
 
+    /**
+     * Increments the number of bottles collected and updates the bar.
+     */
     collectBottle() {
         this.bottlesCollected++;
         this.setPercentage(this.bottlesCollected * 20);
