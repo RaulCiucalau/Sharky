@@ -14,6 +14,7 @@ class Character extends MovableObject {
     height = 250;
     width = 250;
     speed = 3;
+    isItDead = false;
     IMAGES_IDLE = [
         'img/1.Sharkie/1.IDLE/1.png',
         'img/1.Sharkie/1.IDLE/2.png',

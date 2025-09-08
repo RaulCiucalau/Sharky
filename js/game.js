@@ -28,6 +28,15 @@ function restartGameState() {
     canvas = document.getElementById('canvas');
     keyboard = new Keyboard();
     world = new World(canvas, keyboard);
+    // Ensure character starts with full energy
+    if (world.character) {
+        world.character.energy = 100;
+    }
+    // Hide game over dialog if visible
+    const gameOverDialog = document.querySelector('.game-over-dialog');
+    if (gameOverDialog) {
+        gameOverDialog.classList.add('dp-none');
+    }
     world.paused = false;
     gamePaused = false;
 }

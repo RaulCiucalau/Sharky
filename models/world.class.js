@@ -291,11 +291,9 @@ class World {
      * @private
      */
     _handleGameOverIfNeeded() {
-        if (this.character.energy === 0) {
-            if (!this.paused) {
-                this.paused = true;
-                document.querySelector('.game-over-dialog').classList.remove('dp-none');
-            }
+        if (this.character.energy === 0 && !this.character.isItDead) {
+            this.character.isItDead = true;
+            document.querySelector('.game-over-dialog').classList.remove('dp-none');
         }
     }
 
@@ -394,6 +392,7 @@ class World {
         );
         this.ctx.restore();
         if (typeof obj.drawOffsetRectangle === 'function') {
+            obj.drawOffsetRectangle(this.ctx);
         }
     }
 
