@@ -273,10 +273,6 @@ class World {
                 hurtSound.currentTime = 0;
                 try {
                     hurtSound.play();
-                    console.log(this.character.energy);
-                    console.log(prevEnergy);
-                    console.log(this.character.isHurt());
-
                 } catch (e) {
                     console.error('Error playing sound:', e);
                 }

@@ -106,7 +106,6 @@ class Character extends MovableObject {
         'img/1.Sharkie/5.Hurt/2.Electric shock/3.png'
     ]
     world;
-    energy = 100;
 
     /**
      * Initializes the character and loads all images.
