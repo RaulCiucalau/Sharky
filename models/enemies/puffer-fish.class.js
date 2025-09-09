@@ -16,12 +16,6 @@ class PufferFish extends MovableObject {
     imgs_dead = [
         'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png'
     ];
-    offset = {
-        left: 90,
-        right: 96,
-        top: 70,
-        bottom: 90
-    };
 
     /**
      * Creates a new PufferFish instance.
@@ -35,6 +29,12 @@ class PufferFish extends MovableObject {
         this.y = 100 + i * 20 + Math.random() * 40;
         this.x = 700 + i * 300 + Math.random() * 200;
         this.animate();
+        this.offset = {
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 35
+        };
     }
 
     /**

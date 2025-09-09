@@ -20,12 +20,6 @@ class JellyFish extends MovableObject {
         'img/2.Enemy/2 Jelly fish/Dead/Lila/L3.png',
         'img/2.Enemy/2 Jelly fish/Dead/Lila/L4.png'
     ];
-    offset = {
-        left: 80,
-        right: 80,
-        top: 80,
-        bottom: 80
-    };
     speed = 0.6 + Math.random() * 0.5;
     /**
      * Creates a new JellyFish instance.
@@ -39,6 +33,12 @@ class JellyFish extends MovableObject {
         this.y = 300 + Math.random() * 100;
         this.x = 300 + i * 300 + Math.random() * 200;
         this.animate();
+        this.offset = {
+            left: 20,
+            right: 20,
+            top: 15,
+            bottom: 15
+        };
     }
 
     /**
@@ -58,18 +58,18 @@ class JellyFish extends MovableObject {
         }, 240);
     }
 
-    
+
     /**
      * Marks the jellyfish as dead and removes it from the given enemies array after the death animation.
      * @param {Array} enemiesArray - The array of enemies to remove this jellyfish from.
      */
     dieAndRemove(enemiesArray) {
-    this.isDead = true;
-    setTimeout(() => {
-        const idx = enemiesArray.indexOf(this);
-        if (idx > -1) {
-            enemiesArray.splice(idx, 1);
-        }
-    }, this.imgs_dead.length * 240);
-}
+        this.isDead = true;
+        setTimeout(() => {
+            const idx = enemiesArray.indexOf(this);
+            if (idx > -1) {
+                enemiesArray.splice(idx, 1);
+            }
+        }, this.imgs_dead.length * 240);
+    }
 }

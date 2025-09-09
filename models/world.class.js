@@ -85,7 +85,6 @@ class World {
         this.paused = false;
         this.draw();
         this.setWorld();
-        this.checkCollisions();
         this.checkCollectBottle();
         this.checkCollectCoin();
         this.checkBubbleCollisions();
@@ -115,9 +114,9 @@ class World {
                 this.finalEnemy.hurtFrame = 0;
                 this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
                 this.healthBarEndboss.setPercentage(this.finalEnemy.energy);
-                    if (this.finalEnemy.energy === 0) {
-                        document.getElementById('gameWinDialog').classList.remove('dp-none-win');
-                        this.paused = true;
+                if (this.finalEnemy.energy === 0) {
+                    document.getElementById('gameWinDialog').classList.remove('dp-none-win');
+                    this.paused = true;
                 }
             }
         });
@@ -130,15 +129,17 @@ class World {
         if (
             this.finalEnemy &&
             !this.finalEnemy.isDead &&
-            this.character.isColliding(this.finalEnemy)
+            this.character.isColliding(this.finalEnemy) &&
+            this.finalEnemy.canHitCharacter
         ) {
+            const prevEnergy = this.character.energy;
             this.character.hit();
             this.statusBar.setPercentage(this.character.energy);
-            if (this.finalEnemy.energy === 0) {
-                document.getElementById('gameWinDialog').classList.remove('dp-none-win');
-                this.paused = true;
-            }
+            this.finalEnemy.hitCharacterCooldown();
+            this._playHurtSoundIfNeeded(prevEnergy);
+            this._handleGameOverIfNeeded();
         }
+
     }
 
     /**
@@ -161,7 +162,7 @@ class World {
      * Handles the introduction sequence for the final enemy.
      */
     checkFinalEnemyIntroduce() {
-            const finalEnemySplashSound = document.getElementById('finalEnemySplash');
+        const finalEnemySplashSound = document.getElementById('finalEnemySplash');
         if (
             this.finalEnemy &&
             (this.finalEnemy.isIntroducing || this.character.x === 2151 || this.finalEnemyVisible)
@@ -235,18 +236,7 @@ class World {
         }
     }
 
-    /**
-     * Checks for collisions between the character and enemies, and handles damage/game over.
-     */
-    checkCollisions() {
-        setInterval(() => {
-            this.level.enemies.forEach(enemy => {
-                if (!enemy.isDead && this.character.isColliding(enemy)) {
-                    this._handleCharacterEnemyCollision(enemy);
-                }
-            });
-        }, 100);
-    }
+
 
     /**
      * Handles collision logic between the character and an enemy.
@@ -254,10 +244,14 @@ class World {
      * @param {MovableObject} enemy - The enemy object.
      */
     _handleCharacterEnemyCollision(enemy) {
-        if (!this.character.isHurt()) {
+        if (!this.character.isHurt() &&
+            this.character.isColliding(enemy) &&
+            enemy.canHitCharacter
+        ) {
             const prevEnergy = this.character.energy;
             this.character.hit();
             this.statusBar.setPercentage(this.character.energy);
+            enemy.hitCharacterCooldown();
             this._playHurtSoundIfNeeded(prevEnergy);
             this._handleGameOverIfNeeded();
         }
@@ -279,6 +273,10 @@ class World {
                 hurtSound.currentTime = 0;
                 try {
                     hurtSound.play();
+                    console.log(this.character.energy);
+                    console.log(prevEnergy);
+                    console.log(this.character.isHurt());
+
                 } catch (e) {
                     console.error('Error playing sound:', e);
                 }
@@ -331,6 +329,17 @@ class World {
         }, 200);
     }
 
+    handleCollisions() {
+        this.level.enemies.forEach(enemy => {
+            if (!enemy.isDead) {
+                this._handleCharacterEnemyCollision(enemy);
+            }
+        });
+        this.checkFinalEnemyCollision();
+        this.checkPoisonBubbleFinalEnemyCollision();
+    }
+
+
     /**
      * Main game loop: draws all objects and handles game state updates.
      */
@@ -355,11 +364,10 @@ class World {
         this.showEndbossHealthBar();
         this.ctx.translate(this.camera_x, 0);
         this.ctx.translate(-this.camera_x, 0);
-        this.checkFinalEnemyCollision();
         this.checkPoisonBubbleFinalEnemyCollision();
+        this.handleCollisions();
         requestAnimationFrame(() => this.draw());
     }
-
     /**
      * Adds an array of objects to the map for rendering.
      * @param {DrawableObject[]} objects - The objects to add.

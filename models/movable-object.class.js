@@ -30,17 +30,41 @@ class MovableObject extends DrawableObject {
      */
     lastHit = 0;
 
+    constructor() {
+        super();
+        this.canHitCharacter = true;
+        this.hitCooldown = 500;
+    }
+
+     hitCharacterCooldown() {
+        this.canHitCharacter = false;
+        setTimeout(() => {
+            this.canHitCharacter = true;
+        }, this.hitCooldown);
+    }
+
+
     /**
      * Checks if this object is colliding with another movable object.
      * @param {MovableObject} mo - The other movable object.
      * @returns {boolean} True if colliding, false otherwise.
      */
     isColliding(mo) {
+        const o1 = this.offset || { left: 0, right: 0, top: 0, bottom: 0 };
+        const o2 = mo.offset || { left: 0, right: 0, top: 0, bottom: 0 };
+        const leftA = this.x + o1.left;
+        const rightA = this.x + this.width - o1.right;
+        const topA = this.y + o1.top;
+        const bottomA = this.y + this.height - o1.bottom;
+        const leftB = mo.x + o2.left;
+        const rightB = mo.x + mo.width - o2.right;
+        const topB = mo.y + o2.top;
+        const bottomB = mo.y + mo.height - o2.bottom;
         return (
-            this.x + this.width - this.offset.right > mo.x &&
-            this.y + this.height - this.offset.bottom > mo.y &&
-            this.x + this.offset.left < mo.x + mo.width &&
-            this.y + this.offset.top < mo.y + mo.height
+            leftA < rightB &&
+            rightA > leftB &&
+            topA < bottomB &&
+            bottomA > topB
         );
     }
 
@@ -48,13 +72,13 @@ class MovableObject extends DrawableObject {
      * Reduces energy when hit and updates lastHit timestamp.
      */
     hit() {
-        this.energy -= 10;
-        if (this.energy < 0) {
-            this.energy = 0;
-        } else {
+        if (!this.isHurt()) {
+            this.energy -= 10;
+            if (this.energy < 0) this.energy = 0;
             this.lastHit = new Date().getTime();
         }
     }
+
 
     /**
      * Checks if the object is currently hurt (within 0.5s of last hit).

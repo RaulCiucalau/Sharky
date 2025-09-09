@@ -107,12 +107,6 @@ class Character extends MovableObject {
     ]
     world;
     energy = 100;
-    offset = {
-        left: 60,
-        right: 52,
-        top: 134,
-        bottom: 66
-    };
 
     /**
      * Initializes the character and loads all images.
@@ -128,6 +122,13 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT_ELECTRIC);
         this.loadImages(this.IMAGES_HURT_POISONED);
         this.animate();
+        this.offset = {
+            left: 40,
+            right: 50,
+            top: 122,
+            bottom: 65
+        };
+
     }
 
     /**
@@ -144,13 +145,6 @@ class Character extends MovableObject {
             this.img = this.imageCache[images[loopIndex]];
             this.currentImage++;
         }
-    }
-
-    /**
-     * Placeholder for custom character movement logic.
-     */
-    moveCharacter() {
-
     }
 
     /**
