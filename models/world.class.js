@@ -288,6 +288,7 @@ class World {
         if (this.character.energy === 0 && !this.character.isItDead) {
             this.character.isItDead = true;
             document.querySelector('.game-over-dialog').classList.remove('dp-none');
+            this.paused = true;
         }
     }
 
