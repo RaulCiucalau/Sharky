@@ -280,6 +280,24 @@ canvas {
     gap: 10px;
     padding: 5px 10px;
     border-radius: 10px;
+    z-index: 30; /* Ensure above overlays */
+    pointer-events: auto;
+}
+
+/* Touch-friendly slider for mobile */
+input[type="range"]#mainMenuVolume {
+    touch-action: manipulation;
+    pointer-events: auto;
+    user-select: auto;
+    min-width: 120px;
+    height: 32px;
+    background: transparent;
+}
+@media (pointer: coarse) {
+    input[type="range"]#mainMenuVolume {
+        min-width: 180px;
+        height: 40px;
+    }
 }
 
 .rotate-device {

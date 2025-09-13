@@ -178,6 +178,15 @@ function restartGame() {
     restartGameState();
 }
 
+/** Restarts the game and hides the game win dialog.
+ */
+function playAgain() {
+    let gameWinDialog = document.getElementById('gameWinDialog');
+    gameWinDialog.classList.add('dp-none-win');
+    userInteracted = false;
+    restartGameState();
+}
+
 /**
  * Shows the joystick for mobile/touch devices and hides it for desktop/large screens.
  */
