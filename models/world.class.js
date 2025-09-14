@@ -448,9 +448,6 @@ class World {
             obj.height
         );
         this.ctx.restore();
-       // if (typeof obj.drawOffsetRectangle === 'function') {
-       //     obj.drawOffsetRectangle(this.ctx);
-       // }
     }
 
     /**
