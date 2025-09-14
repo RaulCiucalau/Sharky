@@ -185,6 +185,10 @@ class World {
             this.finalEnemy.canHitCharacter
         ) {
             const prevEnergy = this.character.energy;
+            this.character.hit();
+            this.statusBar.setPercentage(this.character.energy);
+            this.finalEnemy.hitCharacterCooldown();
+            this._playHurtSoundIfN
             this.character.hitFinalEnemy();
             this.statusBar.setPercentage(this.character.energy);
             this.finalEnemy.hitCharacterCooldown();

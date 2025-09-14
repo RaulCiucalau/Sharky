@@ -4,10 +4,10 @@
  */
 class FinalEnemy extends MovableObject {
     x = 2480;
-    y = -100;
-    height = 500;
-    width = 500;
-    speed = 0.1; // Increased speed for more challenge
+    y = -200;
+    height = 600;
+    width = 600;
+    speed = 0.2;
     imgs_dead = [
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 6.png',
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 7.png',

@@ -155,11 +155,12 @@ document.getElementById('impressumBtn').addEventListener('click', showImpressumT
  * Starts the game, hides the main menu, and shows the joystick if needed.
  */
 function startPlay() {
+    world = new World(canvas, keyboard);
+    world.character.energy = 100;
     soundManager.pauseMusic();
     document.getElementById('inGameMusic').play();
     hideMainMenuUI();
     startGame();
-    restartGameState();
     showJoystickIfNeeded();
 }
 
@@ -368,11 +369,11 @@ function handleJoystickTouchEnd(e) {
  */
 function setupBubbleBtnEvents() {
     if (bubbleBtn) {
-        bubbleBtn.addEventListener('touchstart', function(e) {
+        bubbleBtn.addEventListener('touchstart', function (e) {
             if (window.keyboard) keyboard.E = true;
             e.preventDefault();
         });
-        bubbleBtn.addEventListener('touchend', function(e) {
+        bubbleBtn.addEventListener('touchend', function (e) {
             if (window.keyboard) keyboard.E = false;
             e.preventDefault();
         });
@@ -384,11 +385,11 @@ function setupBubbleBtnEvents() {
  */
 function setupPoisonBtnEvents() {
     if (poisonBtn) {
-        poisonBtn.addEventListener('touchstart', function(e) {
+        poisonBtn.addEventListener('touchstart', function (e) {
             if (window.keyboard) keyboard.Q = true;
             e.preventDefault();
         });
-        poisonBtn.addEventListener('touchend', function(e) {
+        poisonBtn.addEventListener('touchend', function (e) {
             if (window.keyboard) keyboard.Q = false;
             e.preventDefault();
         });
