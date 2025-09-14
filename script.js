@@ -84,13 +84,24 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
 window.addEventListener('DOMContentLoaded', () => {
     const slider = document.getElementById('mainMenuVolume');
-    const music = document.getElementById('mainMenuMusic');
-    if (slider && music) {
-        slider.value = music.volume;
+    const audioIds = [
+        'mainMenuMusic',
+        'inGameMusic',
+        'coinCollectSound',
+        'collectBottleSound',
+        'hurtSound',
+        'finalEnemySplash'
+    ];
+    const audios = audioIds.map(id => document.getElementById(id)).filter(Boolean);
+    if (slider && audios.length) {
+        slider.value = audios[0].volume;
         slider.addEventListener('input', (e) => {
-            music.volume = e.target.value;
+            audios.forEach(audio => {
+                audio.volume = e.target.value;
+            });
         });
     }
 });
