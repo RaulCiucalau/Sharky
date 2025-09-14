@@ -52,9 +52,11 @@ class HealthBarEndboss extends DrawableObject {
      */
     resolveImageIndex(percentage) {
         if (percentage == 100) return 5;
+        if (percentage >= 50) return 4;
+        if (percentage >= 40) return 3;
         if (percentage >= 30) return 2;
-        if (percentage >= 20) return 3;
-        if (percentage >= 10) return 2;
+        if (percentage >= 20) return 1;
+        if (percentage >= 10) return 1;
         return 0;
     }
 }

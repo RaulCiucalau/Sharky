@@ -79,6 +79,17 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+     * Hits the final enemy and reduces its energy.
+     */
+    hitFinalEnemy() {
+        if (!this.isHurt()) {
+            this.energy -= 30;
+            if (this.energy < 0) this.energy = 0;
+            this.lastHit = new Date().getTime();
+        }
+    }
+
 
     /**
      * Checks if the object is currently hurt (within 0.5s of last hit).

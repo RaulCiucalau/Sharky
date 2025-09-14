@@ -7,7 +7,7 @@ class FinalEnemy extends MovableObject {
     y = -100;
     height = 500;
     width = 500;
-    speed = 0.05;
+    speed = 0.1; // Increased speed for more challenge
     imgs_dead = [
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 6.png',
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 7.png',
@@ -56,7 +56,7 @@ class FinalEnemy extends MovableObject {
         'img/2.Enemy/3 Final Enemy/2.floating/12.png'
     ];
     offset = {
-        left: 55,
+        left: 80,
         right: 80,
         top: 260,
         bottom: 120
@@ -67,7 +67,7 @@ class FinalEnemy extends MovableObject {
     attackTimer = 0;
     isDead = false;
     isHurt = false;
-    energy = 30;
+    energy = 50;
 
     /**
      * Initializes the final enemy and loads all images.
@@ -158,18 +158,27 @@ class FinalEnemy extends MovableObject {
     }
 
     /**
-     * Handles attack or floating state logic.
-     */
-    handleAttackOrFloatState() {
-        this.attackTimer += 160;
-        if (this.isAttacking) {
-            return this.handleAttackState();
-        } else if (this.attackTimer >= 2000) {
-            return this.startAttack();
-        } else {
-            return this.handleFloatState();
+ * Handles attack or floating state logic, and follows the character vertically in real time.
+ * @override
+ */
+handleAttackOrFloatState() {
+    this.attackTimer += 160;
+    if (this.world?.character) {
+        const char = this.world.character;
+        const dy = char.y - this.y;
+        if (Math.abs(dy) > 2) {
+            this.y += dy * 0.1;
         }
     }
+    if (this.isAttacking) {
+        return this.handleAttackState();
+    }
+    if (this.attackTimer >= 2000) {
+        return this.startAttack();
+    }
+    return this.handleFloatState();
+}
+
 
     /**
      * Handles the attack animation state.
