@@ -258,7 +258,7 @@ class Character extends MovableObject {
         }
         this.updateIdleTime(moved);
         this.updateRotation();
-        requestAnimationFrame(() => this.moveLoop());
+        setTimeout(() => this.moveLoop(), 1000 / 60);
     }
 
     /**
