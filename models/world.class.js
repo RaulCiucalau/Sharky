@@ -2,29 +2,15 @@
  * Represents the main game world, managing all game objects, collisions, and rendering.
  */
 class World {
-    /**
-     * The main character instance.
-     * @type {Character}
-     */
     character = new Character();
-    /**
-     * The current level data.
-     * @type {Level}
-     */
     level = World.createLevel();
-
-    /**
-     * Creates a new Level instance for a fresh start.
-     * @returns {Level}
-     */
     static createLevel() {
-        // Copy the level1.js code here to always return a new Level instance
         return new Level(
             [
                 new PufferFish(0), new PufferFish(1), new PufferFish(2), new PufferFish(3), new PufferFish(4), new PufferFish(5), new PufferFish(6),
                 new JellyFish(0), new JellyFish(1), new JellyFish(2), new JellyFish(3), new JellyFish(4)
             ],
-            [ new FinalEnemy() ],
+            [new FinalEnemy()],
             [
                 new BackgroundObject('img/3. Background/Layers/5. Water/D2.png', -720, 480, 720),
                 new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D2.png', -720, 400, 720),
@@ -64,65 +50,17 @@ class World {
             ]
         );
     }
-    /**
-     * The canvas element for rendering.
-     * @type {HTMLCanvasElement}
-     */
     canvas;
-    /**
-     * The 2D rendering context.
-     * @type {CanvasRenderingContext2D}
-     */
     ctx;
-    /**
-     * The keyboard input handler.
-     * @type {Keyboard}
-     */
     keyboard;
-    /**
-     * The camera x offset.
-     * @type {number}
-     */
     camera_x = 0;
-    /**
-     * The status bar UI element.
-     * @type {StatusBar}
-     */
     statusBar = new StatusBar();
-    /**
-     * The bottles bar UI element.
-     * @type {BottlesBar}
-     */
     bottlesBar = new BottlesBar();
-    /**
-     * The endboss health bar UI element.
-     * @type {HealthBarEndboss}
-     */
     healthBarEndboss = new HealthBarEndboss();
-    /**
-     * The coins bar UI element.
-     * @type {CoinsBar}
-     */
     coinsBar = new CoinsBar();
-    /**
-     * Array of shootable objects (bubbles).
-     * @type {ShootableObjects[]}
-     */
     shootableObjects = [];
-    /**
-     * The final enemy instance.
-     * @type {FinalEnemy}
-     */
     finalEnemy = new FinalEnemy();
-    /**
-     * Whether the endboss health bar is visible.
-     * @type {boolean}
-     */
     endbossHealthBarVisible = false;
-    /**
-     * Whether the final enemy is visible.
-     * @type {boolean}
-     */
     finalEnemyVisible = false;
 
     /**
@@ -161,6 +99,11 @@ class World {
         });
     }
 
+    /**
+     * Determines if a poison bubble should damage the final enemy.
+     * @param {ShootableObjects} bubble - The bubble to check for collision and poison status.
+     * @returns {boolean} True if the bubble is poisoned, collides with the final enemy, and the final enemy is alive.
+     */
     _shouldDamageFinalEnemy(bubble) {
         return bubble.isPoisoned &&
             this.finalEnemy &&
@@ -168,6 +111,10 @@ class World {
             bubble.isColliding(this.finalEnemy);
     }
 
+    /**
+     * Damages the final enemy when hit by a poison bubble, updates health bar, and handles win condition.
+     * @param {ShootableObjects} bubble - The poison bubble that hit the final enemy.
+     */
     _damageFinalEnemy(bubble) {
         this.finalEnemy.energy = Math.max(0, this.finalEnemy.energy - 10);
         this.finalEnemy.isHurt = true;
@@ -189,6 +136,10 @@ class World {
         }
     }
 
+    /**
+     * Determines if the final enemy should hit the character.
+     * @returns {boolean} True if the final enemy can hit the character and they are colliding.
+     */
     _shouldFinalEnemyHitCharacter() {
         return this.finalEnemy &&
             !this.finalEnemy.isDead &&
@@ -196,6 +147,9 @@ class World {
             this.finalEnemy.canHitCharacter;
     }
 
+    /**
+     * Handles the logic when the final enemy hits the character, including updating energy, status bar, and sound.
+     */
     _handleFinalEnemyHitCharacter() {
         const prevEnergy = this.character.energy;
         this.character.hit();
@@ -237,12 +191,20 @@ class World {
         }
     }
 
+    /**
+     * Determines if the final enemy should be introduced.
+     * @returns {boolean}
+     */
     _shouldIntroduceFinalEnemy() {
         return this.finalEnemy &&
             !this.finalEnemy.isIntroducing &&
             (this.character.x === 2151);
     }
 
+    /**
+     * Starts the final enemy introduction sequence.
+     * @param {HTMLAudioElement} finalEnemySplashSound
+     */
     _startFinalEnemyIntroduction(finalEnemySplashSound) {
         this.finalEnemy.isIntroducing = true;
         this.finalEnemy.introduceFrame = 0;
@@ -250,6 +212,10 @@ class World {
         finalEnemySplashSound.play();
     }
 
+    /**
+     * Determines if the final enemy should be shown.
+     * @returns {boolean}
+     */
     _shouldShowFinalEnemy() {
         return this.finalEnemy &&
             (this.finalEnemy.isIntroducing || this.finalEnemyVisible);
@@ -270,12 +236,23 @@ class World {
         }, 100);
     }
 
+    /**
+     * Determines if a bubble should kill an enemy.
+     * @param {ShootableObjects} bubble
+     * @param {MovableObject} enemy
+     * @returns {boolean}
+     */
     _shouldBubbleKillEnemy(bubble, enemy) {
         return (enemy instanceof JellyFish || enemy instanceof PufferFish) &&
             bubble.isColliding(enemy) &&
             !enemy.isDead;
     }
 
+    /**
+    * Handles the logic when a bubble kills an enemy.
+    * @param {ShootableObjects} bubble
+    * @param {MovableObject} enemy
+    */
     _bubbleKillsEnemy(bubble, enemy) {
         enemy.dieAndRemove(this.level.enemies);
         this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
@@ -317,8 +294,6 @@ class World {
             this.bottlesBar.setPercentage(percent);
         }
     }
-
-
 
     /**
      * Handles collision logic between the character and an enemy.
@@ -387,10 +362,19 @@ class World {
         }, 200);
     }
 
+    /**
+    * Determines if the character should collect a bottle.
+    * @param {Bottles} bottle
+    * @returns {boolean}
+    */
     _shouldCollectBottle(bottle) {
         return this.character.isColliding(bottle);
     }
 
+    /**
+    * Handles the logic for collecting a bottle.
+    * @param {Bottles} bottle
+    */
     _collectBottle(bottle) {
         this.bottlesBar.collectBottle();
         this.level.removeObject(bottle);
@@ -412,10 +396,19 @@ class World {
         }, 200);
     }
 
+    /**
+    * Determines if the character should collect a coin.
+    * @param {Coin} coin
+    * @returns {boolean}
+    */
     _shouldCollectCoin(coin) {
         return this.character.isColliding(coin);
     }
 
+    /**
+    * Handles the logic for collecting a coin.
+    * @param {Coin} coin
+    */
     _collectCoin(coin) {
         this.coinsBar.collectCoin();
         this.level.removeObject(coin);
@@ -424,6 +417,9 @@ class World {
         coinSound.play();
     }
 
+    /**
+     * Handles all collision checks between the character, enemies, and bubbles in the game world.
+     */
     handleCollisions() {
         this.level.enemies.forEach(enemy => {
             if (!enemy.isDead) {
@@ -450,11 +446,23 @@ class World {
         requestAnimationFrame(() => this.draw());
     }
 
+
+    /**
+     * Clears the entire canvas and applies the camera translation.
+     * Prepares the drawing context for rendering the game world at the correct camera position.
+     * @private
+     */
     _clearAndTranslate() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
     }
 
+
+    /**
+     * Draws all main game objects to the canvas, including background, enemies, collectibles, and the player character.
+     * Also handles the introduction and rendering of the final enemy.
+     * @private
+     */
     _drawGameObjects() {
         this.addObjectToMap(this.level.backgroundObjects);
         this.checkFinalEnemyIntroduce();
@@ -466,6 +474,12 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
     }
 
+
+    /**
+     * Draws the user interface elements such as status bars and the endboss health bar.
+     * Ensures UI is rendered above the game world and at the correct position.
+     * @private
+     */
     _drawUI() {
         this.addToMap(this.statusBar);
         this.addToMap(this.bottlesBar);
@@ -475,10 +489,14 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
     }
 
+    /**
+     * Handles core game logic such as checking collisions and updating game state each frame.
+     */
     _handleGameLogic() {
         this.checkPoisonBubbleFinalEnemyCollision();
         this.handleCollisions();
     }
+
     /**
      * Adds an array of objects to the map for rendering.
      * @param {DrawableObject[]} objects - The objects to add.
@@ -501,10 +519,18 @@ class World {
         this.ctx.restore();
     }
 
+    /**
+         * Translates the context to the center of the object.
+         * @param {DrawableObject} obj
+         */
     _translateToObjectCenter(obj) {
         this.ctx.translate(obj.x + obj.width / 2, obj.y + obj.height / 2);
     }
 
+    /**
+    * Applies transforms (flip/rotation) to the context for the object.
+    * @param {DrawableObject} obj
+    */
     _applyObjectTransforms(obj) {
         if (obj.isFacingLeft) {
             this.ctx.scale(-1, 1);
@@ -514,6 +540,10 @@ class World {
         }
     }
 
+    /**
+     * Draws the object's image to the context.
+     * @param {DrawableObject} obj
+     */
     _drawObjectImage(obj) {
         this.ctx.drawImage(
             obj.img,
