@@ -155,47 +155,57 @@ class World {
      */
     checkPoisonBubbleFinalEnemyCollision() {
         this.shootableObjects.forEach(bubble => {
-            if (
-                bubble.isPoisoned &&
-                this.finalEnemy &&
-                !this.finalEnemy.isDead &&
-                bubble.isColliding(this.finalEnemy)
-            ) {
-                this.finalEnemy.energy = Math.max(0, this.finalEnemy.energy - 10);
-                this.finalEnemy.isHurt = true;
-                this.finalEnemy.hurtFrame = 0;
-                this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
-                this.healthBarEndboss.setPercentage(this.finalEnemy.energy);
-                if (this.finalEnemy.energy === 0) {
-                    document.getElementById('gameWinDialog').classList.remove('dp-none-win');
-                    this.paused = true;
-                }
+            if (this._shouldDamageFinalEnemy(bubble)) {
+                this._damageFinalEnemy(bubble);
             }
         });
+    }
+
+    _shouldDamageFinalEnemy(bubble) {
+        return bubble.isPoisoned &&
+            this.finalEnemy &&
+            !this.finalEnemy.isDead &&
+            bubble.isColliding(this.finalEnemy);
+    }
+
+    _damageFinalEnemy(bubble) {
+        this.finalEnemy.energy = Math.max(0, this.finalEnemy.energy - 10);
+        this.finalEnemy.isHurt = true;
+        this.finalEnemy.hurtFrame = 0;
+        this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
+        this.healthBarEndboss.setPercentage(this.finalEnemy.energy);
+        if (this.finalEnemy.energy === 0) {
+            document.getElementById('gameWinDialog').classList.remove('dp-none-win');
+            this.paused = true;
+        }
     }
 
     /**
      * Checks for collisions between the character and the final enemy.
      */
     checkFinalEnemyCollision() {
-        if (
-            this.finalEnemy &&
+        if (this._shouldFinalEnemyHitCharacter()) {
+            this._handleFinalEnemyHitCharacter();
+        }
+    }
+
+    _shouldFinalEnemyHitCharacter() {
+        return this.finalEnemy &&
             !this.finalEnemy.isDead &&
             this.character.isColliding(this.finalEnemy) &&
-            this.finalEnemy.canHitCharacter
-        ) {
-            const prevEnergy = this.character.energy;
-            this.character.hit();
-            this.statusBar.setPercentage(this.character.energy);
-            this.finalEnemy.hitCharacterCooldown();
-            this._playHurtSoundIfN
-            this.character.hitFinalEnemy();
-            this.statusBar.setPercentage(this.character.energy);
-            this.finalEnemy.hitCharacterCooldown();
-            this._playHurtSoundIfNeeded(prevEnergy);
-            this._handleGameOverIfNeeded();
-        }
+            this.finalEnemy.canHitCharacter;
+    }
 
+    _handleFinalEnemyHitCharacter() {
+        const prevEnergy = this.character.energy;
+        this.character.hit();
+        this.statusBar.setPercentage(this.character.energy);
+        this.finalEnemy.hitCharacterCooldown();
+        this.character.hitFinalEnemy();
+        this.statusBar.setPercentage(this.character.energy);
+        this.finalEnemy.hitCharacterCooldown();
+        this._playHurtSoundIfNeeded(prevEnergy);
+        this._handleGameOverIfNeeded();
     }
 
     /**
@@ -219,20 +229,30 @@ class World {
      */
     checkFinalEnemyIntroduce() {
         const finalEnemySplashSound = document.getElementById('finalEnemySplash');
-        if (
-            this.finalEnemy &&
-            (this.finalEnemy.isIntroducing || this.character.x === 2151 || this.finalEnemyVisible)
-        ) {
-            if (!this.finalEnemy.isIntroducing && this.character.x === 2151) {
-                this.finalEnemy.isIntroducing = true;
-                this.finalEnemy.introduceFrame = 0;
-                this.finalEnemyVisible = true;
-                finalEnemySplashSound.play();
-            }
-            if (this.finalEnemy.isIntroducing || this.finalEnemyVisible) {
-                this.addToMap(this.finalEnemy);
-            }
+        if (this._shouldIntroduceFinalEnemy()) {
+            this._startFinalEnemyIntroduction(finalEnemySplashSound);
         }
+        if (this._shouldShowFinalEnemy()) {
+            this.addToMap(this.finalEnemy);
+        }
+    }
+
+    _shouldIntroduceFinalEnemy() {
+        return this.finalEnemy &&
+            !this.finalEnemy.isIntroducing &&
+            (this.character.x === 2151);
+    }
+
+    _startFinalEnemyIntroduction(finalEnemySplashSound) {
+        this.finalEnemy.isIntroducing = true;
+        this.finalEnemy.introduceFrame = 0;
+        this.finalEnemyVisible = true;
+        finalEnemySplashSound.play();
+    }
+
+    _shouldShowFinalEnemy() {
+        return this.finalEnemy &&
+            (this.finalEnemy.isIntroducing || this.finalEnemyVisible);
     }
 
     /**
@@ -242,17 +262,23 @@ class World {
         setInterval(() => {
             this.shootableObjects.forEach(bubble => {
                 this.level.enemies.forEach(enemy => {
-                    if (
-                        (enemy instanceof JellyFish || enemy instanceof PufferFish) &&
-                        bubble.isColliding(enemy) &&
-                        !enemy.isDead
-                    ) {
-                        enemy.dieAndRemove(this.level.enemies);
-                        this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
+                    if (this._shouldBubbleKillEnemy(bubble, enemy)) {
+                        this._bubbleKillsEnemy(bubble, enemy);
                     }
                 });
             });
         }, 100);
+    }
+
+    _shouldBubbleKillEnemy(bubble, enemy) {
+        return (enemy instanceof JellyFish || enemy instanceof PufferFish) &&
+            bubble.isColliding(enemy) &&
+            !enemy.isDead;
+    }
+
+    _bubbleKillsEnemy(bubble, enemy) {
+        enemy.dieAndRemove(this.level.enemies);
+        this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
     }
 
     /**
@@ -354,15 +380,23 @@ class World {
     checkCollectBottle() {
         setInterval(() => {
             this.level.bottles.forEach(bottle => {
-                if (this.character.isColliding(bottle)) {
-                    this.bottlesBar.collectBottle();
-                    this.level.removeObject(bottle);
-                    const bottleSound = document.getElementById('collectBottleSound');
-                    bottleSound.currentTime = 0;
-                    bottleSound.play();
+                if (this._shouldCollectBottle(bottle)) {
+                    this._collectBottle(bottle);
                 }
             });
         }, 200);
+    }
+
+    _shouldCollectBottle(bottle) {
+        return this.character.isColliding(bottle);
+    }
+
+    _collectBottle(bottle) {
+        this.bottlesBar.collectBottle();
+        this.level.removeObject(bottle);
+        const bottleSound = document.getElementById('collectBottleSound');
+        bottleSound.currentTime = 0;
+        bottleSound.play();
     }
 
     /**
@@ -371,15 +405,23 @@ class World {
     checkCollectCoin() {
         setInterval(() => {
             this.level.coins.forEach(coin => {
-                if (this.character.isColliding(coin)) {
-                    this.coinsBar.collectCoin();
-                    this.level.removeObject(coin);
-                    const coinSound = document.getElementById('coinCollectSound');
-                    coinSound.currentTime = 0;
-                    coinSound.play();
+                if (this._shouldCollectCoin(coin)) {
+                    this._collectCoin(coin);
                 }
             });
         }, 200);
+    }
+
+    _shouldCollectCoin(coin) {
+        return this.character.isColliding(coin);
+    }
+
+    _collectCoin(coin) {
+        this.coinsBar.collectCoin();
+        this.level.removeObject(coin);
+        const coinSound = document.getElementById('coinCollectSound');
+        coinSound.currentTime = 0;
+        coinSound.play();
     }
 
     handleCollisions() {
@@ -401,8 +443,19 @@ class World {
             requestAnimationFrame(() => this.draw());
             return;
         }
+        this._clearAndTranslate();
+        this._drawGameObjects();
+        this._drawUI();
+        this._handleGameLogic();
+        requestAnimationFrame(() => this.draw());
+    }
+
+    _clearAndTranslate() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
+    }
+
+    _drawGameObjects() {
         this.addObjectToMap(this.level.backgroundObjects);
         this.checkFinalEnemyIntroduce();
         this.addObjectToMap(this.level.enemies);
@@ -411,15 +464,20 @@ class World {
         this.addObjectToMap(this.shootableObjects);
         this.addToMap(this.character);
         this.ctx.translate(-this.camera_x, 0);
+    }
+
+    _drawUI() {
         this.addToMap(this.statusBar);
         this.addToMap(this.bottlesBar);
         this.addToMap(this.coinsBar);
         this.showEndbossHealthBar();
         this.ctx.translate(this.camera_x, 0);
         this.ctx.translate(-this.camera_x, 0);
+    }
+
+    _handleGameLogic() {
         this.checkPoisonBubbleFinalEnemyCollision();
         this.handleCollisions();
-        requestAnimationFrame(() => this.draw());
     }
     /**
      * Adds an array of objects to the map for rendering.
@@ -437,13 +495,26 @@ class World {
      */
     addToMap(obj) {
         this.ctx.save();
+        this._translateToObjectCenter(obj);
+        this._applyObjectTransforms(obj);
+        this._drawObjectImage(obj);
+        this.ctx.restore();
+    }
+
+    _translateToObjectCenter(obj) {
         this.ctx.translate(obj.x + obj.width / 2, obj.y + obj.height / 2);
+    }
+
+    _applyObjectTransforms(obj) {
         if (obj.isFacingLeft) {
             this.ctx.scale(-1, 1);
         }
         if (obj.rotation && obj.rotation !== 0) {
             this.ctx.rotate((obj.rotation * Math.PI) / 180);
         }
+    }
+
+    _drawObjectImage(obj) {
         this.ctx.drawImage(
             obj.img,
             -obj.width / 2,
@@ -451,7 +522,6 @@ class World {
             obj.width,
             obj.height
         );
-        this.ctx.restore();
     }
 
     /**

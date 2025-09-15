@@ -85,8 +85,18 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', setupMainMenuVolumeSlider);
+
+function setupMainMenuVolumeSlider() {
     const slider = document.getElementById('mainMenuVolume');
+    const audios = getMainMenuAudioElements();
+    if (slider && audios.length) {
+        slider.value = audios[0].volume;
+        slider.addEventListener('input', (e) => setAudiosVolume(audios, e.target.value));
+    }
+}
+
+function getMainMenuAudioElements() {
     const audioIds = [
         'mainMenuMusic',
         'inGameMusic',
@@ -95,16 +105,14 @@ window.addEventListener('DOMContentLoaded', () => {
         'hurtSound',
         'finalEnemySplash'
     ];
-    const audios = audioIds.map(id => document.getElementById(id)).filter(Boolean);
-    if (slider && audios.length) {
-        slider.value = audios[0].volume;
-        slider.addEventListener('input', (e) => {
-            audios.forEach(audio => {
-                audio.volume = e.target.value;
-            });
-        });
-    }
-});
+    return audioIds.map(id => document.getElementById(id)).filter(Boolean);
+}
+
+function setAudiosVolume(audios, value) {
+    audios.forEach(audio => {
+        audio.volume = value;
+    });
+}
 
 window.addEventListener('click', () => { userInteracted = true; });
 window.addEventListener('keydown', () => { userInteracted = true; });
@@ -325,6 +333,13 @@ function handleJoystickTouchStart(e) {
  */
 function handleJoystickTouchMove(e) {
     if (!joystickActive) return;
+    const { distanceX, distanceY } = getJoystickDistances(e);
+    updateKnobPosition(distanceX, distanceY);
+    updateKeyboardDirection(distanceX, distanceY);
+    e.preventDefault();
+}
+
+function getJoystickDistances(e) {
     const touch = e.touches[0];
     let dx = touch.clientX - startX;
     let dy = touch.clientY - startY;
@@ -334,17 +349,22 @@ function handleJoystickTouchMove(e) {
         dx = dx * maxDist / dist;
         dy = dy * maxDist / dist;
     }
-    knob.style.left = (20 + dx) + 'px';
-    knob.style.top = (20 + dy) + 'px';
+    return { distanceX: dx, distanceY: dy };
+}
 
+function updateKnobPosition(distanceX, distanceY) {
+    knob.style.left = (20 + distanceX) + 'px';
+    knob.style.top = (20 + distanceY) + 'px';
+}
+
+function updateKeyboardDirection(distanceX, distanceY) {
     if (window.keyboard) {
-        const dir = getDirection(dx, dy);
-        keyboard.left = dir.left;
-        keyboard.right = dir.right;
-        keyboard.up = dir.up;
-        keyboard.down = dir.down;
+        const direction = getDirection(distanceX, distanceY);
+        keyboard.left = direction.left;
+        keyboard.right = direction.right;
+        keyboard.up = direction.up;
+        keyboard.down = direction.down;
     }
-    e.preventDefault();
 }
 
 /**

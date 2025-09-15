@@ -161,23 +161,27 @@ class FinalEnemy extends MovableObject {
  * Handles attack or floating state logic, and follows the character vertically in real time.
  * @override
  */
-handleAttackOrFloatState() {
-    this.attackTimer += 160;
-    if (this.world?.character) {
-        const char = this.world.character;
-        const dy = char.y - this.y;
-        if (Math.abs(dy) > 2) {
-            this.y += dy * 0.1;
+    handleAttackOrFloatState() {
+        this.attackTimer += 160;
+        this.followCharacterVertically();
+        if (this.isAttacking) return this.handleAttackState();
+        if (this.shouldStartAttack()) return this.startAttack();
+        return this.handleFloatState();
+    }
+
+    followCharacterVertically() {
+        if (this.world?.character) {
+            const char = this.world.character;
+            const dy = char.y - this.y;
+            if (Math.abs(dy) > 2) {
+                this.y += dy * 0.1;
+            }
         }
     }
-    if (this.isAttacking) {
-        return this.handleAttackState();
+
+    shouldStartAttack() {
+        return this.attackTimer >= 2000;
     }
-    if (this.attackTimer >= 2000) {
-        return this.startAttack();
-    }
-    return this.handleFloatState();
-}
 
 
     /**
