@@ -11,31 +11,30 @@ class FinalEnemy extends MovableObject {
      * @param {number} deltaTime - Frame time for movement calculation.
      */
     static approachCharacter(boss, dx, dy, deltaTime) {
-    if (!boss.world || !boss.world.character) return;
-    const character = boss.world.character;
-    const bossCenterX = boss.x + boss.width / 2;
-    const bossCenterY = boss.y + boss.height / 2;
-    const charCenterX = character.x + character.width / 2;
-    const charCenterY = character.y + character.height / 2;
-    const dxCenter = charCenterX - bossCenterX;
-    const dyCenter = charCenterY - bossCenterY;
-    const isTouching = boss.isColliding(character);
-    if (!isTouching) {
-        const distance = Math.sqrt(dxCenter * dxCenter + dyCenter * dyCenter);
-        if (distance > 0.5) {
-            const step = boss.speed * deltaTime;
-            boss.x += (dxCenter / distance) * step;
-            boss.y += (dyCenter / distance) * step;
-            boss.isFacingLeft = dxCenter > 0;
+        if (!boss.world || !boss.world.character) return;
+        const character = boss.world.character;
+        const bossCenterX = boss.x + boss.width / 2;
+        const bossCenterY = boss.y + boss.height / 2;
+        const charCenterX = character.x + character.width / 2;
+        const charCenterY = character.y + character.height / 2;
+        const dxCenter = charCenterX - bossCenterX;
+        const dyCenter = charCenterY - bossCenterY;
+        const isTouching = boss.isColliding(character);
+        if (!isTouching) {
+            const distance = Math.sqrt(dxCenter * dxCenter + dyCenter * dyCenter);
+            if (distance > 0.5) {
+                const step = boss.speed * deltaTime;
+                boss.x += (dxCenter / distance) * step;
+                boss.y += (dyCenter / distance) * step;
+                boss.isFacingLeft = dxCenter > 0;
+            }
         }
     }
-}
-
     x = 2480;
     y = -70;
     height = 400;
     width = 400;
-    speed = 0.4;
+    speed = 0.2;
     imgs_dead = [
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 6.png',
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 7.png',
@@ -84,10 +83,10 @@ class FinalEnemy extends MovableObject {
         'img/2.Enemy/3 Final Enemy/2.floating/12.png'
     ];
     offset = {
-        left: 80,
-        right: 80,
-        top: 260,
-        bottom: 120
+        left: 40,
+        right: 40,
+        top: 200,
+        bottom: 100
     };
     isIntroducing = false;
     introduceFrame = 0;

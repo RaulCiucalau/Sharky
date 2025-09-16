@@ -122,7 +122,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT_POISONED);
         this.animate();
         this.offset = {
-            left: 40,
+            left: 55,
             right: 50,
             top: 122,
             bottom: 65
