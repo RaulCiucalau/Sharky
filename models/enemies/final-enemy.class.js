@@ -3,11 +3,39 @@
  * @extends MovableObject
  */
 class FinalEnemy extends MovableObject {
+    /**
+     * Guides the boss to approach the character position with a smooth step.
+     * @param {FinalEnemy} boss - The boss instance.
+     * @param {number} dx - Horizontal distance to character.
+     * @param {number} dy - Vertical distance to character.
+     * @param {number} deltaTime - Frame time for movement calculation.
+     */
+    static approachCharacter(boss, dx, dy, deltaTime) {
+    if (!boss.world || !boss.world.character) return;
+    const character = boss.world.character;
+    const bossCenterX = boss.x + boss.width / 2;
+    const bossCenterY = boss.y + boss.height / 2;
+    const charCenterX = character.x + character.width / 2;
+    const charCenterY = character.y + character.height / 2;
+    const dxCenter = charCenterX - bossCenterX;
+    const dyCenter = charCenterY - bossCenterY;
+    const isTouching = boss.isColliding(character);
+    if (!isTouching) {
+        const distance = Math.sqrt(dxCenter * dxCenter + dyCenter * dyCenter);
+        if (distance > 0.5) {
+            const step = boss.speed * deltaTime;
+            boss.x += (dxCenter / distance) * step;
+            boss.y += (dyCenter / distance) * step;
+            boss.isFacingLeft = dxCenter > 0;
+        }
+    }
+}
+
     x = 2480;
-    y = -200;
-    height = 600;
-    width = 600;
-    speed = 0.2;
+    y = -70;
+    height = 400;
+    width = 400;
+    speed = 0.4;
     imgs_dead = [
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 6.png',
         'img/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 7.png',
@@ -133,7 +161,6 @@ class FinalEnemy extends MovableObject {
             let path = this.imgs_introduce[this.introduceFrame];
             this.img = this.imageCache[path];
             this.introduceFrame++;
-            if (!this.isDead) this.moveLeft();
         } else {
             this.isIntroducing = false;
             this.hasIntroduced = true;
@@ -163,26 +190,20 @@ class FinalEnemy extends MovableObject {
  */
     handleAttackOrFloatState() {
         this.attackTimer += 160;
-        this.followCharacterVertically();
+        if (this.world?.character) {
+            const char = this.world.character;
+            const dx = (char.x + char.width / 2) - (this.x + this.width / 2);
+            const dy = char.y - (this.y + this.height / 2);
+            FinalEnemy.approachCharacter(this, dx, dy, 1);
+        }
         if (this.isAttacking) return this.handleAttackState();
         if (this.shouldStartAttack()) return this.startAttack();
         return this.handleFloatState();
     }
 
-    followCharacterVertically() {
-        if (this.world?.character) {
-            const char = this.world.character;
-            const dy = char.y - this.y;
-            if (Math.abs(dy) > 2) {
-                this.y += dy * 0.1;
-            }
-        }
-    }
-
     shouldStartAttack() {
         return this.attackTimer >= 2000;
     }
-
 
     /**
      * Handles the attack animation state.

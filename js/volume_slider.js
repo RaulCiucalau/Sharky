@@ -15,6 +15,18 @@ window.addEventListener('DOMContentLoaded', function() {
         const saved = localStorage.getItem('mainMenuVolume');
         if (saved !== null) {
             slider.value = saved;
+                const audioIds = [
+                    'mainMenuMusic',
+                    'inGameMusic',
+                    'coinCollectSound',
+                    'collectBottleSound',
+                    'hurtSound',
+                    'finalEnemySplash'
+                ];
+                audioIds.forEach(id => {
+                    const audio = document.getElementById(id);
+                    if (audio) audio.volume = slider.value;
+                });
         }
      /**
       * Save the current slider value to localStorage on input change.

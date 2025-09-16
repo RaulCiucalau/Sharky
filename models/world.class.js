@@ -86,6 +86,9 @@ class World {
      */
     setWorld() {
         this.character.world = this;
+        if (this.finalEnemy) {
+            this.finalEnemy.world = this;
+        }
     }
 
     /**
@@ -495,6 +498,13 @@ class World {
     _handleGameLogic() {
         this.checkPoisonBubbleFinalEnemyCollision();
         this.handleCollisions();
+        if (this.finalEnemyVisible && this.finalEnemy && !this.finalEnemy.isDead && this.character && this.finalEnemy.hasIntroduced) {
+            const dx = this.character.x - this.finalEnemy.x;
+            const dy = this.character.y - this.finalEnemy.y;
+            if (typeof FinalEnemy.approachCharacter === 'function') {
+                FinalEnemy.approachCharacter(this.finalEnemy, dx, dy, 4);
+            }
+        }
     }
 
     /**
