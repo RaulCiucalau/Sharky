@@ -294,7 +294,7 @@ input[type="range"]#mainMenuVolume {
 }
 @media (pointer: coarse) {
     input[type="range"]#mainMenuVolume {
-        min-width: 180px;
+        min-width: 140px;
         height: 40px;
     }
 }
