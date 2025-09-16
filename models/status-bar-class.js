@@ -9,12 +9,12 @@ class StatusBar extends DrawableObject {
      * @type {string[]}
      */
     IMAGES_LIFE = [
-        'img/4. Marcadores/green/Life/0_copia.png', // 0%
-        'img/4. Marcadores/green/Life/20_copia.png', // 20%
-        'img/4. Marcadores/green/Life/40_copia.png', // 40%
-        'img/4. Marcadores/green/Life/60_copia.png', // 60%
-        'img/4. Marcadores/green/Life/80_copia.png', // 80%
-        'img/4. Marcadores/green/Life/100_copia.png', // 100%
+        'img/4. Marcadores/green/Life/0_copia.png',
+        'img/4. Marcadores/green/Life/20_copia.png',
+        'img/4. Marcadores/green/Life/40_copia.png',
+        'img/4. Marcadores/green/Life/60_copia.png',
+        'img/4. Marcadores/green/Life/80_copia.png',
+        'img/4. Marcadores/green/Life/100_copia.png',
     ];
     /**
      * Current life percentage (0-100).

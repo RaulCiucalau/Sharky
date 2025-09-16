@@ -273,11 +273,12 @@ class Character extends MovableObject {
             if (this.attackBubblePoisonActive) return this.handleAttackBubblePoisonAnimation();
             if (this.world && this.world.keyboard && this.world.keyboard.E) return this.handleStartAttackBubble();
             if (this.world && this.world.keyboard && this.world.keyboard.Q) return this.handleStartAttackBubblePoison();
-            if (this.idleTime >= 10000) return this.handleLongIdleAnimation();
+            if (this.idleTime >= 2000) return this.handleLongIdleAnimation();
             if (
                 this.world && this.world.keyboard &&
                 (this.world.keyboard.right || this.world.keyboard.left || this.world.keyboard.up || this.world.keyboard.down)
             ) return this.handleSwimAnimation();
+                this.playAnimation(this.IMAGES_IDLE);
         }, 140);
     }
 
