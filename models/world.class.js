@@ -502,7 +502,7 @@ class World {
             const dx = this.character.x - this.finalEnemy.x;
             const dy = this.character.y - this.finalEnemy.y;
             if (typeof FinalEnemy.approachCharacter === 'function') {
-                FinalEnemy.approachCharacter(this.finalEnemy, dx, dy, 4);
+                FinalEnemy.approachCharacter(this.finalEnemy, dx, dy, 5);
             }
         }
     }
