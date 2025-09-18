@@ -4,30 +4,14 @@
  * @extends DrawableObject
  */
 class MovableObject extends DrawableObject {
-    /**
-     * The movement speed of the object.
-     * @type {number}
-     */
     speed = 0.4;
-    /**
-     * Whether the object is facing left.
-     * @type {boolean}
-     */
     isFacingLeft = false;
-    /**
-     * The offset for collision detection.
-     * @type {{left: number, right: number, top: number, bottom: number}}
-     */
     offset = {
         left: 0,
         right: 0,
         top: 0,
         bottom: 0
     };
-    /**
-     * Timestamp of the last hit.
-     * @type {number}
-     */
     lastHit = 0;
 
     constructor() {
@@ -36,6 +20,9 @@ class MovableObject extends DrawableObject {
         this.hitCooldown = 500;
     }
 
+    /**
+     * Starts the hit cooldown timer to prevent immediate re-hits.
+     */
      hitCharacterCooldown() {
         this.canHitCharacter = false;
         setTimeout(() => {
@@ -127,19 +114,9 @@ class MovableObject extends DrawableObject {
     drawTransformed(ctx) {
         ctx.save();
         ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-        if (this.isFacingLeft) {
-            ctx.scale(-1, 1);
-        }
-        if (this.rotation && this.rotation !== 0) {
-            ctx.rotate((this.rotation * Math.PI) / 180);
-        }
-        ctx.drawImage(
-            this.img,
-            -this.width / 2,
-            -this.height / 2,
-            this.width,
-            this.height
-        );
+        if (this.isFacingLeft) {ctx.scale(-1, 1);}
+        if (this.rotation && this.rotation !== 0) { ctx.rotate((this.rotation * Math.PI) / 180);}
+        ctx.drawImage(this.img, -this.width / 2, -this.height / 2, this.width, this.height);
         ctx.restore();
     }
 
