@@ -3,7 +3,19 @@
  * @extends MovableObject
  */
 class Character extends MovableObject {
+    /**
+     * Reduces energy on collision with enemy.
+     */
+    hit() {
+        if (typeof this.energy !== 'number') this.energy = 100;
+        this.energy = Math.max(0, this.energy - 10);
+        this.lastHit = Date.now();
+    }
     attackBubbleActive = false;
+    lastHit = 0;
+    isHurt() {
+        return Date.now() - this.lastHit < 1000;
+    }
     attackBubbleFrame = 0;
     attackBubblePoisonActive = false;
     attackBubblePoisonFrame = 0;

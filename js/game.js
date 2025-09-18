@@ -5,8 +5,8 @@ let gamePaused = true;
 
 function init() {
     canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
-    world.paused = true;
+    world = new WorldCore(canvas, keyboard);
+    world.paused = false;
     checkOrientation();
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', checkOrientation);
@@ -27,7 +27,7 @@ function startGame() {
 function restartGameState() {
     canvas = document.getElementById('canvas');
     keyboard = new Keyboard();
-    world = new World(canvas, keyboard);
+    world = new WorldCore(canvas, keyboard);
     if (world.character) {
         world.character.energy = 100;
     }
