@@ -1,4 +1,5 @@
 class WorldCore {
+
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -16,11 +17,9 @@ class WorldCore {
         this.finalEnemyVisible = false;
         this.paused = false;
         this.setWorld();
-        // Handlers
         this.drawHandler = new WorldDrawHandler();
         this.gameHelper = new WorldGameHelper();
         this.bubbleAttack = new WorldBubbleAttack();
-        // Start game logic
         this.drawHandler.draw(this);
         this.gameHelper.checkCollectBottle(this);
         this.gameHelper.checkCollectCoin(this);
@@ -73,6 +72,48 @@ class WorldCore {
             ]
         );
     }
+
+    /**
+     * Returns true if bubble should kill enemy (collision and not dead).
+     */
+    _shouldBubbleKillEnemy(bubble, enemy) {
+        return bubble.isColliding(enemy) && !enemy.isDead;
+    }
+
+    /**
+     * Handles bubble killing enemy (sets dead, removes bubble).
+     */
+    _bubbleKillsEnemy(bubble, enemy) {
+        enemy.isDead = true;
+        this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
+        const floatInterval = setInterval(() => {
+            enemy.y -= 5;
+        }, 30);
+        setTimeout(() => {
+            clearInterval(floatInterval);
+            if (this.level && Array.isArray(this.level.enemies)) {
+                const idx = this.level.enemies.indexOf(enemy);
+                if (idx !== -1) this.level.enemies.splice(idx, 1);
+            }
+            if (this.level && typeof this.level.removeObject === 'function') {
+                this.level.removeObject(enemy);
+            }
+        }, 1000);
+    }
+    /**
+     * Spawns a normal bubble at the given position.
+     */
+    spawnBubble(x, y) {
+        this.bubbleAttack.spawnBubble(this, x, y);
+    }
+
+    /**
+     * Spawns a poison bubble at the given position.
+     */
+    spawnPoisonBubble(x, y) {
+        this.bubbleAttack.spawnPoisonBubble(this, x, y);
+    }
+
     setWorld() {
         this.character.world = this;
         if (this.finalEnemy) {
@@ -129,21 +170,25 @@ class WorldCore {
             this.addToMap(this.finalEnemy);
         }
     }
+    
     _shouldIntroduceFinalEnemy() {
         return this.finalEnemy &&
             !this.finalEnemy.isIntroducing &&
             (this.character.x === 2151);
     }
+
     _startFinalEnemyIntroduction(finalEnemySplashSound) {
         this.finalEnemy.isIntroducing = true;
         this.finalEnemy.introduceFrame = 0;
         this.finalEnemyVisible = true;
         finalEnemySplashSound.play();
     }
+
     _shouldShowFinalEnemy() {
         return this.finalEnemy &&
             (this.finalEnemy.isIntroducing || this.finalEnemyVisible);
     }
+
     showEndbossHealthBar() {
         if (this.character.x === 2151) {
             this.endbossHealthBarVisible = true;
@@ -185,6 +230,7 @@ class WorldCore {
         this.checkFinalEnemyCollision();
         this.checkPoisonBubbleFinalEnemyCollision();
     }
+
     _handleCharacterEnemyCollision(enemy) {
         if (!this.character.isHurt() &&
             this.character.isColliding(enemy) &&
@@ -198,6 +244,7 @@ class WorldCore {
             this._handleGameOverIfNeeded();
         }
     }
+
     _playHurtSoundIfNeeded(prevEnergy) {
         const hurtSound = document.getElementById('hurtSound');
         if (
@@ -238,12 +285,15 @@ class WorldCore {
             this._handleGameOverIfNeeded();
         }
     }
+
     _shouldCollectCoin(coin) {
         return this.character.isColliding(coin);
     }
+
     _shouldCollectBottle(bottle) {
         return this.character.isColliding(bottle);
     }
+
     _collectBottle(bottle) {
         this.bottlesBar.collectBottle();
         this.level.removeObject(bottle);
@@ -251,6 +301,7 @@ class WorldCore {
         bottleSound.currentTime = 0;
         bottleSound.play();
     }
+
     _collectCoin(coin) {
         this.coinsBar.collectCoin();
         this.level.removeObject(coin);

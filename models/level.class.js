@@ -16,7 +16,7 @@ class Level {
      * The x coordinate where the level ends.
      * @type {number}
      */
-    level_end_x = 2150;
+    level_end_x = 3000;
     /**
      * The x coordinate where the level starts.
      * @type {number}

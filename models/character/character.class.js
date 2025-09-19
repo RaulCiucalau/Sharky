@@ -139,7 +139,6 @@ class Character extends MovableObject {
             top: 122,
             bottom: 65
         };
-
     }
 
     /**
@@ -202,8 +201,12 @@ class Character extends MovableObject {
      * @returns {boolean}
      */
     moveRight() {
-        if (this.world.keyboard.right && this.x < this.world.level.level_end_x) {
-            this.x += this.speed;
+        if (this.world.keyboard.right) {
+            if (this.x + this.speed < this.world.level.level_end_x) {
+                this.x += this.speed;
+            } else {
+                this.x = this.world.level.level_end_x;
+            }
             this.isFacingLeft = false;
             return true;
         }
@@ -214,7 +217,11 @@ class Character extends MovableObject {
      * Updates the camera position.
      */
     updateCamera() {
-        this.world.camera_x = -this.x;
+        if (this.x < 2151) {
+            this.world.camera_x = -this.x;
+        } else {
+            this.world.camera_x = -2151;
+        }
     }
 
     /**
