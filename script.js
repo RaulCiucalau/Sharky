@@ -1,52 +1,18 @@
-/**
- * The joystick DOM element for mobile controls.
- * @type {HTMLElement}
- */
+window.addEventListener('DOMContentLoaded', showJoystickIfNeeded);
+window.addEventListener('resize', showJoystickIfNeeded);
 const joystick = document.getElementById('joystick');
-/**
- * The joystick base DOM element.
- * @type {HTMLElement}
- */
 const base = document.getElementById('joystick-base');
-/**
- * The joystick knob DOM element.
- * @type {HTMLElement}
- */
 const knob = document.getElementById('joystick-knob');
-/**
- * Whether the joystick is currently active.
- * @type {boolean}
- */
 let joystickActive = false;
-/**
- * Starting X and Y positions for joystick movement.
- * @type {number}
- */
 let startX, startY;
-/**
- * Tracks if the user has interacted with the page (for sound).
- * @type {boolean}
- */
 let userInteracted = false;
-/**
- * The bubble button DOM element for mobile controls.
- * @type {HTMLElement}
- */
 const bubbleBtn = document.getElementById('bubbleBtn');
-/**
- * The poison button DOM element for mobile controls.
- * @type {HTMLElement}
- */
 const poisonBtn = document.getElementById('poisonBtn');
 
 /**
  * Manages main menu music playback and state.
  */
 const soundManager = {
-    /**
-     * The music DOM element.
-     * @type {HTMLAudioElement|null}
-     */
     music: null,
     /**
      * Checks if the music is currently playing.
@@ -84,9 +50,12 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
 window.addEventListener('DOMContentLoaded', setupMainMenuVolumeSlider);
 
+
+/**
+ * Sets up the main menu volume slider and attaches event listeners.
+ */
 function setupMainMenuVolumeSlider() {
     const slider = document.getElementById('mainMenuVolume');
     const audios = getMainMenuAudioElements();
@@ -96,6 +65,11 @@ function setupMainMenuVolumeSlider() {
     }
 }
 
+
+/**
+ * Returns an array of main menu audio elements.
+ * @returns {HTMLAudioElement[]}
+ */
 function getMainMenuAudioElements() {
     const audioIds = [
         'mainMenuMusic',
@@ -108,6 +82,12 @@ function getMainMenuAudioElements() {
     return audioIds.map(id => document.getElementById(id)).filter(Boolean);
 }
 
+
+/**
+ * Sets the volume for an array of audio elements.
+ * @param {HTMLAudioElement[]} audios - Array of audio elements.
+ * @param {number|string} value - The volume value to set.
+ */
 function setAudiosVolume(audios, value) {
     audios.forEach(audio => {
         audio.volume = value;
@@ -129,7 +109,6 @@ function showControlsTab() {
     document.querySelector('.controls-tab-container').style.display = 'block';
 }
 
-
 /**
  * Hides the controls tab and shows main menu buttons and title.
  */
@@ -139,7 +118,11 @@ function hideControlsTab() {
     document.querySelector('.game-title').style.display = 'block';
 }
 
+/**
+ * Sets up event listeners for controls tab buttons.
+ */
 document.getElementById('backFromControlsBtn').addEventListener('click', hideControlsTab);
+
 /**
  * Shows the impressum tab in the UI.
  */
@@ -213,12 +196,13 @@ function playAgain() {
  */
 function showJoystickIfNeeded() {
     const joystick = document.getElementById('joystick');
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (isTouchDevice && window.innerWidth < 1024) {
-        joystick.classList.remove('dp-none-joystick');
-    } else {
-        joystick.classList.add('dp-none-joystick');
-    }
+    const isTouchDevice = (
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        navigator.msMaxTouchPoints > 0
+    );
+    if (isTouchDevice && window.innerWidth < 1024) joystick.classList.remove('dp-none-joystick');
+    else joystick.classList.add('dp-none-joystick');
 }
 
 /**
@@ -282,11 +266,8 @@ function pauseWorldIfExists() {
  */
 function checkOrientation() {
     let landscapeMode = document.getElementById('landscapeMode');
-    if (window.innerWidth < 720 && window.innerHeight > window.innerWidth) {
-        landscapeMode.classList.remove('d-none');
-    } else {
-        landscapeMode.classList.add('d-none');
-    }
+    if (window.innerWidth < 720 && window.innerHeight > window.innerWidth) landscapeMode.classList.remove('d-none');
+    else landscapeMode.classList.add('d-none');
 }
 
 /**
@@ -304,7 +285,6 @@ function getDirection(dx, dy) {
     if (dy > threshold) dir.down = true;
     return dir;
 }
-
 
 /**
  * Sets up joystick event listeners for touch controls.
@@ -340,24 +320,39 @@ function handleJoystickTouchMove(e) {
     e.preventDefault();
 }
 
+/**
+ * Returns the distances moved by the joystick knob from the start position.
+ * @param {TouchEvent} e - The touch event.
+ * @returns {{distanceX: number, distanceY: number}}
+ */
 function getJoystickDistances(e) {
     const touch = e.touches[0];
-    let dx = touch.clientX - startX;
-    let dy = touch.clientY - startY;
+    let distanceX = touch.clientX - startX;
+    let distanceY = touch.clientY - startY;
     const maxDist = 30;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist > maxDist) {
-        dx = dx * maxDist / dist;
-        dy = dy * maxDist / dist;
+    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+    if (distance > maxDist) {
+        distanceX = distanceX * maxDist / distance;
+        distanceY = distanceY * maxDist / distance;
     }
-    return { distanceX: dx, distanceY: dy };
+    return { distanceX, distanceY };
 }
 
+/**
+ * Updates the position of the joystick knob.
+ * @param {number} distanceX - The change in x position.
+ * @param {number} distanceY - The change in y position.
+ */
 function updateKnobPosition(distanceX, distanceY) {
     knob.style.left = (20 + distanceX) + 'px';
     knob.style.top = (20 + distanceY) + 'px';
 }
 
+/**
+ * Updates the global keyboard direction based on joystick movement.
+ * @param {number} distanceX - The change in x position.
+ * @param {number} distanceY - The change in y position.
+ */
 function updateKeyboardDirection(distanceX, distanceY) {
     if (window.keyboard) {
         const direction = getDirection(distanceX, distanceY);
@@ -383,7 +378,6 @@ function handleJoystickTouchEnd(e) {
         keyboard.down = false;
     }
 }
-
 
 /**
  * Sets up event listeners for the bubble button on mobile.
@@ -417,14 +411,11 @@ function setupPoisonBtnEvents() {
     }
 }
 
-
 /**
  * Sets up the global keyboard object if it exists.
  */
 function setupKeyboardGlobal() {
-    if (typeof keyboard !== 'undefined') {
-        window.keyboard = keyboard;
-    }
+    if (typeof keyboard !== 'undefined') window.keyboard = keyboard;
 }
 
 window.addEventListener('DOMContentLoaded', init);

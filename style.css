@@ -1,3 +1,7 @@
+/* Hide joystick when not needed */
+.dp-none-joystick {
+    display: none !important;
+}
 @font-face {
     font-family: 'LuckiestGuy-Regular';
     src: url('LuckiestGuy-Regular.ttf');
