@@ -3,15 +3,7 @@
  * @extends DrawableObject
  */
 class CoinsBar extends DrawableObject {
-    /**
-     * Number of coins collected.
-     * @type {number}
-     */
     coinsCollected = 0;
-    /**
-     * Array of image paths for each coins bar state.
-     * @type {string[]}
-     */
     IMAGES_COINS = [
         'img/4. Marcadores/green/Coin/0_copia 4.png',
         'img/4. Marcadores/green/Coin/20_copia 2.png',
@@ -20,10 +12,6 @@ class CoinsBar extends DrawableObject {
         'img/4. Marcadores/green/Coin/80_copia 4.png',
         'img/4. Marcadores/green/Coin/100_copia 4.png',
     ];
-    /**
-     * Current percentage of coins collected (0-100).
-     * @type {number}
-     */
     percentage = 0;
 
     /**

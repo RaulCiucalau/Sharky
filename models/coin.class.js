@@ -4,30 +4,14 @@
  * @extends MovableObject
  */
 class Coin extends MovableObject {
-    /**
-     * The height of the coin.
-     * @type {number}
-     */
     height = 50;
-    /**
-     * The width of the coin.
-     * @type {number}
-     */
     width = 50;
-    /**
-     * Array of image paths for coin animation.
-     * @type {string[]}
-     */
     imgs_coin = [
         'img/4. Marcadores/1. Coins/1.png',
         'img/4. Marcadores/1. Coins/2.png',
         'img/4. Marcadores/1. Coins/3.png',
         'img/4. Marcadores/1. Coins/4.png',
     ];
-    /**
-     * The offset for collision detection.
-     * @type {{left: number, right: number, top: number, bottom: number}}
-     */
     offset = {
         left: 1,
         right: 1,

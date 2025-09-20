@@ -4,15 +4,7 @@
  * @extends MovableObject
  */
 class ShootableObjects extends MovableObject {
-    /**
-     * Path to the regular bubble image.
-     * @type {string}
-     */
     img_bubble = 'img/1.Sharkie/4.Attack/Bubble trap/Bubble.png';
-    /**
-     * Path to the poisoned bubble image.
-     * @type {string}
-     */
     img_poisoned_bubble = 'img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png';
 
     /**

@@ -2,25 +2,10 @@
  * Represents a game level, containing all objects and configuration for the level.
  */
 class Level {
-    /**
-     * Array of enemy objects in the level.
-     * @type {MovableObject[]}
-     */
     enemies;
-    /**
-     * Array of background objects for the level.
-     * @type {BackgroundObject[]}
-     */
     backgroundObjects;
-    /**
-     * The x coordinate where the level ends.
-     * @type {number}
-     */
+    backgroundObjects;
     level_end_x = 3000;
-    /**
-     * The x coordinate where the level starts.
-     * @type {number}
-     */
     level_end_start_x = -720;
 
     /**

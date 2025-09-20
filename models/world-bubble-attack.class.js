@@ -1,4 +1,8 @@
 class WorldBubbleAttack {
+    /**
+     * Sets up interval to check for bubble collisions with enemies in the world.
+     * @param {World} world - The game world instance.
+     */
     checkBubbleCollisions(world) {
         setInterval(() => {
             world.shootableObjects.forEach(bubble => {
@@ -10,6 +14,12 @@ class WorldBubbleAttack {
             });
         }, 100);
     }
+    /**
+     * Spawns a normal bubble at the character's position in the world.
+     * @param {World} world - The game world instance.
+     * @param {number} x - The x coordinate (unused).
+     * @param {number} y - The y coordinate (unused).
+     */
     spawnBubble(world, x, y) {
         const direction = world.character.isFacingLeft ? 'left' : 'right';
         const spawnX = direction === 'left' ? world.character.x - 30 : world.character.x + world.character.width - 65;
@@ -20,6 +30,12 @@ class WorldBubbleAttack {
         bubble.move();
         world.shootableObjects.push(bubble);
     }
+    /**
+     * Spawns a poison bubble if bottles are available in the world.
+     * @param {World} world - The game world instance.
+     * @param {number} x - The x coordinate (unused).
+     * @param {number} y - The y coordinate (unused).
+     */
     spawnPoisonBubble(world, x, y) {
         if (world.bottlesBar.bottlesCollected > 0) {
             const direction = world.character.isFacingLeft ? 'left' : 'right';

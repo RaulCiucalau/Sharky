@@ -3,15 +3,7 @@
  * @extends DrawableObject
  */
 class BottlesBar extends DrawableObject {
-    /**
-     * Number of bottles collected.
-     * @type {number}
-     */
     bottlesCollected = 0;
-    /**
-     * Array of image paths for each bottles bar state.
-     * @type {string[]}
-     */
     IMAGES_BOTTLES = [
         'img/4. Marcadores/green/poisoned bubbles/0_ copia 2.png',
         'img/4. Marcadores/green/poisoned bubbles/20_ copia 3.png',
@@ -20,10 +12,6 @@ class BottlesBar extends DrawableObject {
         'img/4. Marcadores/green/poisoned bubbles/80_ copia 2.png',
         'img/4. Marcadores/green/poisoned bubbles/100_ copia 3.png',
     ];
-    /**
-     * Current percentage of bottles collected (0-100).
-     * @type {number}
-     */
     percentage = 0;
 
     /**

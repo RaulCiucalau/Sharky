@@ -3,40 +3,12 @@
  * Handles image loading, drawing, and image caching.
  */
 class DrawableObject {
-    /**
-     * The current image object.
-     * @type {HTMLImageElement}
-     */
     img;
-    /**
-     * Cache of loaded images by path.
-     * @type {Object.<string, HTMLImageElement>}
-     */
     imageCache = {};
-    /**
-     * The current image index for animation.
-     * @type {number}
-     */
     currentImage = 0;
-    /**
-     * The x position of the object.
-     * @type {number}
-     */
     x = 120;
-    /**
-     * The y position of the object.
-     * @type {number}
-     */
     y = 220;
-    /**
-     * The height of the object.
-     * @type {number}
-     */
     height = 150;
-    /**
-     * The width of the object.
-     * @type {number}
-     */
     width = 150;
 
     /**

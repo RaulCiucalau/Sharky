@@ -4,10 +4,6 @@
  * @extends DrawableObject
  */
 class StatusBar extends DrawableObject {
-    /**
-     * Array of image paths for each life state (0% to 100%).
-     * @type {string[]}
-     */
     IMAGES_LIFE = [
         'img/4. Marcadores/green/Life/0_copia.png',
         'img/4. Marcadores/green/Life/20_copia.png',
@@ -16,10 +12,6 @@ class StatusBar extends DrawableObject {
         'img/4. Marcadores/green/Life/80_copia.png',
         'img/4. Marcadores/green/Life/100_copia.png',
     ];
-    /**
-     * Current life percentage (0-100).
-     * @type {number}
-     */
     percentage = 100;
 
     /**
