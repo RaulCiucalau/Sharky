@@ -5,8 +5,6 @@ let gamePaused = true;
 
 function init() {
     canvas = document.getElementById('canvas');
-    world = new WorldCore(canvas, keyboard);
-    world.paused = false;
     checkOrientation();
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', checkOrientation);

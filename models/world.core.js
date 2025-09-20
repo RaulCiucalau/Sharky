@@ -4,55 +4,6 @@
 class World {
     character = new Character();
     level = World.createLevel();
-
-    static createLevel() {
-        return new Level(
-            [
-                new PufferFish(0), new PufferFish(1), new PufferFish(2), new PufferFish(3),
-                new PufferFish(4), new PufferFish(5), new PufferFish(6),
-                new JellyFish(0), new JellyFish(1), new JellyFish(2), new JellyFish(3), new JellyFish(4)
-            ],
-            [new FinalEnemy()],
-            [
-                new BackgroundObject('img/3. Background/Layers/5. Water/D2.png', -720, 480, 720),
-                new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D2.png', -720, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D2.png', -720, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/1. Light/2.png', -720, 450, 700),
-                new BackgroundObject('img/3. Background/Layers/2. Floor/D2.png', -720, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/5. Water/D1.png', 0, 480, 720),
-                new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D1.png', 0, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 0, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0, 450, 700),
-                new BackgroundObject('img/3. Background/Layers/2. Floor/D1.png', 0, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/5. Water/D2.png', 720, 480, 720),
-                new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D2.png', 720, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D2.png', 720, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/1. Light/2.png', 720, 450, 700),
-                new BackgroundObject('img/3. Background/Layers/2. Floor/D2.png', 720, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/5. Water/D1.png', 720 * 2, 480, 720),
-                new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D1.png', 720 * 2, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 720 * 2, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 720 * 2, 450, 700),
-                new BackgroundObject('img/3. Background/Layers/2. Floor/D1.png', 720 * 2, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/5. Water/D2.png', 720 * 3, 480, 720),
-                new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D2.png', 720 * 3, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D2.png', 720 * 3, 400, 720),
-                new BackgroundObject('img/3. Background/Layers/1. Light/2.png', 720 * 3, 450, 700),
-                new BackgroundObject('img/3. Background/Layers/2. Floor/D2.png', 720 * 3, 400, 720)
-            ],
-            [
-                new Coin(300, 300), new Coin(400, 300), new Coin(500, 300),
-                new Coin(1100, 180), new Coin(1200, 180),
-                new Coin(1800, 320), new Coin(1900, 320), new Coin(2000, 320),
-                new Coin(2200, 200), new Coin(2300, 200)
-            ],
-            [
-                new Bottles(150, 120), new Bottles(600, 300), new Bottles(900, 200),
-                new Bottles(1200, 350), new Bottles(1500, 10), new Bottles(1700, 100)
-            ]
-        );
-    }
-
     canvas;
     ctx;
     keyboard;
@@ -66,6 +17,11 @@ class World {
     endbossHealthBarVisible = false;
     finalEnemyVisible = false;
 
+    /**
+     * Initializes the World instance, sets up canvas, keyboard, and starts game logic.
+     * @param {HTMLCanvasElement} canvas - The canvas element for rendering.
+     * @param {Keyboard} keyboard - The keyboard input handler.
+     */
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -79,6 +35,9 @@ class World {
         this.showEndbossHealthBar();
     }
 
+    /**
+     * Sets the world reference for character and final enemy.
+     */
     setWorld() {
         this.character.world = this;
         if (this.finalEnemy) {
@@ -86,14 +45,20 @@ class World {
         }
     }
 
+    /**
+     * Checks for collisions between poison bubbles and the final enemy, applying damage if needed.
+     */
     checkPoisonBubbleFinalEnemyCollision() {
         this.shootableObjects.forEach(bubble => {
-            if (this._shouldDamageFinalEnemy(bubble)) {
-                this._damageFinalEnemy(bubble);
-            }
+            if (this._shouldDamageFinalEnemy(bubble)) {this._damageFinalEnemy(bubble);}
         });
     }
 
+    /**
+     * Determines if a bubble should damage the final enemy.
+     * @param {ShootableObjects} bubble - The bubble to check.
+     * @returns {boolean} True if the bubble should damage the final enemy.
+     */
     _shouldDamageFinalEnemy(bubble) {
         return bubble.isPoisoned &&
             this.finalEnemy &&
@@ -101,6 +66,10 @@ class World {
             bubble.isColliding(this.finalEnemy);
     }
 
+    /**
+     * Applies damage to the final enemy and handles win condition.
+     * @param {ShootableObjects} bubble - The bubble causing damage.
+     */
     _damageFinalEnemy(bubble) {
         this.finalEnemy.energy = Math.max(0, this.finalEnemy.energy - 10);
         this.finalEnemy.isHurt = true;
@@ -113,12 +82,17 @@ class World {
         }
     }
 
+    /**
+     * Checks for collision between the character and the final enemy, handling hit logic.
+     */
     checkFinalEnemyCollision() {
-        if (this._shouldFinalEnemyHitCharacter()) {
-            this._handleFinalEnemyHitCharacter();
-        }
+        if (this._shouldFinalEnemyHitCharacter()) {this._handleFinalEnemyHitCharacter();}
     }
 
+    /**
+     * Determines if the final enemy should hit the character.
+     * @returns {boolean} True if the final enemy should hit the character.
+     */
     _shouldFinalEnemyHitCharacter() {
         return this.finalEnemy &&
             !this.finalEnemy.isDead &&
@@ -126,6 +100,9 @@ class World {
             this.finalEnemy.canHitCharacter;
     }
 
+    /**
+     * Handles the logic when the final enemy hits the character.
+     */
     _handleFinalEnemyHitCharacter() {
         const prevEnergy = this.character.energy;
         this.character.hit();
@@ -138,10 +115,11 @@ class World {
         this._handleGameOverIfNeeded();
     }
 
+    /**
+     * Displays the endboss health bar when the character reaches a specific position.
+     */
     showEndbossHealthBar() {
-        if (this.character.x === 2151) {
-            this.endbossHealthBarVisible = true;
-        }
+        if (this.character.x === 2151) {this.endbossHealthBarVisible = true;}
         if (this.endbossHealthBarVisible) {
             if (this.finalEnemy.energy === 0) {
                 document.getElementById('gameWinDialog').classList.remove('dp-none-win');
@@ -151,22 +129,29 @@ class World {
         }
     }
 
+    /**
+     * Handles the introduction sequence for the final enemy.
+     */
     checkFinalEnemyIntroduce() {
         const finalEnemySplashSound = document.getElementById('finalEnemySplash');
-        if (this._shouldIntroduceFinalEnemy()) {
-            this._startFinalEnemyIntroduction(finalEnemySplashSound);
-        }
-        if (this._shouldShowFinalEnemy()) {
-            this.addToMap(this.finalEnemy);
-        }
+        if (this._shouldIntroduceFinalEnemy()) {this._startFinalEnemyIntroduction(finalEnemySplashSound);}
+        if (this._shouldShowFinalEnemy()) {this.addToMap(this.finalEnemy);}
     }
 
+    /**
+     * Determines if the final enemy should be introduced.
+     * @returns {boolean} True if the final enemy should be introduced.
+     */
     _shouldIntroduceFinalEnemy() {
         return this.finalEnemy &&
             !this.finalEnemy.isIntroducing &&
             (this.character.x === 2151);
     }
 
+    /**
+     * Starts the final enemy introduction sequence and plays splash sound.
+     * @param {HTMLAudioElement} finalEnemySplashSound - The splash sound element.
+     */
     _startFinalEnemyIntroduction(finalEnemySplashSound) {
         this.finalEnemy.isIntroducing = true;
         this.finalEnemy.introduceFrame = 0;
@@ -174,34 +159,52 @@ class World {
         finalEnemySplashSound.play();
     }
 
+    /**
+     * Determines if the final enemy should be shown on the map.
+     * @returns {boolean} True if the final enemy should be shown.
+     */
     _shouldShowFinalEnemy() {
-        return this.finalEnemy &&
-            (this.finalEnemy.isIntroducing || this.finalEnemyVisible);
+        return this.finalEnemy && (this.finalEnemy.isIntroducing || this.finalEnemyVisible);
     }
 
+    /**
+     * Sets up interval to check for bubble collisions with enemies.
+     */
     checkBubbleCollisions() {
         setInterval(() => {
             this.shootableObjects.forEach(bubble => {
                 this.level.enemies.forEach(enemy => {
-                    if (this._shouldBubbleKillEnemy(bubble, enemy)) {
-                        this._bubbleKillsEnemy(bubble, enemy);
-                    }
+                    if (this._shouldBubbleKillEnemy(bubble, enemy)) {this._bubbleKillsEnemy(bubble, enemy);}
                 });
             });
         }, 100);
     }
 
+    /**
+     * Determines if a bubble should kill an enemy.
+     * @param {ShootableObjects} bubble - The bubble to check.
+     * @param {JellyFish|PufferFish} enemy - The enemy to check.
+     * @returns {boolean} True if the bubble should kill the enemy.
+     */
     _shouldBubbleKillEnemy(bubble, enemy) {
-        return (enemy instanceof JellyFish || enemy instanceof PufferFish) &&
-            bubble.isColliding(enemy) &&
-            !enemy.isDead;
+        return (enemy instanceof JellyFish || enemy instanceof PufferFish) && bubble.isColliding(enemy) && !enemy.isDead;
     }
 
+    /**
+     * Handles logic for when a bubble kills an enemy.
+     * @param {ShootableObjects} bubble - The bubble that kills the enemy.
+     * @param {JellyFish|PufferFish} enemy - The enemy being killed.
+     */
     _bubbleKillsEnemy(bubble, enemy) {
         enemy.dieAndRemove(this.level.enemies);
         this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
     }
 
+    /**
+     * Spawns a regular bubble at the character's position.
+     * @param {number} x - The x coordinate (unused).
+     * @param {number} y - The y coordinate (unused).
+     */
     spawnBubble(x, y) {
         const direction = this.character.isFacingLeft ? 'left' : 'right';
         const spawnX = direction === 'left' ? this.character.x - 30 : this.character.x + this.character.width + 10;
@@ -213,6 +216,11 @@ class World {
         this.shootableObjects.push(bubble);
     }
 
+    /**
+     * Spawns a poison bubble if bottles are available.
+     * @param {number} x - The x coordinate (unused).
+     * @param {number} y - The y coordinate (unused).
+     */
     spawnPoisonBubble(x, y) {
         if (this.bottlesBar.bottlesCollected > 0) {
             const direction = this.character.isFacingLeft ? 'left' : 'right';
@@ -229,6 +237,10 @@ class World {
         }
     }
 
+    /**
+     * Handles collision logic between the character and an enemy.
+     * @param {JellyFish|PufferFish|FinalEnemy} enemy - The enemy involved in the collision.
+     */
     _handleCharacterEnemyCollision(enemy) {
         if (!this.character.isHurt() &&
             this.character.isColliding(enemy) &&
@@ -243,6 +255,10 @@ class World {
         }
     }
 
+    /**
+     * Plays the hurt sound if the character's energy decreased and is hurt.
+     * @param {number} prevEnergy - The character's previous energy value.
+     */
     _playHurtSoundIfNeeded(prevEnergy) {
         const hurtSound = document.getElementById('hurtSound');
         if (
@@ -261,6 +277,9 @@ class World {
         }
     }
 
+    /**
+     * Handles game over logic if the character's energy reaches zero.
+     */
     _handleGameOverIfNeeded() {
         if (this.character.energy === 0 && !this.character.isItDead) {
             this.character.isItDead = true;
@@ -269,20 +288,30 @@ class World {
         }
     }
 
+    /**
+     * Sets up interval to check for bottle collection by the character.
+     */
     checkCollectBottle() {
         setInterval(() => {
             this.level.bottles.forEach(bottle => {
-                if (this._shouldCollectBottle(bottle)) {
-                    this._collectBottle(bottle);
-                }
+                if (this._shouldCollectBottle(bottle)) {this._collectBottle(bottle);}
             });
         }, 200);
     }
 
+    /**
+     * Determines if the character should collect a bottle.
+     * @param {Bottles} bottle - The bottle to check.
+     * @returns {boolean} True if the bottle should be collected.
+     */
     _shouldCollectBottle(bottle) {
         return this.character.isColliding(bottle);
     }
 
+    /**
+     * Handles logic for collecting a bottle.
+     * @param {Bottles} bottle - The bottle being collected.
+     */
     _collectBottle(bottle) {
         this.bottlesBar.collectBottle();
         this.level.removeObject(bottle);
@@ -291,20 +320,30 @@ class World {
         bottleSound.play();
     }
 
+    /**
+     * Sets up interval to check for coin collection by the character.
+     */
     checkCollectCoin() {
         setInterval(() => {
             this.level.coins.forEach(coin => {
-                if (this._shouldCollectCoin(coin)) {
-                    this._collectCoin(coin);
-                }
+                if (this._shouldCollectCoin(coin)) {this._collectCoin(coin);}
             });
         }, 200);
     }
 
+    /**
+     * Determines if the character should collect a coin.
+     * @param {Coin} coin - The coin to check.
+     * @returns {boolean} True if the coin should be collected.
+     */
     _shouldCollectCoin(coin) {
         return this.character.isColliding(coin);
     }
 
+    /**
+     * Handles logic for collecting a coin.
+     * @param {Coin} coin - The coin being collected.
+     */
     _collectCoin(coin) {
         this.coinsBar.collectCoin();
         this.level.removeObject(coin);
@@ -313,11 +352,12 @@ class World {
         coinSound.play();
     }
 
+    /**
+     * Handles all collision checks between the character, enemies, and bubbles.
+     */
     handleCollisions() {
         this.level.enemies.forEach(enemy => {
-            if (!enemy.isDead) {
-                this._handleCharacterEnemyCollision(enemy);
-            }
+            if (!enemy.isDead) {this._handleCharacterEnemyCollision(enemy);}
         });
         this.checkFinalEnemyCollision();
         this.checkPoisonBubbleFinalEnemyCollision();

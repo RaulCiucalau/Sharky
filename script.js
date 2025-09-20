@@ -164,6 +164,8 @@ document.getElementById('impressumBtn').addEventListener('click', showImpressumT
  */
 function startPlay() {
     world = new World(canvas, keyboard);
+    world = new WorldCore(canvas, keyboard);
+    world.paused = true;
     world.character.energy = 100;
     soundManager.pauseMusic();
     document.getElementById('inGameMusic').play();
