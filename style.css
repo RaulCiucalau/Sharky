@@ -1,6 +1,6 @@
-/* Hide joystick when not needed */
+
 .dp-none-joystick {
-    display: none !important;
+    display: none ;
 }
 @font-face {
     font-family: 'LuckiestGuy-Regular';

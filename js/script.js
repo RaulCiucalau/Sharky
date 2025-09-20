@@ -1,5 +1,3 @@
-window.addEventListener('DOMContentLoaded', showJoystickIfNeeded);
-window.addEventListener('resize', showJoystickIfNeeded);
 const joystick = document.getElementById('joystick');
 const base = document.getElementById('joystick-base');
 const knob = document.getElementById('joystick-knob');
@@ -52,7 +50,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 window.addEventListener('DOMContentLoaded', setupMainMenuVolumeSlider);
 
-
 /**
  * Sets up the main menu volume slider and attaches event listeners.
  */
@@ -64,7 +61,6 @@ function setupMainMenuVolumeSlider() {
         slider.addEventListener('input', (e) => setAudiosVolume(audios, e.target.value));
     }
 }
-
 
 /**
  * Returns an array of main menu audio elements.
@@ -81,7 +77,6 @@ function getMainMenuAudioElements() {
     ];
     return audioIds.map(id => document.getElementById(id)).filter(Boolean);
 }
-
 
 /**
  * Sets the volume for an array of audio elements.
@@ -100,7 +95,6 @@ window.addEventListener('keydown', () => { userInteracted = true; });
 window.addEventListener('DOMContentLoaded', () => {
     soundManager.playMusic();
 });
-
 
 /**
  * Shows the controls tab in the UI.
@@ -189,20 +183,6 @@ function playAgain() {
     gameWinDialog.classList.add('dp-none-win');
     userInteracted = false;
     restartGameState();
-}
-
-/**
- * Shows the joystick for mobile/touch devices and hides it for desktop/large screens.
- */
-function showJoystickIfNeeded() {
-    const joystick = document.getElementById('joystick');
-    const isTouchDevice = (
-        'ontouchstart' in window ||
-        navigator.maxTouchPoints > 0 ||
-        navigator.msMaxTouchPoints > 0
-    );
-    if (isTouchDevice && window.innerWidth < 1024) joystick.classList.remove('dp-none-joystick');
-    else joystick.classList.add('dp-none-joystick');
 }
 
 /**
@@ -376,38 +356,6 @@ function handleJoystickTouchEnd(e) {
         keyboard.right = false;
         keyboard.up = false;
         keyboard.down = false;
-    }
-}
-
-/**
- * Sets up event listeners for the bubble button on mobile.
- */
-function setupBubbleBtnEvents() {
-    if (bubbleBtn) {
-        bubbleBtn.addEventListener('touchstart', function (e) {
-            if (window.keyboard) keyboard.E = true;
-            e.preventDefault();
-        });
-        bubbleBtn.addEventListener('touchend', function (e) {
-            if (window.keyboard) keyboard.E = false;
-            e.preventDefault();
-        });
-    }
-}
-
-/**
- * Sets up event listeners for the poison button on mobile.
- */
-function setupPoisonBtnEvents() {
-    if (poisonBtn) {
-        poisonBtn.addEventListener('touchstart', function (e) {
-            if (window.keyboard) keyboard.Q = true;
-            e.preventDefault();
-        });
-        poisonBtn.addEventListener('touchend', function (e) {
-            if (window.keyboard) keyboard.Q = false;
-            e.preventDefault();
-        });
     }
 }
 

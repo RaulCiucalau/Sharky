@@ -3,25 +3,34 @@ let world;
 let keyboard = new Keyboard();
 let gamePaused = true;
 
+/**
+ * Initializes the game, sets up canvas, orientation, joystick, and controls.
+ */
 function init() {
     canvas = document.getElementById('canvas');
     checkOrientation();
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', checkOrientation);
     window.addEventListener('load', checkOrientation);
+}
+
+/**
+ * Starts the game by unpausing the world and game state.
+ */
+function startGame() {
+    if (world) {
+        world.paused = false;
+    }
+    gamePaused = false;
     setupJoystickEvents();
     setupBubbleBtnEvents();
     setupPoisonBtnEvents();
     setupKeyboardGlobal();
 }
 
-function startGame() {
-    if (world) {
-        world.paused = false;
-    }
-    gamePaused = false;
-}
-
+/**
+ * Restarts the game state, resets world, character energy, and UI.
+ */
 function restartGameState() {
     canvas = document.getElementById('canvas');
     keyboard = new Keyboard();
@@ -37,6 +46,10 @@ function restartGameState() {
     gamePaused = false;
 }
 
+/**
+ * Handles keydown events to update keyboard control states.
+ * @param {KeyboardEvent} e
+ */
 window.addEventListener("keydown", (e) => {
     if (e.key === "w" || e.key === "W") {
         keyboard.up = true;
@@ -73,6 +86,10 @@ window.addEventListener("keydown", (e) => {
     }
 })
 
+/**
+ * Handles keyup events to reset keyboard control states.
+ * @param {KeyboardEvent} e
+ */
 window.addEventListener("keyup", (e) => {
     if (e.key === "w" || e.key === "W") {
         keyboard.up = false;
