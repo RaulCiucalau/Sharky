@@ -147,7 +147,6 @@ class WorldCore {
         this._applyObjectTransforms(obj);
         this._drawObjectImage(obj);
         this.ctx.restore();
-        if (typeof obj.drawOffsetRectangle === 'function') obj.drawOffsetRectangle(this.ctx);
     }
 
     /**
