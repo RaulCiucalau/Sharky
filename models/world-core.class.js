@@ -1,30 +1,41 @@
 class WorldCore {
+    character = new Character();
+    level = WorldCore.createLevel();
+    camera_x = 0;
+    statusBar = new StatusBar();
+    bottlesBar = new BottlesBar();
+    healthBarEndboss = new HealthBarEndboss();
+    coinsBar = new CoinsBar();
+    shootableObjects = [];
+    finalEnemy = new FinalEnemy();
+    endbossHealthBarVisible = false;
+    finalEnemyVisible = false;
+    paused = false;
+    drawHandler = new WorldDrawHandler();
+    gameHelper = new WorldGameHelper();
+    bubbleAttack = new WorldBubbleAttack();
+
+    /**
+     * Initializes the WorldCore instance, sets up canvas, keyboard, and starts game logic.
+     * @param {HTMLCanvasElement} canvas - The canvas element for rendering.
+     * @param {Keyboard} keyboard - The keyboard input handler.
+     */
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.character = new Character();
-        this.level = WorldCore.createLevel();
-        this.camera_x = 0;
-        this.statusBar = new StatusBar();
-        this.bottlesBar = new BottlesBar();
-        this.healthBarEndboss = new HealthBarEndboss();
-        this.coinsBar = new CoinsBar();
-        this.shootableObjects = [];
-        this.finalEnemy = new FinalEnemy();
-        this.endbossHealthBarVisible = false;
-        this.finalEnemyVisible = false;
-        this.paused = false;
         this.setWorld();
-        this.drawHandler = new WorldDrawHandler();
-        this.gameHelper = new WorldGameHelper();
-        this.bubbleAttack = new WorldBubbleAttack();
         this.drawHandler.draw(this);
         this.gameHelper.checkCollectBottle(this);
         this.gameHelper.checkCollectCoin(this);
         this.bubbleAttack.checkBubbleCollisions(this);
         this.showEndbossHealthBar();
     }
+
+    /**
+     * Creates and returns a new Level instance with enemies, background objects, coins, and bottles.
+     * @returns {Level} The created level object.
+     */
     static createLevel() {
         return new Level(
             [
@@ -85,20 +96,17 @@ class WorldCore {
     _bubbleKillsEnemy(bubble, enemy) {
         enemy.isDead = true;
         this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
-        const floatInterval = setInterval(() => {
-            enemy.y -= 5;
-        }, 30);
+        const floatInterval = setInterval(() => { enemy.y -= 5; }, 30);
         setTimeout(() => {
             clearInterval(floatInterval);
             if (this.level && Array.isArray(this.level.enemies)) {
                 const idx = this.level.enemies.indexOf(enemy);
                 if (idx !== -1) this.level.enemies.splice(idx, 1);
             }
-            if (this.level && typeof this.level.removeObject === 'function') {
-                this.level.removeObject(enemy);
-            }
+            if (this.level && typeof this.level.removeObject === 'function') this.level.removeObject(enemy);
         }, 1000);
     }
+
     /**
      * Spawns a normal bubble at the given position.
      */
@@ -113,43 +121,56 @@ class WorldCore {
         this.bubbleAttack.spawnPoisonBubble(this, x, y);
     }
 
+    /**
+     * Sets the world reference for character and final enemy.
+     */
     setWorld() {
         this.character.world = this;
-        if (this.finalEnemy) {
-            this.finalEnemy.world = this;
-        }
+        if (this.finalEnemy) this.finalEnemy.world = this;
     }
 
+    /**
+     * Adds multiple objects to the map for rendering.
+     * @param {Array} objects - The objects to add to the map.
+     */
     addObjectToMap(objects) {
-        objects.forEach(object => {
-            this.addToMap(object);
-        });
+        objects.forEach(object => { this.addToMap(object); });
     }
 
+    /**
+     * Adds a single object to the map and applies transforms.
+     * @param {Object} obj - The object to add to the map.
+     */
     addToMap(obj) {
         this.ctx.save();
         this._translateToObjectCenter(obj);
         this._applyObjectTransforms(obj);
         this._drawObjectImage(obj);
         this.ctx.restore();
-        if (typeof obj.drawOffsetRectangle === 'function') {
-            obj.drawOffsetRectangle(this.ctx);
-        }
+        if (typeof obj.drawOffsetRectangle === 'function') obj.drawOffsetRectangle(this.ctx);
     }
 
+    /**
+     * Translates the canvas context to the center of the object.
+     * @param {Object} obj - The object to translate to.
+     */
     _translateToObjectCenter(obj) {
         this.ctx.translate(obj.x + obj.width / 2, obj.y + obj.height / 2);
     }
 
+    /**
+     * Applies transforms (scale, rotate) to the object on the canvas context.
+     * @param {Object} obj - The object to transform.
+     */
     _applyObjectTransforms(obj) {
-        if (obj.isFacingLeft) {
-            this.ctx.scale(-1, 1);
-        }
-        if (obj.rotation && obj.rotation !== 0) {
-            this.ctx.rotate((obj.rotation * Math.PI) / 180);
-        }
+        if (obj.isFacingLeft) this.ctx.scale(-1, 1);
+        if (obj.rotation && obj.rotation !== 0) this.ctx.rotate((obj.rotation * Math.PI) / 180);
     }
 
+    /**
+     * Draws the object's image on the canvas context.
+     * @param {Object} obj - The object to draw.
+     */
     _drawObjectImage(obj) {
         this.ctx.drawImage(
             obj.img,
@@ -160,22 +181,29 @@ class WorldCore {
         );
     }
 
+    /**
+     * Handles the introduction sequence for the final enemy.
+     */
     checkFinalEnemyIntroduce() {
         const finalEnemySplashSound = document.getElementById('finalEnemySplash');
-        if (this._shouldIntroduceFinalEnemy()) {
-            this._startFinalEnemyIntroduction(finalEnemySplashSound);
-        }
-        if (this._shouldShowFinalEnemy()) {
-            this.addToMap(this.finalEnemy);
-        }
+        if (this._shouldIntroduceFinalEnemy()) this._startFinalEnemyIntroduction(finalEnemySplashSound);
+        if (this._shouldShowFinalEnemy()) this.addToMap(this.finalEnemy);
     }
-    
+
+    /**
+     * Determines if the final enemy should be introduced.
+     * @returns {boolean} True if the final enemy should be introduced.
+     */
     _shouldIntroduceFinalEnemy() {
         return this.finalEnemy &&
             !this.finalEnemy.isIntroducing &&
             (this.character.x === 2151);
     }
 
+    /**
+     * Starts the final enemy introduction sequence and plays splash sound.
+     * @param {HTMLAudioElement} finalEnemySplashSound - The splash sound element.
+     */
     _startFinalEnemyIntroduction(finalEnemySplashSound) {
         this.finalEnemy.isIntroducing = true;
         this.finalEnemy.introduceFrame = 0;
@@ -183,15 +211,20 @@ class WorldCore {
         finalEnemySplashSound.play();
     }
 
+    /**
+     * Determines if the final enemy should be shown on the map.
+     * @returns {boolean} True if the final enemy should be shown.
+     */
     _shouldShowFinalEnemy() {
         return this.finalEnemy &&
             (this.finalEnemy.isIntroducing || this.finalEnemyVisible);
     }
 
+    /**
+     * Displays the endboss health bar when the character reaches a specific position.
+     */
     showEndbossHealthBar() {
-        if (this.character.x === 2151) {
-            this.endbossHealthBarVisible = true;
-        }
+        if (this.character.x === 2151) this.endbossHealthBarVisible = true;
         if (this.endbossHealthBarVisible) {
             if (this.finalEnemy.energy === 0) {
                 document.getElementById('gameWinDialog').classList.remove('dp-none-win');
@@ -201,17 +234,13 @@ class WorldCore {
         }
     }
 
+    /**
+     * Checks for collisions between poison bubbles and the final enemy, applying damage if needed.
+     */
     checkPoisonBubbleFinalEnemyCollision() {
         this.shootableObjects.forEach(bubble => {
-            if (bubble.isPoisoned &&
-                this.finalEnemy &&
-                !this.finalEnemy.isDead &&
-                bubble.isColliding(this.finalEnemy)) {
-                this.finalEnemy.energy = Math.max(0, this.finalEnemy.energy - 10);
-                this.finalEnemy.isHurt = true;
-                this.finalEnemy.hurtFrame = 0;
-                this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
-                this.healthBarEndboss.setPercentage(this.finalEnemy.energy);
+            if (bubble.isPoisoned && this.finalEnemy && !this.finalEnemy.isDead && bubble.isColliding(this.finalEnemy)) {
+                this.damageFinalEnemyWithPoisonBubble(bubble);
                 if (this.finalEnemy.energy === 0) {
                     document.getElementById('gameWinDialog').classList.remove('dp-none-win');
                     this.paused = true;
@@ -220,16 +249,33 @@ class WorldCore {
         });
     }
 
+    /**
+     * Applies damage to the final enemy when hit by a poison bubble.
+     * @param {ShootableObjects} bubble - The bubble causing damage.
+     */
+    damageFinalEnemyWithPoisonBubble(bubble) {
+        this.finalEnemy.energy = Math.max(0, this.finalEnemy.energy - 10);
+        this.finalEnemy.isHurt = true;
+        this.finalEnemy.hurtFrame = 0;
+        this.shootableObjects.splice(this.shootableObjects.indexOf(bubble), 1);
+        this.healthBarEndboss.setPercentage(this.finalEnemy.energy);
+    }
+
+    /**
+     * Handles all collision checks between the character, enemies, and bubbles.
+     */
     handleCollisions() {
         this.level.enemies.forEach(enemy => {
-            if (!enemy.isDead) {
-                this._handleCharacterEnemyCollision(enemy);
-            }
+            if (!enemy.isDead) this._handleCharacterEnemyCollision(enemy);
         });
         this.checkFinalEnemyCollision();
         this.checkPoisonBubbleFinalEnemyCollision();
     }
 
+    /**
+     * Handles collision logic between the character and an enemy.
+     * @param {JellyFish|PufferFish|FinalEnemy} enemy - The enemy involved in the collision.
+     */
     _handleCharacterEnemyCollision(enemy) {
         if (!this.character.isHurt() &&
             this.character.isColliding(enemy) &&
@@ -244,6 +290,10 @@ class WorldCore {
         }
     }
 
+    /**
+     * Plays the hurt sound if the character's energy decreased and is hurt.
+     * @param {number} prevEnergy - The character's previous energy value.
+     */
     _playHurtSoundIfNeeded(prevEnergy) {
         const hurtSound = document.getElementById('hurtSound');
         if (
@@ -261,6 +311,9 @@ class WorldCore {
             }
         }
     }
+    /**
+     * Handles game over logic if the character's energy reaches zero.
+     */
     _handleGameOverIfNeeded() {
         if (this.character.energy === 0 && !this.character.isItDead) {
             this.character.isItDead = true;
@@ -268,6 +321,9 @@ class WorldCore {
             this.paused = true;
         }
     }
+    /**
+     * Checks for collision between the character and the final enemy, handling hit logic.
+     */
     checkFinalEnemyCollision() {
         if (this.finalEnemy &&
             !this.finalEnemy.isDead &&
@@ -285,14 +341,28 @@ class WorldCore {
         }
     }
 
+    /**
+     * Determines if the character should collect a coin.
+     * @param {Coin} coin - The coin to check.
+     * @returns {boolean} True if the coin should be collected.
+     */
     _shouldCollectCoin(coin) {
         return this.character.isColliding(coin);
     }
 
+    /**
+     * Determines if the character should collect a bottle.
+     * @param {Bottles} bottle - The bottle to check.
+     * @returns {boolean} True if the bottle should be collected.
+     */
     _shouldCollectBottle(bottle) {
         return this.character.isColliding(bottle);
     }
 
+    /**
+     * Handles logic for collecting a bottle.
+     * @param {Bottles} bottle - The bottle being collected.
+     */
     _collectBottle(bottle) {
         this.bottlesBar.collectBottle();
         this.level.removeObject(bottle);
@@ -301,6 +371,10 @@ class WorldCore {
         bottleSound.play();
     }
 
+    /**
+     * Handles logic for collecting a coin.
+     * @param {Coin} coin - The coin being collected.
+     */
     _collectCoin(coin) {
         this.coinsBar.collectCoin();
         this.level.removeObject(coin);

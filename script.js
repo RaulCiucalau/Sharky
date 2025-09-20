@@ -163,7 +163,6 @@ document.getElementById('impressumBtn').addEventListener('click', showImpressumT
  * Starts the game, hides the main menu, and shows the joystick if needed.
  */
 function startPlay() {
-    world = new World(canvas, keyboard);
     world = new WorldCore(canvas, keyboard);
     world.paused = true;
     world.character.energy = 100;
