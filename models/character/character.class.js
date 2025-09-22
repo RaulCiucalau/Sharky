@@ -162,7 +162,7 @@ class Character extends MovableObject {
      * @returns {boolean}
      */
     moveUp() {
-        if (this.world.keyboard.up && this.y > -120) {
+        if (this.world.keyboard.up && this.y > -60) {
             this.y -= this.speed;
             this.rotation = -15;
             return true;
