@@ -21,6 +21,8 @@ class WorldBubbleAttack {
      * @param {number} y - The y coordinate (unused).
      */
     spawnBubble(world, x, y) {
+    x = x ?? 0;
+    y = y ?? 0;
     const direction = world.character.isFacingLeft ? 'left' : 'right';
     const spawnX = direction === 'left' ? world.character.x - 30 : world.character.x + world.character.width - 65;
     const spawnY = world.character.y + world.character.height / 2;
@@ -38,7 +40,9 @@ class WorldBubbleAttack {
      * @param {number} y - The y coordinate (unused).
      */
     spawnPoisonBubble(world, x, y) {
-        if (world.bottlesBar.bottlesCollected <= 0) return;
+    x = x ?? 0;
+    y = y ?? 0;
+    if (world.bottlesBar.bottlesCollected <= 0) return;
         const direction = world.character.isFacingLeft ? 'left' : 'right';
         const spawnX = direction === 'left' ? world.character.x : world.character.x + world.character.width - 65;
         const spawnY = world.character.y + world.character.height / 2;
