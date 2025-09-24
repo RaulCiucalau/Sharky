@@ -34,6 +34,7 @@ class DrawableObject {
      * @param {string[]} arr - Array of image paths to load.
      */
     loadImages(arr) {
+        arr = arr ?? [];
         arr.forEach((path) => {
             let img = new Image();
             img.src = path;
