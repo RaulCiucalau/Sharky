@@ -229,7 +229,8 @@ class Character extends MovableObject {
      * @param {boolean} moved
      */
     updateIdleTime(moved) {
-        if (moved) {
+    moved = moved ?? false;
+    if (moved) {
             this.idleTime = 0;
         } else {
             this.idleTime += 5;
