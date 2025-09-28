@@ -3,6 +3,13 @@
  * @extends DrawableObject
  */
 class BottlesBar extends DrawableObject {
+    /**
+     * Resets the bottles bar to zero.
+     */
+    reset() {
+        this.bottlesCollected = 0;
+        this.setPercentage(0);
+    }
     bottlesCollected = 0;
     IMAGES_BOTTLES = [
         'img/4. Marcadores/green/poisoned bubbles/0_ copia 2.png',
