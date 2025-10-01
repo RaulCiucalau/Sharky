@@ -17,11 +17,11 @@ class Level {
      * @param {Bottles[]} bottles - The bottles in the level.
      */
     constructor(enemies, finalEnemy, backgroundObjects, coins, bottles) {
-            this.enemies = enemies;
-            this.finalEnemy = finalEnemy || null;
+        this.enemies = enemies;
+        this.finalEnemy = finalEnemy || null;
         this.backgroundObjects = backgroundObjects;
         this.coins = coins;
-        this.bottles = bottles;
+        this.bottles = bottles || [];
     }
 
     /**
