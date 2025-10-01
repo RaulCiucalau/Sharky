@@ -25,11 +25,11 @@ class Coin extends MovableObject {
      * @param {number} y - The y position of the coin.
      */
     constructor(x, y) {
-        super().loadImage('img/4. Marcadores/1. Coins/1.png');
-        this.loadImages(this.imgs_coin);
-        if (typeof x === 'number') this.x = x;
-        if (typeof y === 'number') this.y = y;
-        this.animate();
+    super().loadImage('img/4. Marcadores/1. Coins/1.png');
+    this.loadImages(this.imgs_coin);
+    if (typeof x === 'number') this.x = x;
+    this.y = typeof y === 'number' ? y : 0;
+    this.animate();
     }
 
     /**
