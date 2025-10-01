@@ -4,6 +4,7 @@ class WorldBubbleAttack {
      * @param {World} world - The game world instance.
      */
     checkBubbleCollisions(world) {
+    // Check for bubble collisions every 100ms
     setInterval(() => {
             world.shootableObjects.forEach(bubble => {
                 world.level.enemies.forEach(enemy => {
