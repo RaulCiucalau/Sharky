@@ -1,3 +1,6 @@
+/**
+ * UI Controls and Menu Management for Sharky Splash
+ */
 const joystick = document.getElementById('joystick');
 const base = document.getElementById('joystick-base');
 const knob = document.getElementById('joystick-knob');
