@@ -1,5 +1,6 @@
 /**
  * Represents the bottles bar UI element, showing collected bottles as a percentage.
+ * Displays poison bottle collection progress for the player's ammunition.
  * @extends DrawableObject
  */
 class BottlesBar extends DrawableObject {
