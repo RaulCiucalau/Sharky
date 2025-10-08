@@ -1,3 +1,6 @@
+/**
+ * Sharky Splash - Game Logic and Initialization
+ */
 let canvas;
 let world;
 let keyboard = new Keyboard();
