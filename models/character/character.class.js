@@ -167,6 +167,7 @@ class Character extends MovableObject {
             this.rotation = -15;
             return true;
         }
+        this.rotation = 0;
         return false;
     }
 
