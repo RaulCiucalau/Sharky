@@ -30,8 +30,8 @@ class WorldBubbleAttack {
     const bubble = new ShootableObjects(false, direction);
     bubble.x = spawnX;
     bubble.y = spawnY;
-    bubble.move();
     world.shootableObjects.push(bubble);
+    bubble.move();
     return bubble;
     }
     /**
