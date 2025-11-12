@@ -1,3 +1,6 @@
+/**
+ * Mobile Joystick Controls for Touch Devices
+ */
 window.addEventListener('resize', showJoystickIfNeeded);
 window.addEventListener('orientationchange', showJoystickIfNeeded);
 
