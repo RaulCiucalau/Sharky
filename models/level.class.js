@@ -29,7 +29,9 @@ class Level {
      * @param {Coin|Bottles} object - The object to remove.
      */
     removeObject(object) {
-        this.coins = this.coins.filter(c => c !== object);
-        this.bottles = this.bottles.filter(b => b !== object);
+        const coinIndex = this.coins.indexOf(object);
+        const bottleIndex = this.bottles.indexOf(object);
+        if (coinIndex > -1) this.coins.splice(coinIndex, 1);
+        if (bottleIndex > -1) this.bottles.splice(bottleIndex, 1);
     }
 }
