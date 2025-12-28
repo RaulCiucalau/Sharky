@@ -119,7 +119,7 @@ class World {
      * Displays the endboss health bar when the character reaches a specific position.
      */
     showEndbossHealthBar() {
-        if (this.character.x === 2151) {this.endbossHealthBarVisible = true;}
+        if (this.character.x >= 2151) {this.endbossHealthBarVisible = true;}
         if (this.endbossHealthBarVisible) {
             if (this.finalEnemy.energy === 0) {
                 document.getElementById('gameWinDialog').classList.remove('dp-none-win');
@@ -145,7 +145,8 @@ class World {
     _shouldIntroduceFinalEnemy() {
         return this.finalEnemy &&
             !this.finalEnemy.isIntroducing &&
-            (this.character.x === 2151);
+            !this.finalEnemyVisible &&
+            (this.character.x >= 2151);
     }
 
     /**
