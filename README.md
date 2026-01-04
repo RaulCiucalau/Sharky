@@ -15,12 +15,6 @@ The project focuses on **object-oriented programming**, game mechanics, and real
 
 ---
 
-## 🌐 Live Demo
-
-👉 https://raul-ciucalau.de/Projects/Sharky/index.html
-
----
-
 ## 📂 Repository
 
 👉 https://github.com/RaulCiucalau/Sharky
