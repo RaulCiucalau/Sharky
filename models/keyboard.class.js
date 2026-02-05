@@ -10,4 +10,5 @@ class Keyboard {
     down = false;
     E = false;
     Q = false;
+    D = false;
 }
