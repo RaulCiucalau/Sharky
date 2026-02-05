@@ -4,7 +4,7 @@
 const joystick = document.getElementById('joystick');
 const base = document.getElementById('joystick-base');
 const knob = document.getElementById('joystick-knob');
-let joystickActive = false;
+let joystickActive = true;
 let startX, startY;
 let userInteracted = false;
 const bubbleBtn = document.getElementById('bubbleBtn');
