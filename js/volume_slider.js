@@ -5,7 +5,7 @@
  *
  * @module volume_slider
  */
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('load', function() {
     const slider = document.getElementById('mainMenuVolume');
     if (slider) {
      /**
